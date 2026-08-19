@@ -75,6 +75,13 @@ Start the next cycle by returning to step 1 and re-reading the documents — do 
 
 ---
 
+## Git workflow
+
+- **Branch**: work directly on `main` (trunk-based). No feature branches, no PR review cycle for this solo-cycle project.
+- **Commit granularity**: one commit per completed `MASTER_PLAN.md` phase, made once that phase's exit criteria are met and `PROGRESS.md`/`EXECUTION_ORDER.md` are updated — not one commit per individual task.
+- **Commit messages**: plain, professional, human-readable prose describing what shipped and why it matters, the way a developer would write it. No internal task-ID shorthand (`FOUND-001`, `HERO-003`, etc.), no AI/tool attribution or generated-by trailers, anywhere in the commit id or message. Write it as if a human engineer is describing their own work.
+- Before any commit, confirm `.env.local` and other secrets are excluded (gitignored) — see Phase 0's risk note in `MASTER_PLAN.md`.
+
 ## Guardrails
 
 - Never reopen an `Active` decision in `DECISIONS.md` without a new, material constraint — if you think one exists, state the constraint explicitly before proposing a change.

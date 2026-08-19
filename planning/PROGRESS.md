@@ -24,6 +24,7 @@ Not started. `SOURCE_OF_TRUTH.md`, `MASTER_PLAN.md`, `EXECUTION_ORDER.md`, `DECI
 - Initialized the git repository (`git init` — repo had no VCS before this).
 - Incorporated a user-supplied change: the Hero's old choreographed opening (in §11's motion sequence) is superseded by a dedicated brand-signature loader spec (blink → recede → settle into Hero). Added `SOURCE_OF_TRUTH.md` §11a, `DECISIONS.md` DEC-013, and — per the user's explicit sequencing request — inserted a new **Phase 8.5 — Hero loader / opening sequence** into `MASTER_PLAN.md`/`EXECUTION_ORDER.md` (scheduled after Phase 8, not inside Phase 2). Phase 2's Hero tasks were updated to note they ship only the simple interim entrance now; Phase 8.5 owns the full loader.
 - Noticed an `assests/` folder (not previously catalogued) containing `plan.md`, `DESIGN_SYSTEM.md`, `ASSETLY VISITING CARD.pdf`, and logo files (`logo_2048 (1).png`, `logo_2048 (1) copy.png`, `logo_editable (1).psd`). These are raster/PSD, not the vector SVG lockup `OD-01` calls for, so `OD-01` is **not** resolved — but a future agent should check this folder before assuming no logo asset exists at all.
+- Made the initial commit on `main` (renamed from git's default `master`) and locked the git workflow in `LOOP.md`: trunk-based on `main`, one commit per completed `MASTER_PLAN.md` phase (not per task), commit messages written as plain professional prose with no task-ID shorthand and no AI/tool attribution anywhere.
 
 ## Files Changed
 
