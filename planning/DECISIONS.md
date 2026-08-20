@@ -436,6 +436,16 @@ Every important technical or product decision, including conflict resolutions fo
 
 ---
 
+### DEC-040 - The Hero plate frames the copy and ships hidden on phones
+
+- **Date**: 2026-08-21
+- **Decision**: The Hero copy and loader landing position remain fixed. At widths above 640px, Access occupies the lower-left and sits on one full-width ground datum, the Scale path leaves the crane's deck and travels beneath a protected central copy zone, and Grow rises at the right. The plate settles at 20% opacity; while drawing, its stroke begins in Pitch and resolves to Olive. At 640px and below the production mode is `hidden`. Typed `access` and `growth` compositions are implemented but inactive, selected through one constant. Viewports 520px high or less always hide the plate.
+- **Reason**: The full centred plate crossed the proposition and became increasingly illegible as the viewport narrowed. The owner approved the standalone desktop/tablet composition, exact 20% settled opacity, a slightly darker drawing state, and a phone default with no plate while retaining two documented future options.
+- **Consequences**: This supersedes §11's previous ~16% opacity and its requirement that the complete plate scale down to 320px. `HERO_PLATE_MOBILE_OPTIONS.md` is the activation guide. Only structural junction nodes breathe; wheels and fixed architecture do not. `OD-02` remains open because the code-authored artwork still has no formal design approval.
+- **Status**: Active
+
+---
+
 ## Decision index
 
 | ID | Topic | Status |
@@ -479,3 +489,4 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-037 | The reference crane belongs to the Hero plate | Active |
 | DEC-038 | Hovering a sector card holds that card, not the grid | Active |
 | DEC-039 | The opening blink is slower and runs on a near-sine curve | Active |
+| DEC-040 | Hero plate frames the copy; hidden is the approved phone mode | Active |

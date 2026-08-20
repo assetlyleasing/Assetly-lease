@@ -47,9 +47,17 @@
   will-change: transform;
 }
 
+.plateFrame {
+  width: min(112%, 1500px);
+  aspect-ratio: 12 / 7;
+  color: var(--olive);
+  transform: translateY(clamp(8px, 2svh, 24px));
+}
+
 .plate {
-  width: min(115%, 1500px);
-  height: auto;
+  width: 100%;
+  height: 100%;
+  color: inherit;
   /*
    * §11's Stage 3: the plate fades as the visitor leaves the Hero. Driven by a
    * scroll-linked custom property rather than a class, so it tracks position
@@ -85,30 +93,45 @@
   }
 }
 
+/*
+ * The approved 20% plate is a shade stronger while its line is being drawn.
+ * Tone, rather than opacity, carries that emphasis so the settled opacity
+ * remains exact and the shared Plate reveal is left intact.
+ */
+@keyframes plateDrawTone {
+  0%,
+  68% {
+    color: var(--pitch);
+  }
+
+  to {
+    color: var(--olive);
+  }
+}
+
+.ready .plateFrame {
+  animation: plateDrawTone var(--dur-draw) var(--eio) both;
+}
+
 .ready .plate {
   animation: plateDrift 11s var(--eio) 3s infinite alternate;
 }
 
-.ready .plate circle {
+.ready .plate [data-hero-plate-node] {
   /* Without this the translate resolves against the SVG viewport, not the node. */
   transform-box: fill-box;
   animation: nodeBreathe 9s var(--eio) 3.2s infinite alternate;
 }
 
 /* Staggered so the nodes never move in unison. */
-.ready .plate circle:nth-of-type(2) {
+.ready .plate [data-hero-plate-node="2"] {
   animation-duration: 12s;
   animation-delay: 3.8s;
 }
 
-.ready .plate circle:nth-of-type(3) {
+.ready .plate [data-hero-plate-node="3"] {
   animation-duration: 10.5s;
   animation-delay: 4.4s;
-}
-
-.ready .plate circle:nth-of-type(4) {
-  animation-duration: 12.5s;
-  animation-delay: 3.5s;
 }
 
 /* ---- Content stack ------------------------------------------------------ */
@@ -332,9 +355,14 @@
    * and §8 makes neutralising it mandatory rather than optional.
    */
   .ready .plate,
-  .ready .plate circle {
+  .ready .plate [data-hero-plate-node],
+  .ready .plateFrame {
     animation: none;
     translate: none;
+  }
+
+  .plateFrame {
+    color: var(--olive);
   }
 
   .plateLayer {
@@ -351,5 +379,67 @@
     transform: translate(-50%, -50%);
     animation: none;
     transition: none;
+  }
+}
+
+/* The approved tablet composition keeps the complete story around the copy. */
+@media (min-width: 641px) and (max-width: 900px) {
+  .plateFrame {
+    width: 125%;
+    transform: translateY(clamp(60px, calc(116px - 6.2vw), 76px));
+  }
+}
+
+/*
+ * Phone variants are deliberately structural, not scaled desktop art. Change
+ * HERO_MOBILE_PLATE_MODE in hero-plate.tsx to activate one. `hidden` ships.
+ */
+@media (max-width: 640px) {
+  .plateLayer[data-mobile-plate-mode="hidden"] {
+    display: none;
+  }
+
+  .plateLayer[data-mobile-plate-mode="access"] .plateFrame {
+    width: 140%;
+    transform: translate(-9%, clamp(128px, 17svh, 150px));
+  }
+
+  .plateLayer[data-mobile-plate-mode="access"]
+    .plate
+    :is(
+      [data-hero-plate-region="scale"],
+      [data-hero-plate-region="growth"]
+    ) {
+    display: none;
+  }
+
+  .plateLayer[data-mobile-plate-mode="growth"] .plateFrame {
+    width: 142%;
+    transform: translate(11%, clamp(92px, 13.5svh, 114px));
+  }
+
+  .plateLayer[data-mobile-plate-mode="growth"]
+    .plate
+    :is(
+      [data-hero-plate-region="access"],
+      [data-hero-plate-region="scale"],
+      [data-hero-plate-region="datum"]
+    ) {
+    display: none;
+  }
+
+  .plateLayer[data-mobile-plate-mode="growth"]
+    .plate
+    [data-hero-plate-region="growth"] {
+    transform: translate(-185px, 280px) scale(0.72);
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+}
+
+/* Short landscape frames cannot hold both the fixed copy and useful artwork. */
+@media (max-height: 520px) {
+  .plateLayer {
+    display: none;
   }
 }
