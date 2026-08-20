@@ -122,26 +122,71 @@ test.describe("Hero plate responsive composition", () => {
     }
   });
 
-  test("ships hidden on portrait phones and every short landscape", async ({
+  test("ships the combined plate on portrait phones and hides short landscapes", async ({
     page,
   }) => {
     for (const [width, height] of [
       [320, 700],
       [390, 844],
       [640, 900],
-      [844, 390],
     ] as const) {
       await page.setViewportSize({ width, height });
       await openSettledHero(page);
-      await expect(page.locator(PLATE_LAYER)).toHaveAttribute(
+      const layer = page.locator(PLATE_LAYER);
+      await expect(layer).toHaveAttribute(
         "data-mobile-plate-mode",
-        "hidden",
+        "both",
       );
-      await expect(page.locator(PLATE_LAYER)).toBeHidden();
+      await expect(layer).toBeVisible();
+
+      const state = await page.evaluate(() => {
+        const regions = Array.from(
+          document.querySelectorAll<SVGGElement>(
+            "#hero [data-hero-plate-region]",
+          ),
+        )
+          .filter((region) => getComputedStyle(region).display !== "none")
+          .map((region) => region.dataset.heroPlateRegion);
+        const datum = document.querySelector<SVGLineElement>(
+          "#hero [data-hero-plate-region='datum'] line",
+        )!;
+        const datumBounds = datum.getBoundingClientRect();
+        const growth = document.querySelector<SVGGElement>(
+          "#hero [data-hero-plate-region='growth']",
+        )!;
+        const matrix = growth.getScreenCTM()!;
+        const growthBases = [820, 940, 1060].map((x) =>
+          new DOMPoint(x, 600).matrixTransform(matrix),
+        );
+
+        return {
+          regions,
+          datumLeft: datumBounds.left,
+          datumRight: datumBounds.right,
+          clientWidth: document.documentElement.clientWidth,
+          datumY: datumBounds.top,
+          growthBaseYs: growthBases.map((point) => point.y),
+        };
+      });
+
+      expect(state.regions).toEqual(["access", "growth", "datum"]);
+      expect(state.datumLeft).toBeLessThanOrEqual(0.5);
+      expect(state.datumRight).toBeGreaterThanOrEqual(state.clientWidth - 0.5);
+      for (const baseY of state.growthBaseYs) {
+        expect(Math.abs(baseY - state.datumY)).toBeLessThanOrEqual(0.5);
+      }
     }
+
+    await page.setViewportSize({ width: 844, height: 390 });
+    await openSettledHero(page);
+    await expect(page.locator(PLATE_LAYER)).toHaveAttribute(
+      "data-mobile-plate-mode",
+      "both",
+    );
+    await expect(page.locator(PLATE_LAYER)).toBeHidden();
   });
 
-  test("keeps the prepared Access and Growth phone options collision-free", async ({
+  test("keeps the prepared Access and Growth alternatives collision-free", async ({
     page,
   }) => {
     for (const width of [320, 390, 640]) {

@@ -137,7 +137,7 @@ Update this file at the end of every cycle per `LOOP.md` step 6. Do not skip ahe
 - [x] `LOADER-008` Playwright: full §11a test list (colors/contrast, blink count, static tagline, no full disappear, visible movement to destination, settle-before-reveal, no navbar/plate competition during opening, no layout shift, mobile scale, reload/back-nav, reduced-motion)
 - [x] `LOADER-009` Performance check on slow-device emulation
 - [x] `LOADER-010` Recompose the Hero plate around a protected copy zone at desktop/tablet widths; settle at 20% opacity with a darker draw tone
-- [x] `LOADER-011` Prepare typed hidden/Access/Growth phone treatments, ship hidden, and document the one-setting switch
+- [x] `LOADER-011` Prepare typed Both/Hidden/Access/Growth phone treatments, ship the fixed combined composition, and document the one-setting switch
 - [x] `LOADER-012` Playwright and visual review: collision clearance, prepared mobile modes, short landscape, reduced motion and loader landing regression
 
 ## Phase 9 — Legal / basic SEO

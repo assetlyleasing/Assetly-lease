@@ -395,6 +395,17 @@
  * HERO_MOBILE_PLATE_MODE in hero-plate.tsx to activate one. `hidden` ships.
  */
 @media (max-width: 640px) {
+  .plateLayer {
+    transform: none;
+    transition: none;
+  }
+
+  .ready .plate,
+  .ready .plate [data-hero-plate-node] {
+    animation: none;
+    translate: none;
+  }
+
   .plateLayer[data-mobile-plate-mode="hidden"] {
     display: none;
   }
@@ -434,6 +445,40 @@
     transform: translate(-185px, 280px) scale(0.72);
     transform-box: fill-box;
     transform-origin: center;
+  }
+
+  .plateLayer[data-mobile-plate-mode="both"] .plateFrame {
+    width: 140%;
+    transform: translate(-9%, clamp(128px, 17svh, 150px));
+  }
+
+  .plateLayer[data-mobile-plate-mode="both"]
+    .plate
+    [data-hero-plate-region="scale"] {
+    display: none;
+  }
+
+  .plateLayer[data-mobile-plate-mode="both"]
+    .plate
+    [data-hero-plate-region="access"] {
+    transform: translate(70px, 0);
+    transform-box: fill-box;
+  }
+
+  .plateLayer[data-mobile-plate-mode="both"]
+    .plate
+    [data-hero-plate-region="datum"] {
+    transform: scaleX(3);
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  .plateLayer[data-mobile-plate-mode="both"]
+    .plate
+    [data-hero-plate-region="growth"] {
+    transform: translate(200px, 0) scale(0.55);
+    transform-box: fill-box;
+    transform-origin: center bottom;
   }
 }
 

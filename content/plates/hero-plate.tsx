@@ -38,8 +38,8 @@ export const HERO_PLATE_VIEWBOX = "0 0 1200 700";
  * One production setting controls the phone treatment. All three layouts are
  * kept live in CSS so a future review changes this value, not the artwork.
  */
-export type HeroMobilePlateMode = "hidden" | "access" | "growth";
-export const HERO_MOBILE_PLATE_MODE: HeroMobilePlateMode = "hidden";
+export type HeroMobilePlateMode = "hidden" | "access" | "growth" | "both";
+export const HERO_MOBILE_PLATE_MODE: HeroMobilePlateMode = "both";
 
 export function HeroPlateArtwork() {
   return (

@@ -9,9 +9,9 @@ import {
 } from "@/content/plates/hero-plate";
 
 describe("Hero plate composition", () => {
-  it("ships the approved hidden phone mode behind a typed switch", () => {
+  it("ships the approved combined phone mode behind a typed switch", () => {
     const mode: HeroMobilePlateMode = HERO_MOBILE_PLATE_MODE;
-    expect(mode).toBe("hidden");
+    expect(mode).toBe("both");
     expect(HERO_PLATE_VIEWBOX).toBe("0 0 1200 700");
   });
 
