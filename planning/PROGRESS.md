@@ -6,44 +6,46 @@ This file reflects the *current* state of the project, not a running chronologic
 
 ## Current Phase
 
-Phase 6 — Sectors: **complete**. Phases 0, 1, 2, 4, 5 and 6 are complete. Phase 3 remains blocked on `OD-05`/`OD-06`; Phase 7 is unblocked. Phase 8 is now explicitly blocked on the real-image requirement in `OD-14`.
+Phase 7 — Contact: **complete**. Phases 0, 1, 2, 4, 5, 6 and 7 are complete. Phase 3 remains blocked on `OD-05`/`OD-06`. Phase 8 is blocked on the real-image requirement in `OD-14` and must not begin partially.
 
 ## Current Task
 
-`CONTACT-001` — build the approved static Contact information block, followed by the code-authored Bengaluru visual and enquiry experience.
+`ABOUT-000` — obtain the real, usage-approved landscape About image and its factual alt description required by `OD-14` before any Phase 8 implementation begins.
 
 ## Status
 
-The homepage now renders the shared shell, Hero, corrected Compare sequence, Why Assetly, and the complete auto-rotating Sectors section. Green at this boundary: lint, typecheck, production build, 78 unit tests, 93 Chromium Playwright tests, and 15 targeted WebKit interaction tests.
+The homepage now renders the shared shell, Hero, corrected Compare sequence, Why Assetly, rotating Sectors grid, and complete Contact enquiry experience. Green at this boundary: lint, typecheck, production build, 87 unit tests, 104 Chromium Playwright tests, and 26 targeted WebKit interaction tests.
 
 ## Completed This Cycle
 
-### Phase 6 — Sectors We Serve
+### Phase 7 — Contact
 
-- Added the locked six-sector pool with typed IDs, fixed `01–06` indices, approved short descriptors, and typed plate references.
-- Authored six distinct 200×130 inline plates for commercial interiors, manufacturing, construction, hospitality, healthcare, and IT infrastructure using the unchanged shared `Plate` primitive.
-- Built the connected 2×2 desktop / 1×4 mobile ledger grid with four sectors visible, equal desktop row heights, and compact mobile cards without long descriptors.
-- Added a pure cyclic rotation model and one timer owner. Rotation begins after the entrance settles, changes one slot every 2.5 seconds, completes the 450ms exit before replacement, and remounts only entering artwork for its 2.6-second draw.
-- Rotation pauses before another swap while the grid is hovered or focused and while the document is hidden. An in-progress swap is allowed to finish.
-- The grid is one keyboard focus target with a visible focus state and `aria-live="off"`; passive cards do not become four extra tab stops.
-- Reduced motion renders sectors 01–04 and fully drawn plates without creating the rotation timer.
+- Added the approved CONTACT information block with linked email and phone plus Bengaluru only; the full postal address remains Footer-only.
+- Authored an illustrative, non-cartographic Bengaluru SVG with muted linework, one Assetly marker, and a BENGALURU label using the shared `Plate` and draw-on-enter behavior.
+- Added the typed enquiry model and Zod discriminated union for Operating Lease, Asset Requirement, Existing Requirement, General Enquiry, and a custom type, including all approved required/optional fields and length limits.
+- Built a stable two-step enquiry flow with associated validation errors, first-invalid-field focus, Back and Close actions, and preserved local form state across close/reopen.
+- Built the desktop map-edge drawer and structurally separate mobile bottom sheet at 700px. The sheet has a visual grip and explicit Close action without an unrequested drag gesture.
+- Factored focus trapping, Escape close, focus return, and body scroll lock into one shared hook, then migrated the mobile menu and reused the behavior for both Contact dialogs without changing the menu presentation.
+- Added one pure email-draft builder. Gmail and mailto actions share the same recipient, subject, and body; blank optional lines are omitted, visitor input is encoded, and nothing is submitted to or stored by Assetly.
+- Reduced motion completes the map immediately and removes spatial panel and field transitions.
+- Expanded the targeted WebKit project to cover Contact alongside Why Assetly and Sectors.
 
 ### Decisions and planning
 
-- **DEC-025** approves the six code-authored plates and the completely static reduced-motion state, resolving `OD-04`.
-- Added **OD-14** for Phase 8: a real, usage-approved landscape About image at least 1600px wide plus factual alt text. No substitute visual is authorized and no partial Phase 8 implementation may begin without it.
+- **DEC-026** approves the illustrative code-authored Bengaluru plate and resolves/removes `OD-08`.
+- Phase 7 execution items are complete. Phase 8 remains explicitly gated by `OD-14`; no About implementation or partial Phase 8 commit was created.
 
 ### Visual review
 
-- Reviewed rendered 1440×900 desktop and 390×844 mobile Sectors states after rotation.
-- Corrected unequal desktop row sizing exposed by the longer IT title by locking both implicit grid rows to one shared fraction.
-- Confirmed the shared-border grid, thin drafting plates, mobile composition, and completed reduced-motion plates on screen.
+- Reviewed rendered 1440×900 desktop closed/drawer states and 390×844 mobile closed/sheet states from a running preview server.
+- Tightened desktop drawer spacing after the first preview exposed a partly clipped Continue action; the complete first step now fits while longer detail forms retain internal scrolling.
+- Confirmed the map-edge composition, partially visible map, mobile sheet, grip and close control, typography, shared borders, and responsive overflow on screen.
 
 ## Decisions
 
-- **DEC-023** — use qualitative Compare tier bars while retaining the ban on prototype calculator math and value input.
 - **DEC-024** — expose only the active Why Assetly face to screen readers.
 - **DEC-025** — author the six sector plates inline and stop rotation entirely under reduced motion.
+- **DEC-026** — use a non-cartographic code-authored Bengaluru plate without external map data or tracking.
 
 ## Tests Run
 
@@ -51,34 +53,32 @@ The homepage now renders the shared shell, Hero, corrected Compare sequence, Why
 |---|---|
 | `npm run lint` | Pass — 0 problems |
 | `npm run typecheck` | Pass |
-| `npm run test -- --maxWorkers=1` | Pass — 78/78 |
-| `npx playwright test --workers=1` | Pass — 108/108 (93 Chromium + 15 targeted WebKit) |
-| Compare RAF profile | Pass inside the serial full suite; an earlier concurrent run produced one 207.6ms outlier while p95 stayed within guard, and the isolated plus serial reruns passed |
+| `npm run test -- --maxWorkers=1` | Pass — 87/87 |
+| `npx playwright test --workers=1` | Pass — 130/130 (104 Chromium + 26 targeted WebKit) |
+| Compare RAF profile | Pass inside the serial full suite |
 | `npm run build` | Pass — all routes statically generated |
-| Visual preview | Pass — desktop rotated state and complete 390×844 mobile grid |
+| Visual preview | Pass — desktop Contact/map drawer and 390×844 Contact/mobile sheet |
 
-The Phase 6 suite guards exact copy, six unique geometries, deterministic one-slot rotation, timer suppression and cleanup, hover/focus pause, entering plate draw, equal layout, responsive composition, overflow, no live announcements, and static reduced motion in Chromium and WebKit.
+The Phase 7 suite guards every Zod branch and boundary, deterministic draft text, special-character encoding, identical Gmail/mailto payloads, absence of persistence, every enquiry type plus custom, conditional fields, validation and focus behavior, Back/close/reopen preservation, Escape/focus return/trap, desktop drawer, mobile sheet, protected external links, reduced motion, and exclusion of the full address.
 
 ## Issues / Blockers
 
-1. `OD-08` — Phase 7 still needs the approved illustrative Bengaluru map produced; the implementation plan authorizes a non-cartographic code-native SVG.
-2. `OD-14` — Phase 8 cannot begin until a real, rights-cleared About image and factual alt description are supplied.
-3. `OD-13` — no Compare disclaimer wording has been supplied. It remains open; no disclaimer was invented.
-4. `OD-02` — the Hero plate remains authored rather than designer-reviewed.
-5. `OD-01` — the logo is raster, no favicon exists, and Phase 8.5 still needs the loader letterform confirmed.
-6. `OD-05` / `OD-06` — no Firebase project or admin-auth decision; Phase 3 remains blocked.
-7. Bottle underline contrast on Pitch remains queued for Phase 10 QA.
-8. `npm audit` still reports six moderate advisories through `firebase-admin`; re-evaluate with Phase 3.
+1. `OD-14` — Phase 8 cannot begin until a real, rights-cleared About image at least 1600px wide and its factual alt description are supplied.
+2. `OD-13` — no Compare disclaimer wording has been supplied. It remains open; no disclaimer was invented.
+3. `OD-02` — the Hero plate remains authored rather than designer-reviewed.
+4. `OD-01` — the logo is raster, no favicon exists, and Phase 8.5 still needs the loader letterform confirmed.
+5. `OD-05` / `OD-06` — no Firebase project or admin-auth decision; Phase 3 remains blocked.
+6. Bottle underline contrast on Pitch remains queued for Phase 10 QA.
+7. `npm audit` reports six moderate advisories through `firebase-admin`; re-evaluate with Phase 3.
 
 ## Next Recommended Task
 
-Complete Phase 7 in order: static Contact information, code-authored Bengaluru map, typed enquiry model and Zod validation, shared modal focus management, desktop drawer/mobile sheet, deterministic Gmail/mailto draft generation, then full interaction and visual verification.
+Supply the `OD-14` About asset: a genuine Assetly-relevant landscape WebP, JPEG, or AVIF at least 1600px wide, with confirmed usage rights and a factual alt description. Once supplied, implement and commit Phase 8 as one complete boundary. Do not use stock, generated, logo-based, or abstract artwork as a substitute.
 
 ## Notes for Next Cycle
 
-- Install `zod` as the only new Phase 7 runtime dependency and commit both package files with the phase.
-- Preserve partially entered Contact data when the panel closes; nothing is sent or persisted by Assetly.
-- Use separate desktop drawer and mobile sheet structures selected through `useMediaQuery`; do not add a drag gesture.
-- Stop any preview server before Playwright starts its own server and use `page.emulateMedia({ reducedMotion: "reduce" })`.
-- Reuse `Plate`, `useDrawOnEnter`, shared primitives, `.sr-only`, and the existing focus/scroll-lock behavior.
-- Anything clearing the fixed nav uses `--nav-block`, not `--nav-h`.
+- Do not start Phase 8 or create a partial phase commit while `OD-14` remains unresolved.
+- After the asset is supplied, render it with `next/image`, intrinsic dimensions, responsive `sizes`, and the supplied factual alt text.
+- Reuse the public Nav/Footer, clear the fixed nav with `--nav-block`, and verify homepage anchors in both directions from `/about`.
+- Phase 3 remains separately blocked on Firebase project and admin-auth decisions.
+- `OD-13` remains open; no Compare disclaimer wording may be invented.

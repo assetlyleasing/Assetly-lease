@@ -296,6 +296,16 @@ Every important technical or product decision, including conflict resolutions fo
 
 ---
 
+### DEC-026 — Bengaluru context is an illustrative code-authored plate
+
+- **Date**: 2026-08-20
+- **Decision**: The Contact section uses an illustrative, non-cartographic inline SVG authored with the existing `Plate` primitive. Muted road/network linework, a BENGALURU label, and one Assetly marker create location context without external map data, street names, exact coordinates, or a third-party embed.
+- **Reason**: The approved visual direction calls for restrained Bengaluru context, not navigation or geographic precision. Code-native geometry matches the site's drafting language, avoids introducing an unapproved map-data source, and remains fully controllable under reduced motion.
+- **Consequences**: `OD-08` is resolved. The artwork is decorative, immediately complete under reduced motion, and no map provider, attribution layer, or location tracking enters the application.
+- **Status**: Active
+
+---
+
 ## Decision index
 
 | ID | Topic | Status |
@@ -325,3 +335,4 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-023 | Compare uses qualitative tier bars without prototype math | Active |
 | DEC-024 | Why Assetly exposes only the active face to screen readers | Active |
 | DEC-025 | Sector artwork and reduced motion are code-native and static | Active |
+| DEC-026 | Contact uses an illustrative code-authored Bengaluru plate | Active |

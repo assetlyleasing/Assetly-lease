@@ -347,7 +347,11 @@ Four-step scroll sequence, each a near-full-screen argument slide:
 
 **Desktop layout**: ~40/60 split. Left: "CONTACT" label, heading "Let's talk.", Email, Phone, Location line. Right: large simplified Bengaluru map visual (warm muted tones, minimal street/detail noise, Assetly marker, subtle Olive line work, Paper/Field tones, no default-Google-Maps look, no extra info cards) with a "BENGALURU" micro-label, and a minimal contact drawer handle (**"CONTACT ›"**) attached to the map's edge — styled as a drawer handle, not a large CTA button.
 
+**Map artwork**: the approved map is an illustrative, non-cartographic inline SVG authored in the shared `Plate` language (DEC-026). Its roads/network lines provide Bengaluru context without external map data, street names, exact coordinates, or a third-party embed. This resolves `OD-08`.
+
 **Drawer transition**: contact panel slides across part of the map (map stays partially visible), ~700–900ms, `cubic-bezier(.65,0,.35,1)`, no hard pop-up.
+
+**Panel behavior**: the desktop drawer and mobile sheet are separate structures selected at 700px. Both are modal dialogs: focus enters at the first enquiry option, Tab remains trapped, Escape closes, and focus returns to the opener. Closing does not erase the visitor's selected type, step, or entered fields.
 
 **Enquiry flow — Step 1 (type selection)**, large selectable rows, not radio buttons:
 
@@ -362,13 +366,15 @@ Four-step scroll sequence, each a near-full-screen argument slide:
 **Step 2 — minimal details, always asked**: Name, Company, Email, Phone (optional). Do not re-ask what the visitor already selected in Step 1.
 
 **Conditional fields**:
-- Operating Lease / Asset Requirement → Asset/equipment (required-ish), Approx. asset value (optional)
+- Operating Lease / Asset Requirement → Asset/equipment (required), Approx. asset value (optional)
 - Existing Requirement → Reference/short note (optional)
-- General Enquiry / custom → Message (single short textarea)
+- General Enquiry / custom → Message (required single short textarea)
+
+**Validation limits**: Name 2–100 characters; Company 2–150; valid Email up to 254; optional Phone up to 32 without country-specific formatting assumptions. Asset/equipment is capped at 200, approximate value at 100, existing-requirement reference at 300, message at 600, and the custom type label at 80. Invalid continuation focuses the first invalid field and associates each message programmatically.
 
 **Form design**: underline-style fields (no boxed inputs). On focus: line strengthens, subtle Bottle accent, label shifts gently, no glow, no thick borders. Generous spacing.
 
-**Final action**: primary **"Open in Gmail →"** generates a Gmail compose draft (recipient `sankar@assetly.lease`, subject and body built from the selected type + fields) — nothing sends automatically, the visitor reviews/edits/sends themselves. Secondary, subtle fallback: **"Use another email app"** (same recipient/subject/body via `mailto:` and the visitor's default mail client).
+**Final action**: primary **"Open in Gmail →"** generates a Gmail compose draft (recipient `sankar@assetly.lease`, subject `{Enquiry type} Enquiry — {Company}`, and one deterministic body built from the selected type + fields) — nothing sends automatically, the visitor reviews/edits/sends themselves. Secondary, subtle fallback: **"Use another email app"** uses the identical recipient/subject/body through `mailto:` and the visitor's default mail client. Blank optional lines are omitted and all visitor content is URL-encoded; no enquiry is submitted to Assetly infrastructure or persisted in Firebase.
 
 **Typography**: DM Serif Display for "Let's talk.", Bengaluru/major location text, large panel headings. DM Serif Text for email, phone, form input values, supporting info. Inter Tight for all labels (CONTACT, EMAIL, PHONE, LOCATION), enquiry indexes, form field labels, drawer controls, CTA microcopy.
 
@@ -376,7 +382,7 @@ Four-step scroll sequence, each a near-full-screen argument slide:
 
 **Animation**: entrance — CONTACT label fades → heading reveals → email/phone/Bengaluru stagger in → map fades/draws in → contact handle appears last. Drawer: `translateX()`, ~700–900ms, slow physical easing. Step transitions (type → details): fade + `8–12px` movement, ~500–700ms — no dramatic carousel motion.
 
-**Mobile**: vertical recomposition (Contact label → heading → email/phone/location → map → "CONTACT ›" handle). Tapping Contact opens a **bottom sheet** (not a side drawer) containing Step 1 → Step 2 → "Open in Gmail →", scrollable where necessary, visible close/drag handle, full-width fields, generous touch spacing.
+**Mobile**: vertical recomposition (Contact label → heading → email/phone/location → map → "CONTACT ›" handle). Tapping Contact opens a **bottom sheet** (not a side drawer) containing Step 1 → Step 2 → "Open in Gmail →", scrollable where necessary, a visual/tap grip plus an explicit Close control, full-width fields, and generous touch spacing. No drag gesture is implemented.
 
 **Explicitly excluded from this section**: website URL, full postal address, long company description, social links (unless later supplied), a large generic contact form, a generic "Submit" button.
 
@@ -526,7 +532,6 @@ Only **Privacy Policy** and **Terms of Use** are reserved (Footer links) for now
 | OD-05 | Firebase project config: project ID, environment variables, staging vs. production project split, custom domain | Phase 0 exit, Phase 11 |
 | OD-06 | Admin authentication method (email/password vs. Google SSO) and the list of authorized admin accounts | Phase 3 |
 | OD-07 | Admin panel (`/admin`) visual layout/styling beyond the functional capability list in §18 | Phase 3 |
-| OD-08 | Bengaluru custom map visual — data source/base artwork for the "warm muted map" treatment | Phase 7 |
 | OD-09 | Real Privacy Policy / Terms of Use legal wording (currently generic placeholder only) | Phase 9 |
 | OD-10 | Whether/when a Cookie Policy becomes required (depends on future analytics/consent decisions — none planned currently) | Phase 9 |
 | OD-11 | Trusted By actual partner/client logo assets and names (populated via admin after launch, not a build blocker) | Post-launch content |

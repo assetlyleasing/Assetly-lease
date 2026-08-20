@@ -333,24 +333,26 @@ Referenced open decisions (`OD-xx`) and resolved conflicts (`DEC-xxx`) are defin
 **Inputs/dependencies**: Phase 1 (shell). `SOURCE_OF_TRUTH.md` §16.
 
 **Components/files**:
-- `components/contact/ContactSection.tsx`, `ContactMap.tsx`, `ContactDrawer.tsx`
-- `components/contact/EnquiryTypeStep.tsx`, `EnquiryDetailsStep.tsx`
+- `components/contact/ContactSection.tsx`, `ContactMap.tsx`, `ContactDrawer.tsx`, `ContactSheet.tsx`
+- `components/contact/EnquiryFlow.tsx`
 - `content/contact/enquiryTypes.ts` (the 4 categories per DEC-003 + conditional field definitions)
 - `lib/validation/contactForm.ts` (Zod schemas per enquiry type)
-- `lib/email/buildGmailUrl.ts`, `lib/email/buildMailto.ts` (compose URL builders, subject/body templating from §16 example)
+- `lib/email/buildEmailDraft.ts` (one recipient/subject/body source for Gmail and mailto)
+- `lib/a11y/useFocusTrap.ts` (shared by the mobile menu and Contact dialogs)
 
 **Implementation tasks**:
 1. Build static left-side info block: CONTACT label, "Let's talk." heading, Email (clickable `mailto:`), Phone (tap-to-call `tel:`), "Bengaluru" location line — no full address here.
-2. Build/source the custom Bengaluru map visual per §16 direction (**resolves OD-08** when complete) — warm muted static/SVG treatment, Assetly marker, no third-party embed.
+2. Author the illustrative, non-cartographic Bengaluru map visual per §16 and DEC-026 (**resolves OD-08**) — warm muted inline SVG treatment, Assetly marker, no external map data or third-party embed.
 3. Build `ContactDrawer.tsx`: minimal "CONTACT ›" handle on the map edge, slides in (`translateX`, 700–900ms `--eio`) revealing the enquiry flow, map stays partially visible.
 4. Build `content/contact/enquiryTypes.ts` with the 4 DEC-003 categories + their conditional field definitions (Operating Lease/Asset Requirement → asset+value; Existing Requirement → reference note; General Enquiry → message).
-5. Build `EnquiryTypeStep.tsx`: large selectable rows (01–04) + "Something else…" custom field.
-6. Build `EnquiryDetailsStep.tsx`: Name/Company/Email/Phone(optional) always, plus the conditional fields for the selected type; underline-style inputs with focus states (line strengthens, Bottle accent, label shift, no glow/thick border).
+5. Build the type step in `EnquiryFlow.tsx`: large selectable rows (01–04) + "Something else…" custom field.
+6. Build the details step in `EnquiryFlow.tsx`: Name/Company/Email/Phone(optional) always, plus the conditional fields for the selected type; underline-style inputs with focus states (line strengthens, Bottle accent, label shift, no glow/thick border).
 7. Build `lib/validation/contactForm.ts`: Zod schema per enquiry type (required vs. optional fields).
-8. Build `buildGmailUrl.ts`/`buildMailto.ts`: template the subject/body per the §16 example format, URL-encode correctly, target `sankar@assetly.lease`.
+8. Build `buildEmailDraft.ts`: template one recipient/subject/body payload, then derive identically encoded Gmail and mailto URLs targeting `sankar@assetly.lease`.
 9. Wire primary "Open in Gmail →" action and secondary "Use another email app" fallback.
-10. Build mobile variant: bottom sheet (not side drawer) with drag/close handle, Step 1 → Step 2 → action, full-width fields.
+10. Build mobile variant: bottom sheet (not side drawer) with visual grip and explicit Close control, Step 1 → Step 2 → action, full-width fields; no drag gesture.
 11. Implement section entrance sequence (label → heading → info stagger → map fade/draw → handle appears last).
+12. Factor focus trapping, Escape, focus return, and scroll locking into one shared hook; migrate the mobile menu and reuse it for both Contact panels without changing menu visuals.
 
 **Data/schema changes**: None (no Firestore write on submission — DEC-012).
 
@@ -368,9 +370,9 @@ Referenced open decisions (`OD-xx`) and resolved conflicts (`DEC-xxx`) are defin
 
 **Exit criteria**: All 4 enquiry types (+ custom) produce correct, correctly-encoded Gmail and mailto drafts; mobile bottom sheet behaves correctly; no full address or excluded content (§16 exclusion list) appears in this section.
 
-**Risks**: URL length limits on `mailto:`/Gmail compose links for very long custom messages — validate against a reasonable max length in the Zod schema. OD-08 (map asset) is a real design deliverable, not incidental.
+**Risks**: URL length limits on `mailto:`/Gmail compose links for very long custom messages — bounded by the approved Zod field limits and covered by encoded-draft tests.
 
-**Open decisions**: OD-08.
+**Open decisions**: None blocking; `OD-08` resolved by DEC-026.
 
 ---
 

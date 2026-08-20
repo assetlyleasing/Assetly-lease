@@ -99,17 +99,18 @@ Update this file at the end of every cycle per `LOOP.md` step 6. Do not skip ahe
 
 ## Phase 7 — Contact
 
-- [ ] `CONTACT-001` Build static left info block (email/phone/Bengaluru, no full address)
-- [ ] `CONTACT-002` Build/source custom Bengaluru map visual — resolves `OD-08`
-- [ ] `CONTACT-003` Build `ContactDrawer.tsx` (handle + slide-in, map partially visible)
-- [ ] `CONTACT-004` Build `content/contact/enquiryTypes.ts` per DEC-003 (4 categories + conditional fields)
-- [ ] `CONTACT-005` Build `EnquiryTypeStep.tsx` (selectable rows + custom field)
-- [ ] `CONTACT-006` Build `EnquiryDetailsStep.tsx` (base fields + conditional fields, underline inputs)
-- [ ] `CONTACT-007` Build `lib/validation/contactForm.ts` (Zod, per enquiry type)
-- [ ] `CONTACT-008` Build `buildGmailUrl.ts` + `buildMailto.ts`, wire primary/fallback actions
-- [ ] `CONTACT-009` Build mobile bottom-sheet variant (Step 1 → Step 2 → action)
-- [ ] `CONTACT-010` Implement section entrance sequence
-- [ ] `CONTACT-011` Playwright: full enquiry flow all 4 types + custom, URL/encoding correctness, mobile sheet, a11y
+- [x] `CONTACT-001` Build static left info block (email/phone/Bengaluru, no full address)
+- [x] `CONTACT-002` Author illustrative non-cartographic Bengaluru plate — resolves `OD-08` (DEC-026)
+- [x] `CONTACT-003` Build `ContactDrawer.tsx` (handle + slide-in, map partially visible)
+- [x] `CONTACT-004` Build `content/contact/enquiryTypes.ts` per DEC-003 (4 categories + custom and conditional fields)
+- [x] `CONTACT-005` Build the selectable enquiry-type step in `EnquiryFlow.tsx`
+- [x] `CONTACT-006` Build the details step with conditional underline fields in `EnquiryFlow.tsx`
+- [x] `CONTACT-007` Build `lib/validation/contactForm.ts` (Zod discriminated union and locked limits)
+- [x] `CONTACT-008` Build one deterministic email draft source and wire matching protected Gmail/mailto actions
+- [x] `CONTACT-009` Build the separate mobile bottom-sheet variant with grip and explicit Close control
+- [x] `CONTACT-010` Implement reduced-motion-safe section, map, panel, and step presentation
+- [x] `CONTACT-011` Playwright: every enquiry branch, encoding, preservation, validation/focus, desktop/mobile panels, reduced motion, Chromium+WebKit
+- [x] `CONTACT-012` Factor and reuse shared modal focus trap, Escape, focus return, and scroll lock behavior
 
 ## Phase 8 — About page
 

@@ -36,7 +36,7 @@ export default defineConfig({
     },
     {
       name: "webkit-interactions",
-      testMatch: /(why-us|sectors)\.spec\.ts/,
+      testMatch: /(why-us|sectors|contact)\.spec\.ts/,
       use: { ...devices["Desktop Safari"] },
     },
   ],
