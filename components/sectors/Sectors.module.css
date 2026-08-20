@@ -1,0 +1,141 @@
+.section {
+  padding-block: var(--section-pad);
+  background: var(--paper);
+}
+
+.header {
+  margin-bottom: clamp(30px, 5vh, 52px);
+}
+
+.heading {
+  margin-top: clamp(12px, 2vh, 18px);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: 1fr;
+  border-top: var(--hairline);
+  border-left: var(--hairline);
+  outline-offset: 5px;
+}
+
+.cell {
+  min-width: 0;
+  min-height: clamp(300px, 28vw, 390px);
+  border-right: var(--hairline);
+  border-bottom: var(--hairline);
+}
+
+.card {
+  display: flex;
+  min-height: inherit;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: clamp(20px, 3vw, 36px);
+  padding: var(--card-pad-lg);
+  background: var(--paper);
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 450ms var(--e),
+    transform 450ms var(--e);
+}
+
+.card[data-swapping="true"] {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.cardTop {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(18px, 3vw, 36px);
+}
+
+.index {
+  font-family: var(--u);
+  font-size: var(--u-size);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: var(--u-track-wide);
+  color: var(--moss);
+  font-variant-numeric: tabular-nums;
+}
+
+.plateWrap {
+  width: min(100%, 300px);
+  aspect-ratio: 200 / 130;
+  justify-self: end;
+}
+
+.plate {
+  transition: opacity var(--dur-toggle) var(--eio);
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 2vh, 18px);
+}
+
+.name {
+  max-width: 18ch;
+  font-size: clamp(25px, 3vw, 42px);
+  line-height: 1.04;
+}
+
+.descriptor {
+  max-width: 34ch;
+  font-size: clamp(15px, 1.3vw, 18px);
+  line-height: 1.5;
+  color: var(--moss);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .grid:hover .plate {
+    opacity: 0.78;
+  }
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cell {
+    min-height: clamp(245px, 70vw, 285px);
+  }
+
+  .card {
+    padding: var(--card-pad);
+  }
+
+  .cardTop {
+    gap: 18px;
+  }
+
+  .plateWrap {
+    width: min(74%, 220px);
+  }
+
+  .name {
+    font-size: clamp(25px, 8vw, 32px);
+  }
+
+  .descriptor {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .card[data-swapping="true"],
+  .plate {
+    opacity: 1;
+    transform: none;
+    transition: none !important;
+  }
+}

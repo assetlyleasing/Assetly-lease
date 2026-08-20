@@ -308,9 +308,9 @@ Referenced open decisions (`OD-xx`) and resolved conflicts (`DEC-xxx`) are defin
 
 **Responsive requirements**: 2×2 desktop → 1×4 vertical mobile, both showing exactly 4 of 6 sectors at any moment.
 
-**Animation requirements**: One-out-one-in rotation (2.5s interval, 450ms fade+translateY swap) + plate draw (2.6s) per §15, reduced-motion-safe (rotation may need to slow/pause or swap without the translateY per `prefers-reduced-motion` — apply the same neutralization principle as §8).
+**Animation requirements**: One-out-one-in rotation (2.5s interval, 450ms fade+translateY swap) + plate draw (2.6s) per §15. Under reduced motion, render the initial four sectors and completed plates without creating the rotation timer (DEC-025).
 
-**Accessibility requirements**: Auto-rotating content should not trap or disorient screen-reader/keyboard users — consider `aria-live="off"` on the rotating region with content still reachable, and ensure rotation pauses on focus-within (not just hover) so keyboard users can read a focused card without it changing underneath them.
+**Accessibility requirements**: The grid is one focusable region with a visible focus state and `aria-live="off"`; focus pauses rotation. The four passive cards do not become separate tab stops (DEC-025).
 
 **Tests**:
 - Vitest: `useOneOutOneIn` scheduler produces correct one-at-a-time rotation over a simulated pool of 6/visible 4, never double-swapping simultaneously.
@@ -322,7 +322,7 @@ Referenced open decisions (`OD-xx`) and resolved conflicts (`DEC-xxx`) are defin
 
 **Risks**: `setInterval`-based rotation can drift or double-fire if not cleaned up correctly on unmount/re-render — prefer a single scheduler instance guarded by `useEffect` cleanup. OD-04 (plate artwork) is a real design deliverable.
 
-**Open decisions**: OD-04.
+**Open decisions**: None blocking; `OD-04` resolved by DEC-025.
 
 ---
 
@@ -407,7 +407,7 @@ Referenced open decisions (`OD-xx`) and resolved conflicts (`DEC-xxx`) are defin
 
 **Risks**: Temptation to over-build this page beyond "simple" — resist per the §4 non-goals (no timeline/stats/founders unless supplied).
 
-**Open decisions**: None blocking (image asset should be sourced from real Assetly material if available; otherwise flag rather than fabricate).
+**Open decisions**: `OD-14` blocks implementation and the Phase 8 commit until a real, usage-approved image and factual alt description are supplied. Do not substitute stock, generated, logo-based, or abstract artwork.
 
 ---
 

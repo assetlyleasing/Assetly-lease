@@ -318,7 +318,7 @@ Four-step scroll sequence, each a near-full-screen argument slide:
 
 **Card content**: small Inter Tight index/label; DM Serif Display sector name; optional short DM Serif Text descriptor on desktop (can be omitted where the plate provides enough context). Example: "01 / Commercial Interiors / Workplace, fit-out and interior assets."
 
-**Sector plates** (meaningful, not generic icons — artwork not yet produced, `OPEN DECISION` §25):
+**Sector plates** (meaningful, not generic icons — approved as code-authored 200×130 inline geometry under DEC-025):
 
 - Commercial Interiors → floor plan/furniture/workspace geometry
 - Manufacturing → machinery/production-line geometry
@@ -336,6 +336,8 @@ Four-step scroll sequence, each a near-full-screen argument slide:
 **Desktop hover**: pauses rotation, slightly raises plate opacity, card stays physically stable — no scale-up.
 
 **Mobile**: no hover-dependent interaction; the four stacked cells passively continue the same 2.5s one-card-at-a-time rotation.
+
+**Accessibility and reduced motion**: the grid is one focusable region rather than four passive tab stops; rotation pauses while it is focused and changing copy is not announced as a live region. Under `prefers-reduced-motion: reduce`, the initial four sectors remain static with fully drawn plates and no rotation timer.
 
 ## 16. Contact specification
 
@@ -521,7 +523,6 @@ Only **Privacy Policy** and **Terms of Use** are reserved (Footer links) for now
 |---|---|---|
 | OD-01 | Vector Assetly logo/wordmark lockup (SVG) not yet in the repo | Nav, Footer, Hero (Phase 1–2) |
 | OD-02 | Hero plate SVG artwork ("Access → Scale → Grow" line drawing) — direction defined, asset not produced | Phase 2 exit |
-| OD-04 | Sector plate artwork ×6 — direction defined, assets not produced | Phase 6 exit |
 | OD-05 | Firebase project config: project ID, environment variables, staging vs. production project split, custom domain | Phase 0 exit, Phase 11 |
 | OD-06 | Admin authentication method (email/password vs. Google SSO) and the list of authorized admin accounts | Phase 3 |
 | OD-07 | Admin panel (`/admin`) visual layout/styling beyond the functional capability list in §18 | Phase 3 |
@@ -531,3 +532,4 @@ Only **Privacy Policy** and **Terms of Use** are reserved (Footer links) for now
 | OD-11 | Trusted By actual partner/client logo assets and names (populated via admin after launch, not a build blocker) | Post-launch content |
 | OD-12 | Production/staging domain name(s) | Phase 11 |
 | OD-13 | Whether the Compare section needs a disclaimer line beneath the calculator. §13's approved copy states tax and finance outcomes as fact ("Full rentals deductible", "180-day usage restriction", "GST input credit continues to apply") and the prototype DESIGN_SYSTEM describes carried an "illustrative disclaimer" element, but no wording has been supplied and none may be invented (§24) | Phase 4 polish / Phase 9 legal |
+| OD-14 | Real, usage-approved About image (landscape WebP/JPEG/AVIF, at least 1600px wide) plus a factual alt description. No stock, generated, logo-based, or abstract substitute is authorized | Phase 8 |

@@ -88,14 +88,14 @@ Update this file at the end of every cycle per `LOOP.md` step 6. Do not skip ahe
 
 ## Phase 6 — Sectors
 
-- [ ] `SECTOR-001` Build `content/sectors/sectors.ts` (6-sector pool, short descriptors)
-- [ ] `SECTOR-002` Author/source 6 sector plate artworks — resolves `OD-04`
-- [ ] `SECTOR-003` Implement `useOneOutOneIn` rotation scheduler (2.5s interval, one-slot-at-a-time)
-- [ ] `SECTOR-004` Build `SectorCard.tsx` (index + name + optional descriptor + plate)
-- [ ] `SECTOR-005` Build 2×2 desktop / 1×4 mobile ledger grid
-- [ ] `SECTOR-006` Implement entrance sequence (stagger reveal → initial plates draw → rotation starts)
-- [ ] `SECTOR-007` Implement hover-pause (desktop) + focus-pause (keyboard)
-- [ ] `SECTOR-008` Playwright: rotation cadence/correctness, hover/focus pause, reduced-motion, responsive
+- [x] `SECTOR-001` Build `content/sectors/sectors.ts` (6-sector pool, short descriptors)
+- [x] `SECTOR-002` Author 6 code-native 200×130 sector plate artworks — resolves `OD-04` (DEC-025)
+- [x] `SECTOR-003` Implement `useOneOutOneIn` rotation scheduler (2.5s interval, one-slot-at-a-time)
+- [x] `SECTOR-004` Build `SectorCard.tsx` (index + name + desktop descriptor + plate)
+- [x] `SECTOR-005` Build 2×2 desktop / 1×4 mobile ledger grid
+- [x] `SECTOR-006` Implement entrance sequence (stagger reveal → initial plates draw → rotation starts)
+- [x] `SECTOR-007` Implement hover, focus, and document-visibility pause behavior
+- [x] `SECTOR-008` Playwright: rotation cadence/correctness, hover/focus pause, reduced-motion, responsive, Chromium+WebKit
 
 ## Phase 7 — Contact
 
@@ -113,6 +113,7 @@ Update this file at the end of every cycle per `LOOP.md` step 6. Do not skip ahe
 
 ## Phase 8 — About page
 
+- [ ] `ABOUT-000` Resolve `OD-14`: supply a real, usage-approved landscape image (≥1600px) and factual alt description before implementation begins
 - [ ] `ABOUT-001` Build `content/about/copy.ts` (source-grounded, no fabricated content)
 - [ ] `ABOUT-002` Build `/about` page: image + heading + body + optional location line
 - [ ] `ABOUT-003` Confirm Nav/Footer reuse and correct link resolution to/from `/about`

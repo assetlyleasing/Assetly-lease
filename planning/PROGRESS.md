@@ -6,45 +6,44 @@ This file reflects the *current* state of the project, not a running chronologic
 
 ## Current Phase
 
-Phase 5 — Why Us: **complete**. Phases 0, 1, 2 and 4 are complete; Phase 4 also has its approved plate and qualitative-graph correction. Phase 3 remains blocked on `OD-05`/`OD-06`. Phase 6 is unblocked.
+Phase 6 — Sectors: **complete**. Phases 0, 1, 2, 4, 5 and 6 are complete. Phase 3 remains blocked on `OD-05`/`OD-06`; Phase 7 is unblocked. Phase 8 is now explicitly blocked on the real-image requirement in `OD-14`.
 
 ## Current Task
 
-`SECTOR-001` — build the locked six-sector content model for Phase 6. Plate production remains tied to `OD-04` at `SECTOR-002`.
+`CONTACT-001` — build the approved static Contact information block, followed by the code-authored Bengaluru visual and enquiry experience.
 
 ## Status
 
-The homepage now renders the shared shell, Hero, corrected Compare sequence, and the completed Why Assetly section. Green at this boundary: lint, typecheck, production build, 71 unit tests, 86 Chromium Playwright tests, and 8 targeted WebKit Why Assetly tests.
+The homepage now renders the shared shell, Hero, corrected Compare sequence, Why Assetly, and the complete auto-rotating Sectors section. Green at this boundary: lint, typecheck, production build, 78 unit tests, 93 Chromium Playwright tests, and 15 targeted WebKit interaction tests.
 
 ## Completed This Cycle
 
-### Phase 5 — Why Assetly
+### Phase 6 — Sectors We Serve
 
-- Added the exact approved T/F/S/P value names and explanations in a typed `WhyUsValue` content model.
-- Replaced the homepage placeholder with a connected 2×2 ledger grid that recomposes to one column at 640px and below.
-- Built each card as an independent native button. Click, tap, Enter, and Space flip; multiple cards can remain open; hover only strengthens contrast and moves the cue by 1–2px.
-- Locked both absolutely positioned faces to one shared card-shell minimum height. Desktop and mobile bounding boxes remain unchanged before and after a flip.
-- Added the standard `RevealOnScroll` entrance and four-cell `rv-u` / `rv-d1..3` stagger without any automatic flip.
-- Added the 900ms 3D flip with proper perspective and hidden backfaces. Reduced motion removes the 3D transform and uses the standard short opacity swap.
-- Added Chromium coverage to the full suite and a targeted WebKit project for the complete Why Assetly interaction suite.
+- Added the locked six-sector pool with typed IDs, fixed `01–06` indices, approved short descriptors, and typed plate references.
+- Authored six distinct 200×130 inline plates for commercial interiors, manufacturing, construction, hospitality, healthcare, and IT infrastructure using the unchanged shared `Plate` primitive.
+- Built the connected 2×2 desktop / 1×4 mobile ledger grid with four sectors visible, equal desktop row heights, and compact mobile cards without long descriptors.
+- Added a pure cyclic rotation model and one timer owner. Rotation begins after the entrance settles, changes one slot every 2.5 seconds, completes the 450ms exit before replacement, and remounts only entering artwork for its 2.6-second draw.
+- Rotation pauses before another swap while the grid is hovered or focused and while the document is hidden. An in-progress swap is allowed to finish.
+- The grid is one keyboard focus target with a visible focus state and `aria-live="off"`; passive cards do not become four extra tab stops.
+- Reduced motion renders sectors 01–04 and fully drawn plates without creating the rotation timer.
 
-### Accessibility decision
+### Decisions and planning
 
-- **DEC-024** records the active-face-only approach. The visual 3D faces are outside the accessibility tree; the button's value name and `aria-pressed` state remain available. The explanation is mounted as a polite button description only while flipped, then removed on return.
-- This was chosen so assistive-technology users receive the same state-dependent explanation without hearing both faces or hidden back copy before activation.
+- **DEC-025** approves the six code-authored plates and the completely static reduced-motion state, resolving `OD-04`.
+- Added **OD-14** for Phase 8: a real, usage-approved landscape About image at least 1600px wide plus factual alt text. No substitute visual is authorized and no partial Phase 8 implementation may begin without it.
 
 ### Visual review
 
-- Reviewed rendered 1440×900 desktop front and mixed-flip states plus the complete 390×844 mobile column.
-- Increased the shared mobile card minimum height after the first preview placed the longest explanation's return cue too close to the clipped edge. The final preview keeps the copy and cue fully visible without changing height during activation.
-- Reconfirmed the project-owner-requested thicker Compare graph fills: uniform 44px desktop and 28px mobile.
+- Reviewed rendered 1440×900 desktop and 390×844 mobile Sectors states after rotation.
+- Corrected unequal desktop row sizing exposed by the longer IT title by locking both implicit grid rows to one shared fraction.
+- Confirmed the shared-border grid, thin drafting plates, mobile composition, and completed reduced-motion plates on screen.
 
 ## Decisions
 
-- **DEC-021** — archive both prototype HTML files under `reference/`.
-- **DEC-022** — approve the compact prototype-derived Compare plate set and resolve `OD-03`.
 - **DEC-023** — use qualitative Compare tier bars while retaining the ban on prototype calculator math and value input.
 - **DEC-024** — expose only the active Why Assetly face to screen readers.
+- **DEC-025** — author the six sector plates inline and stop rotation entirely under reduced motion.
 
 ## Tests Run
 
@@ -52,33 +51,34 @@ The homepage now renders the shared shell, Hero, corrected Compare sequence, and
 |---|---|
 | `npm run lint` | Pass — 0 problems |
 | `npm run typecheck` | Pass |
-| `npm run test` | Pass — 71/71 |
-| `npx playwright test --workers=2` | Pass — 94/94 (86 Chromium + 8 targeted WebKit) |
-| Compare RAF profile | Pass inside the full suite — p95 below 60ms and worst frame below 200ms in the guarded development-build profile |
+| `npm run test -- --maxWorkers=1` | Pass — 78/78 |
+| `npx playwright test --workers=1` | Pass — 108/108 (93 Chromium + 15 targeted WebKit) |
+| Compare RAF profile | Pass inside the serial full suite; an earlier concurrent run produced one 207.6ms outlier while p95 stayed within guard, and the isolated plus serial reruns passed |
 | `npm run build` | Pass — all routes statically generated |
-| Visual preview | Pass — desktop front/mixed states and complete 390×844 mobile grid |
+| Visual preview | Pass — desktop rotated state and complete 390×844 mobile grid |
 
-The Phase 5 suite guards exact copy, independent and simultaneous flips, native keyboard behavior, hover never flipping, active-face descriptions, fixed card and section boxes, mobile one-column composition, overflow, and reduced-motion behavior in both engines.
+The Phase 6 suite guards exact copy, six unique geometries, deterministic one-slot rotation, timer suppression and cleanup, hover/focus pause, entering plate draw, equal layout, responsive composition, overflow, no live announcements, and static reduced motion in Chromium and WebKit.
 
 ## Issues / Blockers
 
-1. `OD-13` — no Compare disclaimer wording has been supplied. It remains open; no disclaimer was invented.
-2. `OD-02` — the Hero plate remains authored rather than designer-reviewed.
-3. `OD-01` — the logo is raster, no favicon exists, and Phase 8.5 still needs the loader letterform confirmed.
-4. `OD-05` / `OD-06` — no Firebase project or admin-auth decision; Phase 3 remains blocked.
-5. `OD-04` — Phase 6 sector plate artwork still needs sourcing or approval before `SECTOR-002` can close.
-6. Bottle underline contrast on Pitch remains queued for Phase 10 QA.
-7. `npm audit` still reports six moderate advisories through `firebase-admin`; re-evaluate with Phase 3.
+1. `OD-08` — Phase 7 still needs the approved illustrative Bengaluru map produced; the implementation plan authorizes a non-cartographic code-native SVG.
+2. `OD-14` — Phase 8 cannot begin until a real, rights-cleared About image and factual alt description are supplied.
+3. `OD-13` — no Compare disclaimer wording has been supplied. It remains open; no disclaimer was invented.
+4. `OD-02` — the Hero plate remains authored rather than designer-reviewed.
+5. `OD-01` — the logo is raster, no favicon exists, and Phase 8.5 still needs the loader letterform confirmed.
+6. `OD-05` / `OD-06` — no Firebase project or admin-auth decision; Phase 3 remains blocked.
+7. Bottle underline contrast on Pitch remains queued for Phase 10 QA.
+8. `npm audit` still reports six moderate advisories through `firebase-admin`; re-evaluate with Phase 3.
 
 ## Next Recommended Task
 
-Start Phase 6 with `SECTOR-001`: implement the locked six-sector pool and approved short descriptors without inventing facts. Then resolve `OD-04` before authoring the six sector plates in `SECTOR-002`.
+Complete Phase 7 in order: static Contact information, code-authored Bengaluru map, typed enquiry model and Zod validation, shared modal focus management, desktop drawer/mobile sheet, deterministic Gmail/mailto draft generation, then full interaction and visual verification.
 
 ## Notes for Next Cycle
 
-- Run `npm run build` once before `npm run typecheck` on a clean checkout so Next.js route types exist.
-- Stop any existing `next dev` before Playwright starts its own server.
-- Use `page.emulateMedia({ reducedMotion: "reduce" })`; the fixture option does not reach the page here.
-- Reuse the existing plate, reveal, typography, responsive, and shared-motion primitives.
+- Install `zod` as the only new Phase 7 runtime dependency and commit both package files with the phase.
+- Preserve partially entered Contact data when the panel closes; nothing is sent or persisted by Assetly.
+- Use separate desktop drawer and mobile sheet structures selected through `useMediaQuery`; do not add a drag gesture.
+- Stop any preview server before Playwright starts its own server and use `page.emulateMedia({ reducedMotion: "reduce" })`.
+- Reuse `Plate`, `useDrawOnEnter`, shared primitives, `.sr-only`, and the existing focus/scroll-lock behavior.
 - Anything clearing the fixed nav uses `--nav-block`, not `--nav-h`.
-- Keep UI completion dependent on desktop and mobile browser inspection; the mobile card-height adjustment was visible before it was a test failure.

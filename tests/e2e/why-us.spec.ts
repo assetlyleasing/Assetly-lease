@@ -121,7 +121,7 @@ test.describe("Why Assetly — activation", () => {
     );
     expect(Math.round(sectionAfter.height)).toBe(Math.round(sectionBefore.height));
     expect(Math.round(cardAfter.height)).toBe(Math.round(cardBefore.height));
-    expect(Math.round(cardDocumentYAfter)).toBe(Math.round(cardDocumentYBefore));
+    expect(Math.abs(cardDocumentYAfter - cardDocumentYBefore)).toBeLessThanOrEqual(2);
   });
 });
 

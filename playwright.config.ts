@@ -14,8 +14,8 @@ const launchOptions = executablePath ? { executablePath } : undefined;
 /**
  * User-flow and interaction tests (SOURCE_OF_TRUTH.md §19).
  *
- * The full regression suite runs in Chromium. Phase 5 also runs the Why Assetly
- * interaction suite in WebKit; Phase 10 broadens that second-engine coverage.
+ * The full regression suite runs in Chromium. Interaction-heavy completed
+ * sections also run in WebKit; Phase 10 broadens that second-engine coverage.
  */
 export default defineConfig({
   testDir: "./tests/e2e",
@@ -35,8 +35,8 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"] },
     },
     {
-      name: "webkit-why-us",
-      testMatch: /why-us\.spec\.ts/,
+      name: "webkit-interactions",
+      testMatch: /(why-us|sectors)\.spec\.ts/,
       use: { ...devices["Desktop Safari"] },
     },
   ],

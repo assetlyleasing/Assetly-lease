@@ -286,6 +286,16 @@ Every important technical or product decision, including conflict resolutions fo
 
 ---
 
+### DEC-025 — Sector artwork and reduced motion remain code-native and static
+
+- **Date**: 2026-08-20
+- **Decision**: The six Sectors plates are distinct 200×130 inline geometries authored in the established thin-stroke drafting language. The grid rotates one slot at a time on the approved 2.5-second cadence, pauses on hover/focus/document hiding, and exposes no live announcements. Under reduced motion, it renders sectors 01–04 and fully drawn plates without starting the rotation timer.
+- **Reason**: The approved sector directions are specific enough to produce meaningful artwork without an external asset, while a completely static reduced-motion state satisfies the site's rule that continuous motion must stop rather than merely accelerate.
+- **Consequences**: `OD-04` is resolved. The generic `Plate` and `useDrawOnEnter` primitives remain unchanged, and each entering sector remounts only its artwork so the plate draws once.
+- **Status**: Active
+
+---
+
 ## Decision index
 
 | ID | Topic | Status |
@@ -314,3 +324,4 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-022 | Compare plates use the archived prototype's drafting language | Active |
 | DEC-023 | Compare uses qualitative tier bars without prototype math | Active |
 | DEC-024 | Why Assetly exposes only the active face to screen readers | Active |
+| DEC-025 | Sector artwork and reduced motion are code-native and static | Active |
