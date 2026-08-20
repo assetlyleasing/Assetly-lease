@@ -10,7 +10,9 @@ test("root route responds 200 with the expected title", async ({ page }) => {
 
   expect(response?.status()).toBe(200);
   await expect(page).toHaveTitle("Assetly");
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Assetly");
+  // The page's single h1 is the Hero proposition; hero.spec.ts asserts its
+  // exact locked wording.
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 });
 
 test("design tokens and base typography are applied", async ({ page }) => {

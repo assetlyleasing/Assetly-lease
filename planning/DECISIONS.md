@@ -210,6 +210,18 @@ Every important technical or product decision, including conflict resolutions fo
 
 ---
 
+### DEC-018 — Hero main line is "The lighter balance sheet.", superseding DEC-001's headline
+
+- **Date**: 2026-08-20
+- **Decision**: The Hero's main line is **"The lighter balance sheet."**, set across the two mask lines as "The *lighter*" / "balance sheet.", with `lighter` carrying the §7 italic-in-Moss emphasis. The subline is **unchanged** — it remains the "Access . Scale . Grow" tagline from DEC-001 and §5.
+- **Reason**: Direct user instruction while reviewing the built Hero. This supersedes only the *main line* clause of DEC-001; every other part of that decision (the subline, and the rule that no additional paragraph follows it) still stands.
+- **Alternatives considered**: DEC-001's line, "The lighter way to access what your business needs.", which was selected because `plan.md` was the newest planning document in the repository and explicitly locked that copy.
+- **Why rejected**: DEC-001 resolved a conflict between planning documents in the absence of the user's own preference. That preference has now been stated directly, and a live instruction from the project owner outranks an inference drawn from document chronology. Worth noting that this line is the one the `home-2.html` prototype used, which DEC-001 had recorded as the rejected alternative — the prototype's headline is now the approved one.
+- **Consequences**: `SOURCE_OF_TRUTH.md` §11's "Approved copy" block is updated. §11a point 7 describes the final Hero hierarchy as **A / proposition / ACCESS · SCALE · GROW**; that shape is unaffected, since only the proposition's wording changed. `content/site/hero.ts` holds the copy and `tests/unit/heroCopy.test.ts` asserts the segments still reassemble into exactly this sentence, so a careless edit fails rather than silently shipping different words.
+- **Status**: Active
+
+---
+
 ## Decision index
 
 | ID | Topic | Status |
@@ -231,3 +243,4 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-015 | Self-host brand fonts via `next/font/local` if Google Fonts is unreachable | **Withdrawn** |
 | DEC-016 | `FOUND-008` prototype archival closed as not applicable | Active |
 | DEC-017 | Nav wordmark = serif "assetly"; bar wider than the page gutter | Active |
+| DEC-018 | Hero main line = "The lighter balance sheet." (supersedes DEC-001's headline) | Active |

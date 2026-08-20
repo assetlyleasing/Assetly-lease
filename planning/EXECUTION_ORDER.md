@@ -33,15 +33,15 @@ Update this file at the end of every cycle per `LOOP.md` step 6. Do not skip ahe
 
 > Scope note (DEC-013): this phase's entry animation is the simple interim version only. The full blink/recede opening loader (§11a) is deferred to Phase 8.5, scheduled after Phase 8.
 
-- [ ] `PLATE-001` Build generic `Plate.tsx` (draw animation, `.go` trigger, reduced-motion fallback)
-- [ ] `PLATE-002` Build `useDrawOnEnter` (IntersectionObserver trigger hook)
-- [ ] `HERO-001` Implement Hero copy stack with locked DEC-001 copy (main line + subline), including a stable "A" mark position Phase 8.5 can hand off into
-- [ ] `HERO-002` Author/source Hero plate SVG artwork (Access→Scale→Grow direction) — resolves `OD-02`
-- [ ] `HERO-003` Implement interim entry sequence (§11 Hero Motion Sequence, post-loader form — plate draw → headline mask reveal → subline fade → plate complete → ambient start), fired on mount for now
-- [ ] `HERO-004` Implement Stage 2 ambient drift (`useAmbientDrift`) + optional cursor parallax
-- [ ] `HERO-005` Implement Stage 3 scroll-exit fade
-- [ ] `HERO-006` Playwright: entry sequence timing, reduced-motion fallback, responsive 320–1920px
-- [ ] `HERO-007` Performance check: Hero paint not blocked by any fetch
+- [x] `PLATE-001` Build generic `Plate.tsx` (draw animation, `.go` trigger, reduced-motion fallback) — artwork passes geometry only; stroke/fill/dash all supplied by the component, so Phases 4 and 6 reuse it unmodified
+- [x] `PLATE-002` Build `useDrawOnEnter` (IntersectionObserver trigger hook)
+- [x] `HERO-001` Implement Hero copy stack with locked copy (main line + subline), including a stable mark position Phase 8.5 can hand off into — main line now per `DECISIONS.md` DEC-018
+- [~] `HERO-002` Author/source Hero plate SVG artwork (Access→Scale→Grow direction) — artwork authored in-house and shipping (`content/plates/hero-plate.tsx`); `OD-02` stays **open** pending design review, since §11's direction was interpreted rather than supplied by a designer
+- [x] `HERO-003` Implement interim entry sequence (§11 Hero Motion Sequence, post-loader form — plate draw → headline mask reveal → subline fade → plate complete → ambient start), fired on mount for now
+- [x] `HERO-004` Implement Stage 2 ambient drift + cursor parallax — drift is CSS (8–12s, `alternate`, delayed past the draw); parallax is `lib/motion/useCursorParallax.ts`, inert under reduced motion and on coarse pointers
+- [x] `HERO-005` Implement Stage 3 scroll-exit fade — continuous, rAF-coalesced, written as `--hero-plate-fade`
+- [x] `HERO-006` Playwright: entry sequence timing, reduced-motion fallback, responsive 320–1920px
+- [x] `HERO-007` Performance check: Hero paint not blocked by any fetch — asserted by test, no Firebase/network request on load
 
 ## Phase 3 — Trusted By infrastructure
 

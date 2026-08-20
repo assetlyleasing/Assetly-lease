@@ -1,0 +1,70 @@
+/*
+ * The traced-line "plate", SOURCE_OF_TRUTH.md §5 and §8.
+ *
+ * Every section's plate is a line drawing that means something about that
+ * section's content (§5), drawn once on activation: stroke-dasharray 2200 →
+ * stroke-dashoffset 0 over 2.6s with --eio (§8).
+ *
+ * The draw is expressed entirely in CSS and keyed off a single `.go` class, so
+ * the same component serves the Hero (Phase 2), the four Compare slides
+ * (Phase 4) and the six sector cards (Phase 6) without modification.
+ */
+
+.plate {
+  /* Sized by whatever lays it out; it never dictates its own box. */
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  /* §11: the Hero plate settles to ~16%. Callers override per section. */
+  opacity: 0;
+  color: var(--olive);
+  transition: opacity var(--dur-draw) var(--eio);
+}
+
+.plate.go {
+  opacity: var(--plate-opacity, 0.16);
+}
+
+/*
+ * Applied to every stroked child rather than a specific element, so plate
+ * artwork can be authored as paths, lines, circles or polylines without the
+ * animation needing to know which.
+ */
+.plate :is(path, line, polyline, circle, ellipse, rect, polygon) {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--plate-stroke, 1);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: var(--plate-dash, 2200);
+  stroke-dashoffset: var(--plate-dash, 2200);
+}
+
+.plate.go :is(path, line, polyline, circle, ellipse, rect, polygon) {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset var(--plate-draw-duration, var(--dur-draw))
+    var(--eio);
+}
+
+/* ---- Reduced motion ----------------------------------------------------- */
+
+/*
+ * §8: the plate's meaningful end state is "fully drawn", so under the
+ * preference it is simply drawn — no dash offset, no transition, and visible
+ * without waiting for the trigger. A plate left undrawn would be missing
+ * artwork, not merely un-animated.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .plate {
+    opacity: var(--plate-opacity, 0.16);
+    transition: none;
+  }
+
+  .plate :is(path, line, polyline, circle, ellipse, rect, polygon) {
+    stroke-dasharray: none;
+    stroke-dashoffset: 0;
+    transition: none;
+  }
+}

@@ -150,9 +150,9 @@ Final principle: the navbar is supporting chrome — minimal, premium, editorial
 
 **Content stack** (top → bottom): Logo → Main line → Subline, with a large traced-line SVG plate as a spatial background layer behind all three.
 
-**Approved copy** (locked — see `DECISIONS.md` DEC-001):
+**Approved copy** (locked — see `DECISIONS.md` DEC-018 for the main line, DEC-001 for the rest):
 
-- Main line: **"The lighter way to access what your business needs."**
+- Main line: **"The lighter balance sheet."** — set across two mask lines as "The *lighter*" / "balance sheet.", with `lighter` in Moss italic. DEC-018 supersedes DEC-001's earlier main line ("The lighter way to access what your business needs.").
 - Subline / tagline: **"Access . Scale . Grow"**
 - No additional paragraph beyond the subline.
 

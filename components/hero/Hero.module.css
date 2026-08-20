@@ -1,0 +1,237 @@
+/*
+ * Hero, SOURCE_OF_TRUTH.md §11.
+ *
+ * "Logo + proposition + a living technical illustration of what Assetly does"
+ * — the plate is a spatial background layer behind the whole content stack,
+ * not an image beside it.
+ *
+ * Scope note (DEC-013): the entrance here is the simple interim version. The
+ * blink/recede opening loader (§11a) is Phase 8.5, which will gate this
+ * sequence behind the "A" settling rather than firing it on mount.
+ */
+
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--nav-h) + clamp(40px, 8vh, 90px)) var(--gutter)
+    clamp(40px, 8vh, 90px);
+  overflow: hidden;
+}
+
+/* ---- Plate -------------------------------------------------------------- */
+
+.plateLayer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Behind the copy, and never intercepting a pointer. */
+  z-index: 0;
+  pointer-events: none;
+  /*
+   * §11 Stage 2's cursor parallax. The offsets are written from a rAF-throttled
+   * pointermove; the transition smooths them so the plate trails the cursor
+   * instead of tracking it rigidly.
+   */
+  transform: translate3d(
+    var(--hero-parallax-x, 0px),
+    var(--hero-parallax-y, 0px),
+    0
+  );
+  transition: transform 1.6s var(--eio);
+  will-change: transform;
+}
+
+.plate {
+  width: min(115%, 1500px);
+  height: auto;
+  /*
+   * §11's Stage 3: the plate fades as the visitor leaves the Hero. Driven by a
+   * scroll-linked custom property rather than a class, so it tracks position
+   * continuously instead of snapping at a threshold.
+   */
+  opacity: var(--hero-plate-fade, 1);
+}
+
+/* ---- Stage 2: the living plate ------------------------------------------ */
+
+/*
+ * §11 Stage 2: once the draw has finished the plate must read as "alive", not
+ * "animated" — selected lines drift 2–5px and a node or two reposition, on a
+ * slow 8–12s cycle. The delay clears the 2.6s draw so the two never overlap,
+ * and `alternate` means it eases back and forth rather than looping, which is
+ * what keeps it from reading as a repeating animation.
+ */
+@keyframes plateDrift {
+  from {
+    translate: 0 0;
+  }
+  to {
+    translate: 4px -3px;
+  }
+}
+
+@keyframes nodeBreathe {
+  from {
+    translate: 0 0;
+  }
+  to {
+    translate: -3px 4px;
+  }
+}
+
+.ready .plate {
+  animation: plateDrift 11s var(--eio) 3s infinite alternate;
+}
+
+.ready .plate circle {
+  /* Without this the translate resolves against the SVG viewport, not the node. */
+  transform-box: fill-box;
+  animation: nodeBreathe 9s var(--eio) 3.2s infinite alternate;
+}
+
+/* Staggered so the nodes never move in unison. */
+.ready .plate circle:nth-of-type(2) {
+  animation-duration: 12s;
+  animation-delay: 3.8s;
+}
+
+.ready .plate circle:nth-of-type(3) {
+  animation-duration: 10.5s;
+  animation-delay: 4.4s;
+}
+
+.ready .plate circle:nth-of-type(4) {
+  animation-duration: 12.5s;
+  animation-delay: 3.5s;
+}
+
+/* ---- Content stack ------------------------------------------------------ */
+
+.content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: clamp(18px, 3vh, 30px);
+}
+
+/*
+ * The brand mark. Phase 8.5 animates the loader's "A" to exactly this
+ * position, so its size and placement are a hand-off contract — change them
+ * and the loader's settle lands in the wrong place.
+ */
+.mark {
+  font-size: clamp(46px, 8.5vw, 104px);
+  color: var(--olive);
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+}
+
+/* §11: hero mark settle — 1.7s var(--e). */
+.ready .mark {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--dur-settle) var(--e),
+    transform var(--dur-settle) var(--e);
+}
+
+/* ---- Headline ----------------------------------------------------------- */
+
+/*
+ * §8's line-mask reveal: each line sits in an overflow-hidden wrapper and
+ * rises from translateY(105%).
+ */
+.headline {
+  max-width: 20ch;
+  margin: 0;
+}
+
+.maskLine {
+  display: block;
+  overflow: hidden;
+}
+
+.maskLine > span {
+  display: block;
+  transform: translateY(105%);
+}
+
+.ready .maskLine > span {
+  transform: none;
+  transition: transform var(--dur-mask) var(--e);
+}
+
+.ready .maskLine:nth-of-type(2) > span {
+  transition-delay: 0.12s;
+}
+
+/* ---- Subline ------------------------------------------------------------ */
+
+.subline {
+  font-family: var(--s);
+  font-size: clamp(17px, 1.8vw, 22px);
+  line-height: 1.4;
+  color: var(--moss);
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.ready .subline {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--dur-fade) var(--e),
+    transform var(--dur-fade) var(--e);
+  transition-delay: 0.55s;
+}
+
+/* ---- Reduced motion ----------------------------------------------------- */
+
+/*
+ * §8: the Hero arrives at its final state instantly — mark settled, headline
+ * lines in place, subline visible, plate drawn and still. Nothing here waits
+ * on a trigger, because a Hero that depends on an animation having run is a
+ * Hero that can fail to appear.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .mark,
+  .subline {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .maskLine > span {
+    transform: none;
+    transition: none;
+  }
+
+  .plate {
+    opacity: 1;
+  }
+
+  /*
+   * No ambient drift and no parallax. §11's "living plate" is precisely the
+   * kind of continuous, unrequested movement the preference exists to stop,
+   * and §8 makes neutralising it mandatory rather than optional.
+   */
+  .ready .plate,
+  .ready .plate circle {
+    animation: none;
+    translate: none;
+  }
+
+  .plateLayer {
+    transform: none;
+    transition: none;
+  }
+}
