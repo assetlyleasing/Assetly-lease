@@ -1,26 +1,54 @@
 import type { Metadata } from "next";
 
-import styles from "../placeholder.module.css";
+import { Container } from "@/components/primitives/Container";
+import { Eyebrow } from "@/components/primitives/Eyebrow";
+import { RevealOnScroll } from "@/components/primitives/RevealOnScroll";
+import { SerifHeading } from "@/components/primitives/SerifHeading";
+import { ABOUT_CONTENT, ABOUT_META_DESCRIPTION } from "@/content/about/copy";
+import { CONTACT } from "@/content/site/navigation";
+
+import styles from "./About.module.css";
 
 export const metadata: Metadata = {
-  title: "About | Assetly",
+  title: "About Assetly | Assetly",
+  description: ABOUT_META_DESCRIPTION,
+  openGraph: {
+    title: "About Assetly | Assetly",
+    description: ABOUT_META_DESCRIPTION,
+    type: "website",
+  },
 };
 
-/*
- * About page. Phase 1 renders it only as a second route for the shared shell to
- * prove itself on — Nav and Footer must behave identically here, and section
- * links must resolve back to `/#section` rather than to a fragment.
- *
- * The real content (image, heading, company description, optional location
- * line) is built in Phase 8 from source-grounded copy only. Do not fabricate
- * company history, statistics, or founder content here; §4 is explicit.
- */
 export default function AboutPage() {
   return (
-    <main>
-      <section className={styles.section}>
-        <h1>About Assetly</h1>
-        <p className={styles.note}>Placeholder — built in Phase 8.</p>
+    <main id="main-content">
+      <section className={styles.section} aria-labelledby="about-title">
+        <Container>
+          <RevealOnScroll className={styles.layout}>
+            <div
+              className={`${styles.media} rv-u`}
+              data-about-media-placeholder
+              aria-hidden="true"
+            >
+              <span className={styles.placeholderLabel}>Image forthcoming</span>
+            </div>
+
+            <div className={`${styles.copy} rv-u rv-d1`}>
+              <Eyebrow>{ABOUT_CONTENT.eyebrow}</Eyebrow>
+              <SerifHeading level={1} id="about-title" className={styles.heading}>
+                {ABOUT_CONTENT.heading}
+              </SerifHeading>
+              <p className={styles.body}>{ABOUT_CONTENT.body}</p>
+
+              <p className={styles.closing}>
+                <span>{ABOUT_CONTENT.city}</span>
+                <a className={styles.email} href={`mailto:${CONTACT.email}`}>
+                  {CONTACT.email}
+                </a>
+              </p>
+            </div>
+          </RevealOnScroll>
+        </Container>
       </section>
     </main>
   );

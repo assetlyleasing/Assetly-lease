@@ -35,7 +35,7 @@ test("design tokens and base typography are applied", async ({ page }) => {
   expect(headingFont).toContain("DM Serif Display");
 });
 
-test("placeholder routes render", async ({ page }) => {
+test("public and internal routes render", async ({ page }) => {
   const about = await page.goto("/about");
   expect(about?.status()).toBe(200);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(

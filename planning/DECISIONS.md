@@ -306,6 +306,16 @@ Every important technical or product decision, including conflict resolutions fo
 
 ---
 
+### DEC-027 — About may use an explicit temporary media slot during development
+
+- **Date**: 2026-08-20
+- **Decision**: Phase 8 may implement and commit the complete About route with a clearly labelled, non-image media placeholder. The placeholder is hidden from the accessibility tree and receives no fabricated alt text. The real photograph remains mandatory before Phase 10 exits or production deployment.
+- **Reason**: Direct project-owner instruction to keep an image placeholder and continue. This supersedes only `OD-14`'s earlier prohibition on beginning or committing the About layout before the asset arrives; it does not approve any substitute photograph or resolve the asset requirement.
+- **Consequences**: About copy, metadata, responsive composition, shell navigation, and reduced-motion behavior can be completed now. `OD-14` stays open and moves to `QA-000`; its eventual asset must still be genuine, rights-cleared, at least 1600px wide, rendered with `next/image`, and accompanied by the supplied factual alt description.
+- **Status**: Active
+
+---
+
 ## Decision index
 
 | ID | Topic | Status |
@@ -336,3 +346,4 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-024 | Why Assetly exposes only the active face to screen readers | Active |
 | DEC-025 | Sector artwork and reduced motion are code-native and static | Active |
 | DEC-026 | Contact uses an illustrative code-authored Bengaluru plate | Active |
+| DEC-027 | About may use an explicit temporary media slot during development | Active |

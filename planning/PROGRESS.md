@@ -6,46 +6,46 @@ This file reflects the *current* state of the project, not a running chronologic
 
 ## Current Phase
 
-Phase 7 — Contact: **complete**. Phases 0, 1, 2, 4, 5, 6 and 7 are complete. Phase 3 remains blocked on `OD-05`/`OD-06`. Phase 8 is blocked on the real-image requirement in `OD-14` and must not begin partially.
+Phase 8 — About: **complete under DEC-027's owner-approved temporary media state**. Phases 0, 1, 2, 4, 5, 6, 7 and 8 are complete. Phase 3 remains blocked on `OD-05`/`OD-06`. Phase 8.5 is unblocked. The real About photograph remains required at `QA-000` before Phase 10 can exit or production can deploy.
 
 ## Current Task
 
-`ABOUT-000` — obtain the real, usage-approved landscape About image and its factual alt description required by `OD-14` before any Phase 8 implementation begins.
+`LOADER-001` — build the branded Hero opening sequence after re-reading `SOURCE_OF_TRUTH.md` §11a and DEC-013. Do not fold the outstanding About photograph into the loader work.
 
 ## Status
 
-The homepage now renders the shared shell, Hero, corrected Compare sequence, Why Assetly, rotating Sectors grid, and complete Contact enquiry experience. Green at this boundary: lint, typecheck, production build, 87 unit tests, 104 Chromium Playwright tests, and 26 targeted WebKit interaction tests.
+The homepage contains every currently unblocked narrative section, and `/about` is now a complete standalone route using the shared public shell. Green at this boundary: lint, typecheck, production build, 89 unit tests, 109 Chromium Playwright tests, and 26 targeted WebKit interaction tests.
 
 ## Completed This Cycle
 
-### Phase 7 — Contact
+### Phase 8 — About
 
-- Added the approved CONTACT information block with linked email and phone plus Bengaluru only; the full postal address remains Footer-only.
-- Authored an illustrative, non-cartographic Bengaluru SVG with muted linework, one Assetly marker, and a BENGALURU label using the shared `Plate` and draw-on-enter behavior.
-- Added the typed enquiry model and Zod discriminated union for Operating Lease, Asset Requirement, Existing Requirement, General Enquiry, and a custom type, including all approved required/optional fields and length limits.
-- Built a stable two-step enquiry flow with associated validation errors, first-invalid-field focus, Back and Close actions, and preserved local form state across close/reopen.
-- Built the desktop map-edge drawer and structurally separate mobile bottom sheet at 700px. The sheet has a visual grip and explicit Close action without an unrequested drag gesture.
-- Factored focus trapping, Escape close, focus return, and body scroll lock into one shared hook, then migrated the mobile menu and reused the behavior for both Contact dialogs without changing the menu presentation.
-- Added one pure email-draft builder. Gmail and mailto actions share the same recipient, subject, and body; blank optional lines are omitted, visitor input is encoded, and nothing is submitted to or stored by Assetly.
-- Reduced motion completes the map immediately and removes spatial panel and field transitions.
-- Expanded the targeted WebKit project to cover Contact alongside Why Assetly and Sectors.
+- Replaced the Phase 1 route scaffold with the approved About heading, exact source-grounded description, Bengaluru line, and linked Assetly email.
+- Added typed About content and a route-specific metadata description, document title, and Open Graph title/description.
+- Built a restrained 60/40 editorial desktop composition that recomposes to media-above-copy on mobile.
+- Cleared the fixed navigation using `--nav-block` and reused the existing public Nav, Footer, Container, Eyebrow, SerifHeading, and one RevealOnScroll instance.
+- Added a clearly labelled temporary media slot following direct owner instruction. It is a non-image placeholder, is hidden from the accessibility tree, and receives no invented alt text.
+- Confirmed homepage section links from `/about` resolve to `/#compare`, `/#sectors`, and `/#contact`, and confirmed the Footer About Us link reaches `/about`.
+- Reduced motion exposes the complete layout immediately with no spatial reveal.
+- Removed the obsolete shared placeholder stylesheet after the final public placeholder route was replaced.
 
 ### Decisions and planning
 
-- **DEC-026** approves the illustrative code-authored Bengaluru plate and resolves/removes `OD-08`.
-- Phase 7 execution items are complete. Phase 8 remains explicitly gated by `OD-14`; no About implementation or partial Phase 8 commit was created.
+- **DEC-027** records the owner-approved temporary About media slot and supersedes only the earlier prohibition on implementing or committing Phase 8 before the image arrives.
+- `OD-14` remains open. It now blocks Phase 10 exit and deployment through `QA-000`, rather than the Phase 8 layout/content boundary.
+- Phase 8 execution tasks are complete; `QA-000` explicitly owns the final rights-cleared `next/image` swap and factual alt text.
 
 ### Visual review
 
-- Reviewed rendered 1440×900 desktop closed/drawer states and 390×844 mobile closed/sheet states from a running preview server.
-- Tightened desktop drawer spacing after the first preview exposed a partly clipped Continue action; the complete first step now fits while longer detail forms retain internal scrolling.
-- Confirmed the map-edge composition, partially visible map, mobile sheet, grip and close control, typography, shared borders, and responsive overflow on screen.
+- Reviewed full rendered 1440×900 desktop and 390×844 mobile About pages from a running preview server.
+- Confirmed the desktop media slot occupies approximately 60% of the main composition, the mobile media precedes copy, the placeholder reads intentionally rather than as missing content, and neither viewport overflows horizontally.
+- Confirmed typography, spacing, closing rule, email treatment, fixed-nav clearance, and transition into the shared Footer on screen.
 
 ## Decisions
 
-- **DEC-024** — expose only the active Why Assetly face to screen readers.
 - **DEC-025** — author the six sector plates inline and stop rotation entirely under reduced motion.
 - **DEC-026** — use a non-cartographic code-authored Bengaluru plate without external map data or tracking.
+- **DEC-027** — permit a clearly labelled temporary About media slot while retaining the real-photo requirement before final QA/deployment.
 
 ## Tests Run
 
@@ -53,17 +53,18 @@ The homepage now renders the shared shell, Hero, corrected Compare sequence, Why
 |---|---|
 | `npm run lint` | Pass — 0 problems |
 | `npm run typecheck` | Pass |
-| `npm run test -- --maxWorkers=1` | Pass — 87/87 |
-| `npx playwright test --workers=1` | Pass — 130/130 (104 Chromium + 26 targeted WebKit) |
+| `npm run test -- --maxWorkers=1` | Pass — 89/89 |
+| `npx playwright test tests/e2e/about.spec.ts --project=chromium` | Pass — 5/5 |
+| `npx playwright test --workers=1` | Pass — 135/135 (109 Chromium + 26 targeted WebKit) |
 | Compare RAF profile | Pass inside the serial full suite |
 | `npm run build` | Pass — all routes statically generated |
-| Visual preview | Pass — desktop Contact/map drawer and 390×844 Contact/mobile sheet |
+| Visual preview | Pass — 1440×900 desktop and 390×844 mobile About compositions |
 
-The Phase 7 suite guards every Zod branch and boundary, deterministic draft text, special-character encoding, identical Gmail/mailto payloads, absence of persistence, every enquiry type plus custom, conditional fields, validation and focus behavior, Back/close/reopen preservation, Escape/focus return/trap, desktop drawer, mobile sheet, protected external links, reduced motion, and exclusion of the full address.
+The Phase 8 suite guards exact copy, absence of invented company history, placeholder semantics, metadata, public-shell reuse, homepage navigation in both directions, desktop media proportion, mobile order, fixed-nav clearance, overflow, and immediate reduced-motion content.
 
 ## Issues / Blockers
 
-1. `OD-14` — Phase 8 cannot begin until a real, rights-cleared About image at least 1600px wide and its factual alt description are supplied.
+1. `OD-14` / `QA-000` — replace the About placeholder before Phase 10 exits or production deploys with a genuine, rights-cleared photograph at least 1600px wide, rendered through `next/image`, plus its supplied factual alt description.
 2. `OD-13` — no Compare disclaimer wording has been supplied. It remains open; no disclaimer was invented.
 3. `OD-02` — the Hero plate remains authored rather than designer-reviewed.
 4. `OD-01` — the logo is raster, no favicon exists, and Phase 8.5 still needs the loader letterform confirmed.
@@ -73,12 +74,13 @@ The Phase 7 suite guards every Zod branch and boundary, deterministic draft text
 
 ## Next Recommended Task
 
-Supply the `OD-14` About asset: a genuine Assetly-relevant landscape WebP, JPEG, or AVIF at least 1600px wide, with confirmed usage rights and a factual alt description. Once supplied, implement and commit Phase 8 as one complete boundary. Do not use stock, generated, logo-based, or abstract artwork as a substitute.
+Begin Phase 8.5 with the branded Hero opening loader. First reconcile §11a's recorded final hierarchy with the currently shipped DEC-018 Hero copy, then implement the Pitch opening, double blink, recede, settle, and Hero hand-off without changing the completed About route or resolving `OD-14` by substitution.
 
 ## Notes for Next Cycle
 
-- Do not start Phase 8 or create a partial phase commit while `OD-14` remains unresolved.
-- After the asset is supplied, render it with `next/image`, intrinsic dimensions, responsive `sizes`, and the supplied factual alt text.
-- Reuse the public Nav/Footer, clear the fixed nav with `--nav-block`, and verify homepage anchors in both directions from `/about`.
+- Read `SOURCE_OF_TRUTH.md` §11a and DEC-013 in full before touching the Hero; the loader must hand off into the already-shipped Hero rather than duplicate it.
+- Decide and record loader replay behavior for reload and back navigation as required by `LOADER-007`.
+- Reduced motion skips blink/recede and moves directly to the final Hero state through at most a short subtle fade.
+- `OD-14` is deferred, not resolved. Do not replace the placeholder with stock, generated, logo-based, or abstract artwork.
 - Phase 3 remains separately blocked on Firebase project and admin-auth decisions.
-- `OD-13` remains open; no Compare disclaimer wording may be invented.
+- Continue using one commit per completed phase and explicit-path staging only.

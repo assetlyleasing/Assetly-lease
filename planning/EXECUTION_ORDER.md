@@ -114,11 +114,11 @@ Update this file at the end of every cycle per `LOOP.md` step 6. Do not skip ahe
 
 ## Phase 8 — About page
 
-- [ ] `ABOUT-000` Resolve `OD-14`: supply a real, usage-approved landscape image (≥1600px) and factual alt description before implementation begins
-- [ ] `ABOUT-001` Build `content/about/copy.ts` (source-grounded, no fabricated content)
-- [ ] `ABOUT-002` Build `/about` page: image + heading + body + optional location line
-- [ ] `ABOUT-003` Confirm Nav/Footer reuse and correct link resolution to/from `/about`
-- [ ] `ABOUT-004` Playwright: renders correctly, alt text present, responsive pass
+- [!] `ABOUT-000` Resolve `OD-14`: real usage-approved image and factual alt description deferred to `QA-000` by owner instruction (DEC-027); no longer blocks the Phase 8 layout/content commit
+- [x] `ABOUT-001` Build `content/about/copy.ts` with the exact source-grounded copy
+- [x] `ABOUT-002` Build `/about`: owner-approved temporary media slot + heading + body + Bengaluru/email line (DEC-027)
+- [x] `ABOUT-003` Confirm Nav/Footer reuse and correct link resolution to/from `/about`
+- [x] `ABOUT-004` Playwright: approved copy, metadata, placeholder semantics, responsive composition, navigation, reduced motion
 
 ## Phase 8.5 — Hero loader / opening sequence
 
@@ -144,6 +144,7 @@ Update this file at the end of every cycle per `LOOP.md` step 6. Do not skip ahe
 
 ## Phase 10 — Accessibility, performance, QA
 
+- [!] `QA-000` Replace the About media placeholder with the real usage-approved `next/image` asset and factual alt text — **blocked on `OD-14`; blocks Phase 10 exit and deployment**
 - [ ] `QA-001` Full-site keyboard pass (`/`, `/about`, `/admin`)
 - [ ] `QA-002` Focus management audit (all drawers/overlays/sheets)
 - [ ] `QA-003` Screen reader pass (NVDA or VoiceOver) across all sections

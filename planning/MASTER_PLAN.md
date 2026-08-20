@@ -388,7 +388,7 @@ Referenced open decisions (`OD-xx`) and resolved conflicts (`DEC-xxx`) are defin
 
 **Implementation tasks**:
 1. Build `content/about/copy.ts` with the concise, source-grounded description from §4 (no fabricated stats/timeline/founders content).
-2. Build large hero image treatment (55–65% of section) + DM Serif Display heading + DM Serif Text body.
+2. Build the large hero media treatment (55–65% of section) + DM Serif Display heading + DM Serif Text body. Until `OD-14` is resolved, render the owner-approved, clearly labelled placeholder from DEC-027; keep it out of the accessibility tree and do not invent alt text.
 3. Include optional small location/contact line at the bottom (Bengaluru reference, consistent with Contact §16 — not a duplicate full form).
 4. Reuse Nav/Footer from Phase 1 unmodified; confirm About Us footer link and Nav About link both resolve correctly to `/about`.
 5. Apply very subtle reveal animation only (per DESIGN_SYSTEM.md's general reveal language) — this page is intentionally the least animated in the site.
@@ -402,14 +402,14 @@ Referenced open decisions (`OD-xx`) and resolved conflicts (`DEC-xxx`) are defin
 **Accessibility requirements**: Hero image has meaningful alt text; heading hierarchy correct (single `h1`); page has correct `<title>`/meta description (ties into Phase 9).
 
 **Tests**:
-- Playwright: `/about` renders correctly, Nav/Footer identical component instances to `/`, About Us link from both header and footer navigates correctly, image has alt text.
+- Playwright: `/about` renders correctly, Nav/Footer identical component instances to `/`, About Us link from both header and footer navigates correctly, and the responsive media state is valid. While DEC-027 is active, assert the placeholder is explicitly marked and hidden from assistive technology; once `OD-14` is resolved, replace that assertion with intrinsic image dimensions and factual alt text.
 - Responsive pass.
 
-**Exit criteria**: `/about` is live, uses the same shell, contains only the approved minimal content, and is reachable from both Nav and Footer.
+**Exit criteria**: `/about` is live, uses the same shell, contains only the approved minimal content, and is reachable from both Nav and Footer. DEC-027 permits Phase 8 to exit with the temporary media slot; the real `next/image` asset remains mandatory before Phase 10 exits or production deployment.
 
 **Risks**: Temptation to over-build this page beyond "simple" — resist per the §4 non-goals (no timeline/stats/founders unless supplied).
 
-**Open decisions**: `OD-14` blocks implementation and the Phase 8 commit until a real, usage-approved image and factual alt description are supplied. Do not substitute stock, generated, logo-based, or abstract artwork.
+**Open decisions**: `OD-14` remains open but no longer blocks the layout/content implementation or Phase 8 commit under DEC-027. It blocks Phase 10 exit and production deployment. Do not substitute stock, generated, logo-based, or abstract artwork.
 
 ---
 
@@ -502,6 +502,7 @@ Referenced open decisions (`OD-xx`) and resolved conflicts (`DEC-xxx`) are defin
 **Inputs/dependencies**: Phases 1–9 complete.
 
 **Implementation tasks (audit checklist, not new features)**:
+0. Resolve `OD-14`: replace the About placeholder with the real, usage-approved `next/image` asset and its supplied factual alt text before this phase can exit.
 1. Keyboard: tab through the entire site (`/`, `/about`, `/admin`) confirming logical order, visible focus, no traps (especially Compare's scroll-focus effect and Contact's drawer/bottom-sheet).
 2. Focus management: verify drawer/overlay/bottom-sheet components (Nav mobile menu, Compare drawer, Contact drawer/sheet) correctly move and restore focus.
 3. Screen reader pass (at least one of NVDA/VoiceOver) across all sections, confirming: alt text, ARIA states (`aria-expanded`, `aria-pressed`), no doubled marquee announcements, form labels.
@@ -516,7 +517,7 @@ Referenced open decisions (`OD-xx`) and resolved conflicts (`DEC-xxx`) are defin
 
 **Tests**: This phase *is* the test pass — see tasks above. All results recorded in `PROGRESS.md` per the root testing mandate (bugs found, fixes applied, retested, recorded).
 
-**Exit criteria**: No critical accessibility failures; no reduced-motion gaps; no CLS regressions; Lighthouse scores recorded and any sub-90 performance/accessibility score has a documented reason or follow-up task; full Playwright journey suite green.
+**Exit criteria**: `OD-14` is resolved with the approved About photograph and factual alt text; no critical accessibility failures; no reduced-motion gaps; no CLS regressions; Lighthouse scores recorded and any sub-90 performance/accessibility score has a documented reason or follow-up task; full Playwright journey suite green.
 
 **Risks**: This phase tends to surface issues that require revisiting earlier phases' components — budget time for fixes, not just findings. Do not mark Phase 10 complete on "found issues" alone; issues must be fixed and retested.
 
