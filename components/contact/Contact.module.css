@@ -14,7 +14,7 @@
 
 .info {
   display: flex;
-  min-height: clamp(540px, 68vh, 720px);
+  min-height: clamp(440px, 56vh, 600px);
   flex-direction: column;
   justify-content: space-between;
   padding-block: clamp(12px, 2vh, 24px);
@@ -67,8 +67,9 @@
 }
 
 .mapShell {
+  /* Matches `.info` exactly — the pair is what makes the row read as one block. */
   position: relative;
-  min-height: clamp(540px, 68vh, 720px);
+  min-height: clamp(440px, 56vh, 600px);
   overflow: hidden;
   border: var(--hairline);
   background: var(--field);
@@ -99,11 +100,13 @@
   color: var(--moss);
 }
 
+/* Anchored to the centre of the map's viewBox — see the note in ContactMap. */
 .mapMarker {
   position: absolute;
-  top: 53%;
-  left: 59%;
+  top: 50%;
+  left: 50%;
   display: inline-flex;
+  transform: translate(32px, -50%);
   align-items: center;
   gap: 9px;
   padding: 8px 12px;
@@ -449,11 +452,6 @@
 
   .map {
     overflow: hidden;
-  }
-
-  .mapMarker {
-    top: 56%;
-    left: 48%;
   }
 
   .triggerMobile {

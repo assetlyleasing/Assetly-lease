@@ -27,13 +27,21 @@ export function ContactMap() {
         <path d="M21 208L155 181 267 222 391 188 509 218 691 173 814 205" />
         <path d="M18 430L142 395 248 442 372 403 491 443 612 396 808 438" />
         <path d="M156 181L198 104M267 222L315 314M391 188L449 91M509 218L557 263M691 173L612 396" />
-        <circle cx="475" cy="276" r="23" />
-        <circle cx="475" cy="276" r="5" />
-        <path d="M475 299V356M448 356H502" />
+        {/*
+          * The pin sits on the viewBox's exact centre, and so does the label
+          * that names it. With `xMidYMid slice` the centre is the one point
+          * that maps to the same place at every container aspect ratio, so
+          * anchoring both there is what keeps them together — positioned
+          * anywhere else, cropping moves the drawn pin while the label's
+          * percentage offsets stay put, and the two drift apart.
+          */}
+        <circle cx="400" cy="260" r="23" />
+        <circle cx="400" cy="260" r="5" />
+        <path d="M400 283V340M373 340H427" />
       </Plate>
 
       <span className={styles.mapLabel}>Bengaluru</span>
-      <span className={styles.mapMarker} aria-hidden="true">
+      <span className={styles.mapMarker} aria-hidden="true" data-contact-map-label>
         <span className={styles.mapMarkerDot} />
         Assetly
       </span>

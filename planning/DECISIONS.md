@@ -316,6 +316,36 @@ Every important technical or product decision, including conflict resolutions fo
 
 ---
 
+### DEC-028 — Section blocks are sized against viewport height, not viewport width
+
+- **Date**: 2026-08-20
+- **Decision**: Grid cells and paired section columns cap their height with a `vh`-based clamp rather than a `vw`-based one. Why Assetly and Sectors share one cell height; Contact's info column and map shell share one min-height. The Sectors card is additionally recomposed horizontally below 640px — small plate beside the sector name, index above it — and its plate is sized from the card's height.
+- **Reason**: Keyed to viewport *width*, the cells reached 356–390px, so each 2x2 grid stood 712–780px tall beneath a 150px heading and was never seen whole on a 900px screen. For Sectors that is not only a proportion problem: §15's one-out-one-in rotation is only legible if the four cards it cycles are simultaneously in view, and on mobile a 285px stacked card put two of the four off-screen permanently. The same oversizing left `space-between` distributing ~120px of empty space inside every card.
+- **Consequences**: Both grids now fit within one screen at 1440x900, all four sector cards fit a 390x844 phone, and the voids close. Playwright asserts the fit at both sizes, and asserts that no Why Assetly back face is clipped — `.face` is `overflow: hidden`, so a card too short for its copy truncates it silently. §15's stated composition is unchanged; only the card's internal arrangement below 640px differs, which §15 leaves to implementation.
+- **Status**: Active
+
+---
+
+### DEC-029 — Sector rotation changes a card every 1.2 seconds
+
+- **Date**: 2026-08-20
+- **Decision**: The one-out-one-in rotation interval is 1.2s, superseding §15's stated 2.5s. The swap itself stays at §15's 450ms fade with `translateY(10px)`. §15 is amended to match.
+- **Reason**: Project-owner instruction. The slower cadence read as static on a grid the visitor sees for only a few seconds.
+- **Consequences**: The interval is the cadence of the grid, not of any one card: with four slots, each individual card still holds for 4.8s, so its plate completes the 2.6s draw before that slot comes round again. The Playwright rotation test was rewritten to sample consecutive states and assert that no more than one slot ever changes between them — at 1.2s a single before/after snapshot around one swap is a race, and would have failed for timing rather than for behaviour.
+- **Status**: Active
+
+---
+
+### DEC-030 — The map pin and its label are both anchored to the viewBox centre
+
+- **Date**: 2026-08-20
+- **Decision**: The Contact map's pin geometry sits at the exact centre of its 800x520 viewBox, and the HTML "ASSETLY" label is positioned from the container's centre. The per-breakpoint marker offset is deleted.
+- **Reason**: The map is drawn `xMidYMid slice`, so cropping moves the drawn artwork as the container's aspect ratio changes while a percentage-positioned HTML label stays put. The two drifted apart — at 1440x900 the label already sat over the pin's ring — and the existing mobile override was a hard-coded patch for that drift, not a fix. Under `xMidYMid`, the viewBox centre is the one point that maps to the same place at every aspect ratio.
+- **Consequences**: The label and pin cannot separate at any window size, and no breakpoint-specific marker positions are needed. Playwright checks the two coincide at three aspect ratios.
+- **Status**: Active
+
+---
+
 ## Decision index
 
 | ID | Topic | Status |
@@ -347,3 +377,6 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-025 | Sector artwork and reduced motion are code-native and static | Active |
 | DEC-026 | Contact uses an illustrative code-authored Bengaluru plate | Active |
 | DEC-027 | About may use an explicit temporary media slot during development | Active |
+| DEC-028 | Section blocks are sized against viewport height, not width | Active |
+| DEC-029 | Sector rotation changes a card every 1.2 seconds | Active |
+| DEC-030 | The map pin and its label share the viewBox centre | Active |

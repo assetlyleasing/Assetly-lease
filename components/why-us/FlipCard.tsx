@@ -44,7 +44,7 @@ export function FlipCard({ value }: { value: WhyUsValue }) {
       )}
 
       <span className={styles.stage} aria-hidden="true">
-        <span className={`${styles.face} ${styles.front}`}>
+        <span className={`${styles.face} ${styles.front}`} data-face="front">
           <span className={styles.letter}>{value.letter}</span>
           <span className={styles.frontFooter}>
             <span className={styles.valueName}>{value.name}</span>
@@ -54,7 +54,7 @@ export function FlipCard({ value }: { value: WhyUsValue }) {
           </span>
         </span>
 
-        <span className={`${styles.face} ${styles.back}`}>
+        <span className={`${styles.face} ${styles.back}`} data-face="back">
           <span className={styles.backMarker}>{value.letter}</span>
           <span className={styles.backContent}>
             <span className={styles.backName}>{value.name}</span>

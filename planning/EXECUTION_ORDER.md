@@ -85,17 +85,20 @@ Update this file at the end of every cycle per `LOOP.md` step 6. Do not skip ahe
 - [x] `WHY-005` Wire entry stagger via `RevealOnScroll`
 - [x] `WHY-006` Implement native-button keyboard flip, `aria-pressed`, and active-face-only descriptions (DEC-024)
 - [x] `WHY-007` Playwright: flip correctness, keyboard pass, reduced-motion, cross-browser (Chromium+WebKit)
+- [x] `WHY-008` Correct the grid's proportions (DEC-028): cell height capped against viewport height so the 2×2 is seen whole, letter enlarged and the void closed, back-face copy verified unclipped at 1440×900 and 390×844
 
 ## Phase 6 — Sectors
 
 - [x] `SECTOR-001` Build `content/sectors/sectors.ts` (6-sector pool, short descriptors)
 - [x] `SECTOR-002` Author 6 code-native 200×130 sector plate artworks — resolves `OD-04` (DEC-025)
-- [x] `SECTOR-003` Implement `useOneOutOneIn` rotation scheduler (2.5s interval, one-slot-at-a-time)
+- [x] `SECTOR-003` Implement `useOneOutOneIn` rotation scheduler (1.2s interval per DEC-029, one-slot-at-a-time)
 - [x] `SECTOR-004` Build `SectorCard.tsx` (index + name + desktop descriptor + plate)
 - [x] `SECTOR-005` Build 2×2 desktop / 1×4 mobile ledger grid
 - [x] `SECTOR-006` Implement entrance sequence (stagger reveal → initial plates draw → rotation starts)
 - [x] `SECTOR-007` Implement hover, focus, and document-visibility pause behavior
 - [x] `SECTOR-008` Playwright: rotation cadence/correctness, hover/focus pause, reduced-motion, responsive, Chromium+WebKit
+- [x] `SECTOR-009` Correct the grid's proportions so §15's four-at-once rotation is actually visible (DEC-028): cell capped against viewport height, plate sized from the card, descriptor given a one-line measure, and the mobile card recomposed horizontally so all four fit a 390×844 screen
+- [x] `SECTOR-010` Set the rotation interval to 1.2s and rewrite the cadence test to sample consecutive states rather than snapshot around one swap (DEC-029)
 
 ## Phase 7 — Contact
 
@@ -111,6 +114,8 @@ Update this file at the end of every cycle per `LOOP.md` step 6. Do not skip ahe
 - [x] `CONTACT-010` Implement reduced-motion-safe section, map, panel, and step presentation
 - [x] `CONTACT-011` Playwright: every enquiry branch, encoding, preservation, validation/focus, desktop/mobile panels, reduced motion, Chromium+WebKit
 - [x] `CONTACT-012` Factor and reuse shared modal focus trap, Escape, focus return, and scroll lock behavior
+- [x] `CONTACT-013` Correct the section's proportions (DEC-028): info column and map shell brought to one shorter shared height, closing the ~200px void under the heading
+- [x] `CONTACT-014` Anchor the map pin and its label to the viewBox centre so `slice` cropping cannot separate them, and delete the per-breakpoint marker offset (DEC-030)
 
 ## Phase 8 — About page
 

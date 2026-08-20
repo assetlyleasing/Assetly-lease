@@ -13,6 +13,14 @@ type RotationViewState = {
   swappingSlot: number | null;
 };
 
+/**
+ * §15's one-out-one-in rotation.
+ *
+ * The interval is the cadence of the *grid*, not of any one card: with four
+ * slots in rotation, a 1.2s interval still leaves each individual card in place
+ * for 4.8s, so its plate finishes the 2.6s draw well before that slot comes
+ * round again. The swap itself stays at §15's 450ms.
+ */
 export function useOneOutOneIn({
   itemCount,
   visibleCount,
@@ -20,7 +28,7 @@ export function useOneOutOneIn({
   paused,
   disabled,
   initialDelayMs = 3000,
-  intervalMs = 2500,
+  intervalMs = 1200,
   swapMs = 450,
 }: {
   itemCount: number;

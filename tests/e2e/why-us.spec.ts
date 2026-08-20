@@ -101,6 +101,25 @@ test.describe("Why Assetly — activation", () => {
     await expect(card).toHaveAttribute("aria-describedby", frontDescription!);
   });
 
+  test("shows every back face in full — the card is shorter than the copy is not", async ({
+    page,
+  }) => {
+    await showWhyUs(page);
+
+    /*
+     * `.face` is `overflow: hidden`, so a card too short for its explanation
+     * truncates the copy silently rather than scrolling it — nothing fails, the
+     * words are simply gone. S is the longest of the four; it names six
+     * sectors. Measured on all four so a future type change cannot creep past.
+     */
+    const overflow = await page.locator('[data-face="back"]').evaluateAll((faces) =>
+      faces.map((face) => face.scrollHeight - face.clientHeight),
+    );
+
+    expect(overflow).toHaveLength(4);
+    for (const overflowing of overflow) expect(overflowing).toBeLessThanOrEqual(1);
+  });
+
   test("keeps the card and section boxes locked while flipping", async ({ page }) => {
     await showWhyUs(page);
     const section = page.locator(SECTION);
@@ -127,6 +146,16 @@ test.describe("Why Assetly — activation", () => {
 
 test.describe("Why Assetly — mobile", () => {
   test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
+
+  test("shows every back face in full at 390px too", async ({ page }) => {
+    await showWhyUs(page);
+    const overflow = await page.locator('[data-face="back"]').evaluateAll((faces) =>
+      faces.map((face) => face.scrollHeight - face.clientHeight),
+    );
+
+    expect(overflow).toHaveLength(4);
+    for (const overflowing of overflow) expect(overflowing).toBeLessThanOrEqual(1);
+  });
 
   test("recomposes to one column and tap flips without layout jump", async ({ page }) => {
     await showWhyUs(page);

@@ -20,9 +20,17 @@
   outline-offset: 5px;
 }
 
+/*
+ * §15 puts four sectors on screen at once and changes one of them at a time.
+ * That only reads if all four are genuinely in view, so the cell is capped
+ * against the viewport's *height* — the dimension that decides how much of the
+ * grid fits. Keyed to width (28vw) it reached 390px on a laptop, putting the
+ * 2x2 grid at 780px inside a 900px window with a 150px heading above it, so
+ * the rotation ran largely off-screen.
+ */
 .cell {
   min-width: 0;
-  min-height: clamp(300px, 28vw, 390px);
+  min-height: clamp(260px, 32vh, 300px);
   border-right: var(--hairline);
   border-bottom: var(--hairline);
 }
@@ -33,8 +41,8 @@
   height: 100%;
   flex-direction: column;
   justify-content: space-between;
-  gap: clamp(20px, 3vw, 36px);
-  padding: var(--card-pad-lg);
+  gap: clamp(14px, 2vh, 22px);
+  padding: var(--card-pad);
   background: var(--paper);
   opacity: 1;
   transform: translateY(0);
@@ -65,8 +73,15 @@
   font-variant-numeric: tabular-nums;
 }
 
+/*
+ * Sized from the card's height rather than its width. At a fixed 300px the
+ * plate plus copy outgrew the cell's content box, and `space-between` turned
+ * the difference into a fixed void between the artwork and the sector name.
+ * Driving it from the same dimension that governs the card keeps the two in
+ * proportion at every window height.
+ */
 .plateWrap {
-  width: min(100%, 300px);
+  height: clamp(72px, 12vh, 118px);
   aspect-ratio: 200 / 130;
   justify-self: end;
 }
@@ -88,7 +103,8 @@
 }
 
 .descriptor {
-  max-width: 34ch;
+  /* Wide enough for the longest of the six to hold one line. */
+  max-width: 46ch;
   font-size: clamp(15px, 1.3vw, 18px);
   line-height: 1.5;
   color: var(--moss);
@@ -100,29 +116,58 @@
   }
 }
 
+/*
+ * Mobile — recomposed, not shrunk (§9).
+ *
+ * §15 asks for the same four sectors visible at once here, which a phone can
+ * only give if the card stops stacking a large plate above its name: four
+ * stacked 285px cards ran to 1140px on an 844px screen, so two of the four
+ * were always off it and the rotation was invisible. The card turns on its
+ * side instead — small plate beside the name, index above it, descriptor
+ * dropped as §15 already allows — which fits four inside one screen.
+ */
 @media (max-width: 640px) {
   .grid {
     grid-template-columns: 1fr;
   }
 
   .cell {
-    min-height: clamp(245px, 70vw, 285px);
+    min-height: clamp(128px, 36vw, 156px);
   }
 
   .card {
+    display: grid;
+    align-content: center;
+    grid-template-areas:
+      "index plate"
+      "name plate";
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px 18px;
     padding: var(--card-pad);
   }
 
+  /* The index and the plate become direct items of the card's own grid. */
   .cardTop {
-    gap: 18px;
+    display: contents;
+  }
+
+  .index {
+    grid-area: index;
   }
 
   .plateWrap {
-    width: min(74%, 220px);
+    width: clamp(84px, 26vw, 108px);
+    height: auto;
+    grid-area: plate;
+    align-self: center;
+  }
+
+  .copy {
+    grid-area: name;
   }
 
   .name {
-    font-size: clamp(25px, 8vw, 32px);
+    font-size: clamp(23px, 7vw, 30px);
   }
 
   .descriptor {

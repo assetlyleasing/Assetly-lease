@@ -316,7 +316,7 @@ Four-step scroll sequence, each a near-full-screen argument slide:
 
 **Mobile**: vertical 1×4 connected grid, still 4 sectors visible at once. Cards more compact: smaller plate, sector name, optional tiny index, no long paragraph.
 
-**Auto-rotation**: continuous one-out-one-in cycle. One card position updates every **2.5 seconds**: fade out ~450ms with slight `translateY(10px)`, content replaced, fade back in, then proceed to the next slot. The whole grid never refreshes together. No arrows, no pagination dots, no slider controls.
+**Auto-rotation**: continuous one-out-one-in cycle. One card position updates every **1.2 seconds** (DEC-029, superseding the original 2.5s): fade out ~450ms with slight `translateY(10px)`, content replaced, fade back in, then proceed to the next slot. That is the cadence of the grid, not of any one card — with four slots each individual card still holds for 4.8s. The whole grid never refreshes together. No arrows, no pagination dots, no slider controls.
 
 **Card content**: small Inter Tight index/label; DM Serif Display sector name; optional short DM Serif Text descriptor on desktop (can be omitted where the plate provides enough context). Example: "01 / Commercial Interiors / Workplace, fit-out and interior assets."
 

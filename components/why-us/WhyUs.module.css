@@ -12,7 +12,13 @@
 }
 
 .grid {
-  --why-card-min: clamp(260px, 30vw, 360px);
+  /*
+   * Capped against viewport height, matching the Sectors grid directly below.
+   * Keyed to width it reached 360px, so the 2x2 stood 712px tall under a 150px
+   * heading and was never seen whole on a 900px screen — and half of each card
+   * was empty, because `space-between` had far more height than content.
+   */
+  --why-card-min: clamp(260px, 32vh, 300px);
 
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -60,7 +66,7 @@
   inset: 0;
   display: flex;
   min-height: var(--why-card-min);
-  padding: var(--card-pad-lg);
+  padding: var(--card-pad);
   overflow: hidden;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
@@ -81,7 +87,7 @@
 .letter {
   display: block;
   font-family: var(--d);
-  font-size: clamp(92px, 12vw, 164px);
+  font-size: clamp(84px, 10.5vw, 148px);
   line-height: 0.78;
   color: var(--olive);
   opacity: 0.76;
@@ -129,7 +135,7 @@
 .backMarker {
   display: block;
   font-family: var(--d);
-  font-size: clamp(34px, 4vw, 54px);
+  font-size: clamp(28px, 3vw, 40px);
   line-height: 1;
   color: var(--olive);
 }
@@ -145,9 +151,14 @@
 
 .explanation {
   display: block;
-  max-width: 35ch;
+  /*
+   * The back face is `overflow: hidden`, so copy that outgrows the card is
+   * silently cut rather than scrolled. Measured against the longest of the
+   * four — S, which names six sectors — at the shortened card height.
+   */
+  max-width: 38ch;
   font-family: var(--s);
-  font-size: clamp(15px, 1.45vw, 18px);
+  font-size: clamp(15px, 1.3vw, 17px);
   line-height: 1.55;
   color: var(--moss);
 }
@@ -169,7 +180,7 @@
 
 @media (max-width: 640px) {
   .grid {
-    --why-card-min: clamp(270px, 72vw, 310px);
+    --why-card-min: clamp(258px, 70vw, 300px);
 
     grid-template-columns: 1fr;
   }
@@ -179,7 +190,7 @@
   }
 
   .letter {
-    font-size: clamp(82px, 29vw, 124px);
+    font-size: clamp(66px, 22vw, 96px);
   }
 
   .valueName,
@@ -188,7 +199,7 @@
   }
 
   .explanation {
-    font-size: clamp(15px, 4.4vw, 17px);
+    font-size: clamp(14px, 4vw, 16px);
   }
 }
 

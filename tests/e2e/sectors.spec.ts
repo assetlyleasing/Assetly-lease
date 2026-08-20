@@ -32,16 +32,33 @@ test.describe("Sectors — content and rotation", () => {
     ]);
   });
 
-  test("replaces only one slot and advances forward", async ({ page }) => {
+  test("replaces only one slot at a time and advances forward", async ({ page }) => {
     await showSectors(page);
-    const before = await sectorIds(page);
 
-    await page.waitForTimeout(2600);
+    /*
+     * Sampled rather than snapshotted at a fixed delay. §15's guarantee is that
+     * the grid never refreshes together, and at a 1.2s interval a single
+     * before/after pair taken around one swap is a race — a slow frame lands
+     * two changes inside the window and the test fails for the wrong reason.
+     * Watching consecutive samples asserts the actual invariant.
+     */
+    const samples: (string | null)[][] = [];
+    for (let sample = 0; sample < 26; sample += 1) {
+      samples.push(await sectorIds(page));
+      await page.waitForTimeout(200);
+    }
+
+    let changes = 0;
+    for (let index = 1; index < samples.length; index += 1) {
+      const previous = samples[index - 1];
+      const current = samples[index];
+      const differing = current.filter((id, slot) => id !== previous[slot]).length;
+      expect(differing).toBeLessThanOrEqual(1);
+      changes += differing;
+    }
+
+    expect(changes).toBeGreaterThan(0);
     await expect(page.locator(`${CARDS}[data-sector-id="healthcare"]`)).toHaveCount(1);
-    const after = await sectorIds(page);
-    expect(after.filter((id, index) => id !== before[index])).toHaveLength(1);
-
-    await page.waitForTimeout(2500);
     await expect(page.locator(`${CARDS}[data-sector-id="it-infrastructure"]`)).toHaveCount(1);
   });
 
@@ -91,6 +108,25 @@ test.describe("Sectors — responsive and motion preferences", () => {
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(1440);
   });
 
+  test("keeps all four cards on one screen so the rotation is visible", async ({ page }) => {
+    await showSectors(page);
+
+    const { gridHeight, viewport, navBlock } = await page.evaluate(() => {
+      const grid = document.querySelector("[data-sectors-grid]") as HTMLElement;
+      const header = document.querySelector("header") as HTMLElement;
+      return {
+        gridHeight: grid.getBoundingClientRect().height,
+        viewport: window.innerHeight,
+        // Measured, not read from --nav-block: an unregistered custom property
+        // resolves to its literal `clamp(...)` text, which parses as NaN.
+        navBlock: header.getBoundingClientRect().height,
+      };
+    });
+
+    // Four sectors change one at a time; that only reads if four are in view.
+    expect(gridHeight).toBeLessThanOrEqual(viewport - navBlock);
+  });
+
   test("uses one compact column on mobile and hides descriptors", async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await showSectors(page);
@@ -101,6 +137,12 @@ test.describe("Sectors — responsive and motion preferences", () => {
 
     expect(new Set(xPositions).size).toBe(1);
     await expect(page.locator(`${CARDS} p`).first()).toBeHidden();
+
+    // §15 keeps four sectors visible at once on mobile too.
+    const stackHeight = await page
+      .locator(GRID)
+      .evaluate((grid) => grid.getBoundingClientRect().height);
+    expect(stackHeight).toBeLessThanOrEqual(844 - 94);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
   });
 

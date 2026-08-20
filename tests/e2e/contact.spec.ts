@@ -51,6 +51,42 @@ test.describe("Contact — section and panels", () => {
     await expect(section.locator("[data-contact-map] svg")).toHaveAttribute("aria-hidden", "true");
   });
 
+  test("keeps the Assetly label on its pin at every map aspect ratio", async ({ page }) => {
+    /*
+     * The map is drawn `xMidYMid slice`, so the artwork is cropped differently
+     * as the container's proportions change. Only the viewBox's centre maps to
+     * the same place at every ratio, which is why the pin and its label are
+     * both anchored there — anywhere else the drawn pin moves under a label
+     * whose percentage offsets do not, and the two drift apart. That drift was
+     * previously papered over with a hard-coded mobile offset.
+     */
+    for (const size of [
+      { width: 1440, height: 900 },
+      { width: 1100, height: 760 },
+      { width: 390, height: 844 },
+    ]) {
+      await page.setViewportSize(size);
+      await showContact(page);
+
+      const geometry = await page.evaluate(() => {
+        const map = document.querySelector("[data-contact-map]")!;
+        const pin = map.querySelector("svg circle")!.getBoundingClientRect();
+        const label = map.querySelector("[data-contact-map-label]")!.getBoundingClientRect();
+        return {
+          pinCentreY: pin.top + pin.height / 2,
+          pinCentreX: pin.left + pin.width / 2,
+          labelCentreY: label.top + label.height / 2,
+          labelLeft: label.left,
+        };
+      });
+
+      expect(Math.abs(geometry.labelCentreY - geometry.pinCentreY)).toBeLessThanOrEqual(4);
+      // Beside the pin, clear of the ring, and not adrift across the map.
+      expect(geometry.labelLeft).toBeGreaterThan(geometry.pinCentreX);
+      expect(geometry.labelLeft - geometry.pinCentreX).toBeLessThanOrEqual(60);
+    }
+  });
+
   test("opens the desktop map-edge drawer and restores focus on Escape", async ({ page }) => {
     await showContact(page);
     await expect(page.locator('[data-contact-panel="sheet"]')).toHaveCount(0);
