@@ -1,14 +1,32 @@
+/*
+ * One composition per screen (DEC-032).
+ *
+ * The section is sized against the viewport rather than padded by the page's
+ * standard rhythm: heading and grid are one argument and are meant to be read
+ * as one, which they never were while `--section-pad` alone put the pair at
+ * ~965px inside a 900px window. `min-height` is a floor, not a cap, so a window
+ * too short for the composition simply grows the section — there is no free
+ * space to distribute and nothing centres out of reach.
+ *
+ * The top pad clears the fixed nav (`--nav-block`, DEC-020) so that a section
+ * filling the screen puts its eyebrow below the bar rather than under it.
+ */
 .section {
-  padding-block: var(--section-pad);
+  display: flex;
+  min-height: 100svh;
+  flex-direction: column;
+  justify-content: center;
+  padding-block: calc(var(--nav-block) + clamp(6px, 1.6vh, 18px))
+    clamp(28px, 5vh, 56px);
   background: var(--paper);
 }
 
 .header {
-  margin-bottom: clamp(30px, 5vh, 52px);
+  margin-bottom: clamp(20px, 3.4vh, 40px);
 }
 
 .heading {
-  margin-top: clamp(12px, 2vh, 18px);
+  margin-top: clamp(8px, 1.4vh, 14px);
 }
 
 .grid {
@@ -17,8 +35,12 @@
    * Keyed to width it reached 360px, so the 2x2 stood 712px tall under a 150px
    * heading and was never seen whole on a 900px screen — and half of each card
    * was empty, because `space-between` had far more height than content.
+   *
+   * The cap came down again once the back faces were re-measured against a
+   * wider explanation measure: two rows plus the heading now resolve inside one
+   * screen at 900px and at 768px.
    */
-  --why-card-min: clamp(260px, 32vh, 300px);
+  --why-card-min: clamp(228px, 30vh, 272px);
 
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -87,7 +109,12 @@
 .letter {
   display: block;
   font-family: var(--d);
-  font-size: clamp(84px, 10.5vw, 148px);
+  /*
+   * Scaled from the viewport's height, not its width. The card is now sized
+   * against the height too, and a letter keyed to `vw` outgrew it on a wide,
+   * shallow window — at 1280x800 the front face clipped its own value name.
+   */
+  font-size: clamp(70px, 13.5vh, 140px);
   line-height: 0.78;
   color: var(--olive);
   opacity: 0.76;
@@ -115,7 +142,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: clamp(16px, 2.5vh, 24px);
+  margin-top: clamp(12px, 1.8vh, 20px);
   font-family: var(--u);
   font-size: var(--u-size);
   font-weight: 500;
@@ -135,14 +162,14 @@
 .backMarker {
   display: block;
   font-family: var(--d);
-  font-size: clamp(28px, 3vw, 40px);
+  font-size: clamp(24px, 2.4vw, 32px);
   line-height: 1;
   color: var(--olive);
 }
 
 .backContent {
   margin-block: auto;
-  gap: clamp(12px, 2vh, 18px);
+  gap: clamp(8px, 1.4vh, 14px);
 }
 
 .backName {
@@ -155,11 +182,15 @@
    * The back face is `overflow: hidden`, so copy that outgrows the card is
    * silently cut rather than scrolled. Measured against the longest of the
    * four — S, which names six sectors — at the shortened card height.
+   *
+   * The measure is wider than the original 38ch for that reason: the card is
+   * half a row shorter now, and the height it gives back has to come from
+   * somewhere. A 46ch line still sits well inside the 34em the cell offers.
    */
-  max-width: 38ch;
+  max-width: 46ch;
   font-family: var(--s);
-  font-size: clamp(15px, 1.3vw, 17px);
-  line-height: 1.55;
+  font-size: clamp(15px, 1.2vw, 16.5px);
+  line-height: 1.52;
   color: var(--moss);
 }
 
@@ -178,28 +209,96 @@
   }
 }
 
+/*
+ * Mobile — recomposed, not shrunk (§9).
+ *
+ * Stacked, the card kept the desktop's vertical arrangement: an oversized
+ * letter above a large void above the name. Four of those ran past 1100px, so
+ * one card filled the phone and the section was never seen as a section. The
+ * card turns on its side instead — letter beside the value, the way the mobile
+ * sector card already works — and all four plus the heading fit one screen.
+ */
 @media (max-width: 640px) {
   .grid {
-    --why-card-min: clamp(258px, 70vw, 300px);
+    --why-card-min: clamp(156px, 18.4vh, 168px);
 
     grid-template-columns: 1fr;
   }
 
   .face {
-    padding: var(--card-pad);
+    padding: 15px var(--card-pad);
+  }
+
+  .front {
+    display: grid;
+    align-content: center;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    column-gap: clamp(14px, 4.5vw, 22px);
   }
 
   .letter {
-    font-size: clamp(66px, 22vw, 96px);
+    font-size: clamp(54px, 17.5vw, 76px);
+  }
+
+  .frontFooter {
+    gap: 2px;
+  }
+
+  .front .cue {
+    margin-top: 8px;
+  }
+
+  /*
+   * The back keeps the letter rather than dropping it — it is the card's
+   * identity — but sets it beside the value name instead of above it, so the
+   * explanation gets the height the marker used to take.
+   */
+  .back {
+    display: grid;
+    align-content: center;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: clamp(12px, 3.5vw, 16px);
+  }
+
+  .backMarker {
+    font-size: clamp(22px, 6.5vw, 28px);
+    padding-top: 2px;
+  }
+
+  /*
+   * The name sits beside the letter; the explanation drops below both and takes
+   * the card's full width. On a phone that width is worth a whole line of copy,
+   * and the back face has no room to spare — it cannot grow, since both faces
+   * are absolutely positioned inside a cell of fixed height.
+   */
+  .backContent {
+    display: contents;
+  }
+
+  .backName {
+    align-self: center;
+  }
+
+  .explanation {
+    grid-column: 1 / -1;
+    margin-top: 6px;
+  }
+
+  .back .cue {
+    grid-column: 1 / -1;
+    margin-top: 8px;
   }
 
   .valueName,
   .backName {
-    font-size: clamp(22px, 7vw, 29px);
+    font-size: clamp(20px, 6vw, 26px);
   }
 
   .explanation {
-    font-size: clamp(14px, 4vw, 16px);
+    max-width: none;
+    font-size: clamp(13.5px, 3.6vw, 14.5px);
+    line-height: 1.42;
   }
 }
 

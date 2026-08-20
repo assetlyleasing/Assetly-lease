@@ -70,7 +70,14 @@
   /* Matches `.info` exactly — the pair is what makes the row read as one block. */
   position: relative;
   min-height: clamp(440px, 56vh, 600px);
-  overflow: hidden;
+  /*
+   * `clip`, not `hidden`. Both hide the drawer while it is parked off the right
+   * edge, but `hidden` also makes this a scroll container, and a scroll
+   * container that holds something off-screen will be scrolled to reach it —
+   * by focus, by a browser find, by anything. That is what was moving the map
+   * out from under the composition as the drawer opened. `clip` cannot scroll.
+   */
+  overflow: clip;
   border: var(--hairline);
   background: var(--field);
 }
@@ -88,6 +95,60 @@
   height: 100%;
 }
 
+/*
+ * The map's own layers (DEC-033). Each group sets `--plate-stroke`, which the
+ * plate stylesheet reads on every stroked child, so the weights read as a map
+ * — through-roads over secondaries over the minor street texture — without any
+ * of it leaving the plate language.
+ */
+.mapArea {
+  --plate-stroke: 0.7;
+
+  fill: color-mix(in srgb, var(--olive) 8%, transparent);
+  opacity: 0.85;
+}
+
+.mapWater {
+  --plate-stroke: 0.8;
+
+  fill: color-mix(in srgb, var(--olive) 14%, transparent);
+}
+
+.mapMinor {
+  --plate-stroke: 0.55;
+
+  opacity: 0.5;
+}
+
+.mapSecondary {
+  --plate-stroke: 1.1;
+
+  opacity: 0.82;
+}
+
+.mapMain {
+  --plate-stroke: 1.9;
+}
+
+/* The pin reads as the one interactive thing on the drawing, so it takes Bottle. */
+.mapPin {
+  --plate-stroke: 1.4;
+
+  color: var(--bottle);
+}
+
+/*
+ * `fill` on a group would be overridden by the plate stylesheet's `fill: none`
+ * on the paths themselves, so the two filled layers restate it here.
+ */
+.mapArea path {
+  fill: inherit;
+}
+
+.mapWater path {
+  fill: inherit;
+}
+
 .mapLabel {
   position: absolute;
   top: var(--card-pad-lg);
@@ -100,13 +161,26 @@
   color: var(--moss);
 }
 
+/* ODbL credit — present, legible, and quiet enough not to be chrome. */
+.mapCredit {
+  position: absolute;
+  bottom: 10px;
+  left: var(--card-pad-lg);
+  font-family: var(--u);
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  color: color-mix(in srgb, var(--moss) 78%, transparent);
+}
+
 /* Anchored to the centre of the map's viewBox — see the note in ContactMap. */
 .mapMarker {
   position: absolute;
   top: 50%;
   left: 50%;
+  z-index: 2;
   display: inline-flex;
-  transform: translate(32px, -50%);
+  min-height: 34px;
+  transform: translate(26px, -50%);
   align-items: center;
   gap: 9px;
   padding: 8px 12px;
@@ -118,6 +192,14 @@
   text-transform: uppercase;
   letter-spacing: var(--u-track-tight);
   color: var(--bottle);
+  transition:
+    background var(--dur-toggle) var(--eio),
+    border-color var(--dur-toggle) var(--eio);
+}
+
+.mapMarker:hover {
+  border-color: var(--bottle);
+  background: var(--paper);
 }
 
 .mapMarkerDot {
@@ -369,7 +451,16 @@
 .sheetLayer {
   position: fixed;
   z-index: 120;
-  inset: 0;
+  inset: 0 auto auto 0;
+  /*
+   * `100vw`, not `inset: 0`. The document reserves its scrollbar gutter
+   * permanently (DEC-036), so a fixed box laid out inside the initial
+   * containing block stops short of the window edge — and while a modal holds
+   * body scroll the gutter it stops at is empty. A full-bleed overlay is one of
+   * the few things that genuinely wants the whole window.
+   */
+  width: 100vw;
+  height: 100%;
   visibility: hidden;
   pointer-events: none;
   transition: visibility 0s linear 800ms;
@@ -446,7 +537,7 @@
   }
 
   .mapShell {
-    min-height: clamp(360px, 105vw, 470px);
+    min-height: clamp(320px, 88vw, 420px);
     overflow: visible;
   }
 
@@ -466,13 +557,67 @@
     pointer-events: none;
   }
 
+  /*
+   * §16's sheet, recomposed so a step and its primary action are on screen
+   * together. Step 2 asks for six fields at its longest, and at the page's
+   * standard field rhythm that alone ran past the fold — the visitor opened the
+   * form and could not see what to press. Everything here is a proportion of
+   * the sheet rather than a new type scale: smaller heading, tighter gaps,
+   * inputs still a full 44px tall.
+   */
+  .sheet {
+    max-height: 90svh;
+    padding: 12px var(--card-pad) calc(var(--card-pad) - 4px);
+  }
+
+  .grip {
+    margin-bottom: 12px;
+  }
+
+  .panelTop {
+    margin-bottom: 18px;
+  }
+
+  .flow {
+    gap: 20px;
+  }
+
+  .stepHead {
+    gap: 8px;
+  }
+
   .stepHead h3 {
-    font-size: clamp(29px, 9vw, 38px);
+    font-size: clamp(25px, 7.4vw, 32px);
+  }
+
+  .typeList {
+    /* The rows are the step's whole content, so they keep their full target. */
+    margin-top: -4px;
   }
 
   .typeRow {
-    min-height: 60px;
-    font-size: 18px;
+    min-height: 56px;
+    font-size: 17px;
+  }
+
+  .fields {
+    gap: 16px;
+  }
+
+  .field {
+    gap: 5px;
+  }
+
+  .field input,
+  .field textarea {
+    /* 16px keeps iOS from zooming the page on focus; the padding keeps 44px. */
+    padding: 10px 0 12px;
+    font-size: 16px;
+    line-height: 1.35;
+  }
+
+  .field textarea {
+    min-height: 70px;
   }
 
   .primaryAction {
@@ -481,6 +626,40 @@
 
   .flowActions {
     align-items: stretch;
+    gap: 8px 16px;
+  }
+}
+
+/*
+ * Short phones. Six labelled fields, a heading and an action cannot all fit
+ * 600px of sheet at a readable size, so the last of the height comes out of the
+ * gaps rather than out of the inputs — they stay a full 44px target. What is
+ * left over still scrolls, which §16 allows; it is now a nudge rather than a
+ * page.
+ */
+@media (max-width: 700px) and (max-height: 720px) {
+  .sheet {
+    max-height: 94svh;
+  }
+
+  .panelTop {
+    margin-bottom: 14px;
+  }
+
+  .flow {
+    gap: 16px;
+  }
+
+  .stepHead h3 {
+    font-size: 23px;
+  }
+
+  .fields {
+    gap: 12px;
+  }
+
+  .typeRow {
+    min-height: 52px;
   }
 }
 

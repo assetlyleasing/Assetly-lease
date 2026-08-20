@@ -346,6 +346,56 @@ Every important technical or product decision, including conflict resolutions fo
 
 ---
 
+### DEC-032 - Why Assetly and Sectors are composed to resolve inside one viewport
+
+- **Date**: 2026-08-20
+- **Decision**: Both sections are sized against the viewport rather than padded by the page's standard rhythm: `min-height: 100svh`, contents centred in the space below the fixed nav, reduced heading and card metrics, and a mobile Why Assetly card recomposed horizontally - the letter beside the value name, as the mobile sector card already works.
+- **Reason**: DEC-028 capped the grids against viewport height but left `--section-pad` above and below them, so each section still stood ~965px inside a 900px window and neither was ever seen whole. The mobile Why Assetly card was worse: four 274px cards ran to ~1100px, so one card filled the phone and the section read as a list of cards rather than as a section.
+- **Consequences**: At 1440x900, 1280x800, 1024x768, 430x932 and 390x844 each section is exactly one viewport tall. `min-height` is a floor, so a window too short for the composition grows the section instead of centring content out of reach - at 375x667 Why Assetly is 819px and scrolls, which is correct. Card heights were re-measured against the longest back face (S, which names six sectors) at every size; the flip card cannot grow to fit its copy, because both faces are absolutely positioned inside a cell of fixed height.
+- **Status**: Active
+
+---
+
+### DEC-033 - The Contact map is real OpenStreetMap geography, baked to static paths
+
+- **Date**: 2026-08-20
+- **Decision**: The Bengaluru map is generated from OpenStreetMap data for a 6 x 3.9 km window centred on the office's position on Brigade Road, projected and simplified into static path data in `content/plates/bengaluru-map.ts`, and drawn by the existing `Plate` component in five weighted layers. The ODbL credit is rendered beside the map, and the Assetly marker links to the same coordinates on a real map. This supersedes DEC-026's invented road network.
+- **Reason**: The owner's review was that the drawing was aesthetically consistent but not geographically convincing - it was recognisably nowhere. §16 rules out a third-party embed and the default-Google-Maps look, not real geography. Baking the geometry at authoring time satisfies both: the city reads as itself, and the page still ships no map SDK, no tile requests and no API key.
+- **Consequences**: `content/plates/bengaluru-map.ts` is generated and must not be hand-edited - an edit would make it geographically wrong, which is the one thing it exists to prevent. Regenerate it from Overpass to move the window or refresh the data. The credit is a licence obligation, not decoration, and must survive any redesign of the section. §16's "map artwork" paragraph is amended accordingly.
+- **Status**: Active
+
+---
+
+### DEC-034 - The Compare focus effect holds a locked band before it transitions
+
+- **Date**: 2026-08-20
+- **Decision**: A slide keeps its resting appearance - opacity 1, no blur, no shift - across a band around the viewport centre (0.26 viewport heights on desktop, 0.34 on mobile) and only then begins the existing fade, blur and displacement, reaching full effect by 0.86. The focused index is sticky: a rival slide must be closer by 0.08 viewport heights to take the calculator's mode from the current one.
+- **Reason**: Read literally, §13's "aligned at rest" is a single point, so a slide lost sharpness to any movement at all. On a phone that is most of the time - a thumb never parks a slide on one exact pixel - so the copy the reader was reading lived in a partial blur. The section is meant to read as four settled arguments, and a continuously-derived curve never settles.
+- **Consequences**: §13's focus description is amended: the effect is unchanged in kind, only in when it starts. Measured on screen, a slide is completely sharp through ~260px of scroll at 1440x900 and ~290px at 390x844 before anything begins. Mode sync still follows the reader in both directions; the hysteresis only stops it oscillating at a boundary. Reduced motion is untouched - no appearance is written at all under it.
+- **Status**: Active
+
+---
+
+### DEC-035 - Compare Slide 01's left half is the reference hero crane, mirrored
+
+- **Date**: 2026-08-20
+- **Decision**: The left half of the Upfront Cash plate is the wheeled crane from `reference/home-2.html`'s hero plate, mirrored about its own bounding box and scaled 0.2 onto the plate's ground line. The right half - the floored block and the rayed circle - is the reference argument plate's own geometry, unchanged.
+- **Reason**: The owner's review was that the left half of the plate was wrong and should come from the canonical reference rather than be redrawn, with the hanging boom ending up on the opposite side from where the source puts it. Mirrored, the boom hangs outward rather than over the capital reserve.
+- **Consequences**: §13's plate note for Slide 01 - "retained capital, small portion accessed while a larger reserve stays intact" - now reads as an asset put to work beside a reserve that stays intact. Both halves are reference geometry under a documented transform (x' = 127.4 - 0.2x, y' = 62.8 + 0.2y), so the drawing can be re-derived rather than guessed at. The sector Construction plate deliberately uses a tracked excavator so the two machines do not read as the same drawing twice.
+- **Status**: Active
+
+---
+
+### DEC-036 - Nothing that holds a parked panel may be a scroll container
+
+- **Date**: 2026-08-20
+- **Decision**: `.mapShell` uses `overflow: clip` rather than `hidden`, the focus trap focuses with `preventScroll: true` on both entry and restoration, and the document reserves its scrollbar gutter permanently (`scrollbar-gutter: stable`).
+- **Reason**: The desktop contact drawer appeared to shove the whole composition sideways and then correct itself. The animation was not the cause: `overflow: hidden` made the map shell a scroll container, the drawer starts parked outside it, and focusing a control inside the drawer made the browser scroll the shell to reach it - moving the map, the label and the pin, then letting them drift back. Separately, locking body scroll for a modal removes the scrollbar on a platform with classic scrollbars, which widens the layout viewport and jogs every fixed and centred element on the page.
+- **Consequences**: The drawer now travels monotonically from the shell's right edge to its resting position with the map stationary throughout, verified frame by frame. `clip` cannot be scrolled by anything - focus, find-in-page or script - so the class of bug is closed rather than patched. The reserved gutter costs a permanent ~15px on platforms that draw classic scrollbars, which is the price of both modals opening without moving the page.
+- **Status**: Active
+
+---
+
 ## Decision index
 
 | ID | Topic | Status |
@@ -375,8 +425,13 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-023 | Compare uses qualitative tier bars without prototype math | Active |
 | DEC-024 | Why Assetly exposes only the active face to screen readers | Active |
 | DEC-025 | Sector artwork and reduced motion are code-native and static | Active |
-| DEC-026 | Contact uses an illustrative code-authored Bengaluru plate | Active |
+| DEC-026 | Contact uses an illustrative code-authored Bengaluru plate | Superseded by DEC-033 |
 | DEC-027 | About may use an explicit temporary media slot during development | Active |
 | DEC-028 | Section blocks are sized against viewport height, not width | Active |
 | DEC-029 | Sector rotation changes a card every 1.2 seconds | Active |
 | DEC-030 | The map pin and its label share the viewBox centre | Active |
+| DEC-032 | Why Assetly and Sectors resolve inside one viewport | Active |
+| DEC-033 | Contact map uses real OpenStreetMap geography | Active |
+| DEC-034 | Compare focus holds a locked band before transitioning | Active |
+| DEC-035 | Slide 01's left half is the mirrored reference crane | Active |
+| DEC-036 | Nothing holding a parked panel may be a scroll container | Active |

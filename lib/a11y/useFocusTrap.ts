@@ -46,7 +46,15 @@ export function useFocusTrap({
       // more after reduced motion removes the opening transition, so make a
       // small number of bounded attempts while focus remains outside.
       if (container && activeElement && container.contains(activeElement)) return;
-      initial?.focus();
+      /*
+       * `preventScroll` matters here, not just as a nicety. The desktop drawer
+       * starts translated outside its own clipping ancestor, so focusing a
+       * control inside it asks the browser to scroll that ancestor — and the
+       * whole map composition slides sideways for as long as the panel takes to
+       * arrive, then slides back. The panel's own opening animation is the only
+       * movement that should be happening.
+       */
+      initial?.focus({ preventScroll: true });
     };
     const focusTimers = [50, 150, 400].map((delay) => setTimeout(focusInitial, delay));
 
@@ -59,7 +67,7 @@ export function useFocusTrap({
       document.removeEventListener("keydown", onKeyDown);
       focusTimers.forEach(clearTimeout);
       document.body.style.overflow = previousOverflow;
-      trigger?.focus();
+      trigger?.focus({ preventScroll: true });
     };
   }, [active, containerRef, initialFocusSelector, onEscape, triggerRef]);
 

@@ -15,7 +15,8 @@
   right: 0;
   z-index: 2;
   height: 100svh;
-  width: clamp(340px, 44vw, 640px);
+  /* Declared by `.compare`, so the narrative column can subtract exactly this. */
+  width: var(--compare-drawer-width, clamp(340px, 44vw, 640px));
   /*
    * Translating the whole drawer — control included — is what puts the tab
    * flush against the right edge of the screen when the panel is closed.
@@ -78,14 +79,24 @@
   border-top: var(--hairline);
 }
 
-/* §13: a tiny centred triangle at the sheet's top edge, no text label. */
+/*
+ * §13's tiny triangle at the sheet's top edge, moved off the centre line.
+ *
+ * Centred, it sits directly above the graph's middle column and reads as
+ * something floating over the data rather than as part of the instrument. On
+ * the right it reads as the sheet's own corner tab — the same role the desktop
+ * drawer's tab plays on its leading edge.
+ *
+ * It stays *outside* the sheet's own box on purpose: the sheet travels its full
+ * height on close, so a control drawn inside it would leave the screen with it
+ * and there would be nothing left to reopen.
+ */
 .handle {
   position: absolute;
   top: calc(var(--touch-min) * -1);
-  left: 50%;
+  right: 10px;
   width: var(--touch-min);
   height: var(--touch-min);
-  margin-left: calc(var(--touch-min) / -2);
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -96,14 +107,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 26px;
+  width: 34px;
+  height: 22px;
   background: var(--field);
   border: var(--hairline);
   border-bottom: none;
   border-radius: 4px 4px 0 0;
   color: var(--bottle);
-  font-size: 11px;
+  font-size: 10px;
   line-height: 1;
 }
 
@@ -230,7 +241,12 @@
 
 .fill {
   display: block;
-  width: 44px;
+  /*
+   * Proportional rather than fixed: the drawer is `clamp(340px, 44vw, 640px)`
+   * wide, so a bar set in pixels alone is heavy at 1024 and thin at 1440. The
+   * cap keeps the three columns from meeting at the widest end.
+   */
+  width: min(72px, 58%);
   height: 100%;
   background: var(--olive);
   transform: scaleY(var(--tier-scale));
@@ -335,7 +351,7 @@
   }
 
   .fill {
-    width: 28px;
+    width: min(48px, 52%);
   }
 
   .columnLabel {

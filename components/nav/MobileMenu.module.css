@@ -66,7 +66,15 @@
 
 .overlay {
   position: fixed;
-  inset: 0 0 auto;
+  inset: 0 auto auto 0;
+  /*
+   * `100vw`, not `inset: 0`. The document reserves its scrollbar gutter
+   * permanently (DEC-036), so a fixed box laid out inside the initial
+   * containing block stops short of the window edge — and while a modal holds
+   * body scroll the gutter it stops at is empty. A full-bleed overlay is one of
+   * the few things that genuinely wants the whole window.
+   */
+  width: 100vw;
   z-index: 1;
   background: var(--pitch);
   padding-top: calc(var(--nav-block) + 26px);

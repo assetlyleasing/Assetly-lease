@@ -16,6 +16,14 @@
    * and the column renders at full width for a frame.
    */
   --compare-openness: 0;
+  /*
+   * One source of truth for how wide the panel is. The narrative used to give
+   * up 44% of its own width against a drawer set to 44vw, which agreed only
+   * while those two happened to measure the same thing - they stopped agreeing
+   * the moment the document reserved a scrollbar gutter (DEC-036), and the
+   * column overlapped the panel by the gutter's width.
+   */
+  --compare-drawer-width: clamp(340px, 44vw, 640px);
 }
 
 /*
@@ -25,10 +33,10 @@
  * within whatever width is left, so at rest this is indistinguishable from any
  * other section on the page.
  *
- * 44% mirrors the drawer's own `clamp(340px, 44vw, 640px)`.
+ * The travel is the drawer's own width, inherited from the section above.
  */
 .slides {
-  width: calc(100% - var(--compare-openness) * 44%);
+  width: calc(100% - var(--compare-openness) * var(--compare-drawer-width));
   transition: none;
 }
 

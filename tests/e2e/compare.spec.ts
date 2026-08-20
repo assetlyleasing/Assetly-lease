@@ -215,7 +215,7 @@ test.describe("compare — the calculator", () => {
     await expect(fills.nth(2)).toHaveAttribute("data-tier", "low");
   });
 
-  test("renders a tall, slender, fully visible graph", async ({ page }) => {
+  test("renders a tall, weighted, fully visible graph", async ({ page }) => {
     await page.goto("/");
     await centreSlide(page, 0);
 
@@ -228,9 +228,14 @@ test.describe("compare — the calculator", () => {
 
     expect(track.height).toBeGreaterThanOrEqual(189);
     expect(track.height).toBeLessThanOrEqual(271);
-    expect(fill.width).toBeGreaterThanOrEqual(43);
-    expect(fill.width).toBeLessThanOrEqual(45);
-    expect(fill.width).toBeLessThan(track.width * 0.6);
+    /*
+     * The bar carries the reading, so it is drawn with weight rather than as a
+     * hairline. The upper bound and the proportion are the same guard as
+     * before: three columns that never meet, at any drawer width.
+     */
+    expect(fill.width).toBeGreaterThanOrEqual(56);
+    expect(fill.width).toBeLessThanOrEqual(76);
+    expect(fill.width).toBeLessThan(track.width * 0.65);
   });
 
   test("syncs backwards too, not only on the way down", async ({ page }) => {

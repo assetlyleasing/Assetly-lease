@@ -1,14 +1,26 @@
+/*
+ * One composition per screen (DEC-032), on the same terms as Why Assetly
+ * directly above — the two sit back to back and any difference in their
+ * vertical rhythm shows. §15's rotation only reads while all four cards are on
+ * screen, so this section has the stronger claim to the treatment: the heading
+ * and the four cells are the unit, and the unit has to fit.
+ */
 .section {
-  padding-block: var(--section-pad);
+  display: flex;
+  min-height: 100svh;
+  flex-direction: column;
+  justify-content: center;
+  padding-block: calc(var(--nav-block) + clamp(6px, 1.6vh, 18px))
+    clamp(28px, 5vh, 56px);
   background: var(--paper);
 }
 
 .header {
-  margin-bottom: clamp(30px, 5vh, 52px);
+  margin-bottom: clamp(20px, 3.4vh, 40px);
 }
 
 .heading {
-  margin-top: clamp(12px, 2vh, 18px);
+  margin-top: clamp(8px, 1.4vh, 14px);
 }
 
 .grid {
@@ -30,7 +42,7 @@
  */
 .cell {
   min-width: 0;
-  min-height: clamp(260px, 32vh, 300px);
+  min-height: clamp(202px, 27vh, 262px);
   border-right: var(--hairline);
   border-bottom: var(--hairline);
 }
@@ -40,8 +52,8 @@
   min-height: inherit;
   height: 100%;
   flex-direction: column;
-  justify-content: space-between;
-  gap: clamp(14px, 2vh, 22px);
+  justify-content: center;
+  gap: clamp(14px, 2.6vh, 26px);
   padding: var(--card-pad);
   background: var(--paper);
   opacity: 1;
@@ -81,7 +93,7 @@
  * proportion at every window height.
  */
 .plateWrap {
-  height: clamp(72px, 12vh, 118px);
+  height: clamp(62px, 10.5vh, 104px);
   aspect-ratio: 200 / 130;
   justify-self: end;
 }
@@ -98,7 +110,7 @@
 
 .name {
   max-width: 18ch;
-  font-size: clamp(25px, 3vw, 42px);
+  font-size: clamp(24px, 2.7vw, 38px);
   line-height: 1.04;
 }
 
@@ -132,7 +144,7 @@
   }
 
   .cell {
-    min-height: clamp(128px, 36vw, 156px);
+    min-height: clamp(108px, 29vw, 136px);
   }
 
   .card {
@@ -142,8 +154,8 @@
       "index plate"
       "name plate";
     grid-template-columns: minmax(0, 1fr) auto;
-    gap: 8px 18px;
-    padding: var(--card-pad);
+    gap: 6px 18px;
+    padding: 16px var(--card-pad);
   }
 
   /* The index and the plate become direct items of the card's own grid. */
@@ -156,7 +168,7 @@
   }
 
   .plateWrap {
-    width: clamp(84px, 26vw, 108px);
+    width: clamp(74px, 23vw, 96px);
     height: auto;
     grid-area: plate;
     align-self: center;
@@ -167,7 +179,7 @@
   }
 
   .name {
-    font-size: clamp(23px, 7vw, 30px);
+    font-size: clamp(21px, 6.2vw, 27px);
   }
 
   .descriptor {

@@ -30,6 +30,15 @@ html {
   color-scheme: light;
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+  /*
+   * Both modal panels lock body scroll while they are open (§16). On a platform
+   * with classic scrollbars that removes the scrollbar, the layout viewport
+   * widens by its width, and every fixed and centred thing on the page jumps
+   * sideways and back — which reads as the composition being shoved aside by
+   * the drawer. Reserving the gutter permanently means locking scroll changes
+   * no width at all. Overlay-scrollbar platforms ignore this.
+   */
+  scrollbar-gutter: stable;
 }
 
 body {

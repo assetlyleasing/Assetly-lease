@@ -1,8 +1,12 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  FOCUS_LOCK_DESKTOP,
+  FOCUS_LOCK_MOBILE,
+  FOCUS_SWITCH_MARGIN,
   focusAppearance,
   focusDistance,
+  focusProgress,
   nearestFocusIndex,
 } from "@/lib/motion/scrollFocus";
 
@@ -84,6 +88,50 @@ describe("focusAppearance", () => {
   });
 });
 
+describe("the locked focus band", () => {
+  it("holds the resting appearance across the whole band, not just at its centre", () => {
+    for (const distance of [0, 0.08, 0.17, FOCUS_LOCK_DESKTOP]) {
+      expect(focusAppearance(distance)).toEqual({
+        opacity: 1,
+        blurPx: 0,
+        shiftPx: 0,
+      });
+    }
+  });
+
+  it("locks in both directions", () => {
+    expect(focusAppearance(-FOCUS_LOCK_DESKTOP)).toEqual(focusAppearance(FOCUS_LOCK_DESKTOP));
+  });
+
+  it("begins the transition only past the band", () => {
+    expect(focusProgress(FOCUS_LOCK_DESKTOP)).toBe(0);
+    expect(focusProgress(FOCUS_LOCK_DESKTOP + 0.02)).toBeGreaterThan(0);
+  });
+
+  it("still reaches the full effect by the time the slide is a screen away", () => {
+    expect(focusProgress(1)).toBe(1);
+    expect(focusAppearance(1).blurPx).toBe(focusAppearance(2).blurPx);
+  });
+
+  it("locks harder on mobile, where a thumb never stops on one pixel", () => {
+    expect(FOCUS_LOCK_MOBILE).toBeGreaterThan(FOCUS_LOCK_DESKTOP);
+    // The distance that has already started to blur on a desktop window is
+    // still perfectly sharp on a phone.
+    expect(focusAppearance(0.3).opacity).toBeLessThan(1);
+    expect(focusAppearance(0.3, FOCUS_LOCK_MOBILE)).toEqual({
+      opacity: 1,
+      blurPx: 0,
+      shiftPx: 0,
+    });
+  });
+
+  it("rises without a step at the edge of the band, so the lock is felt and not seen", () => {
+    const justOutside = focusAppearance(FOCUS_LOCK_DESKTOP + 0.01);
+    expect(justOutside.opacity).toBeGreaterThan(0.98);
+    expect(justOutside.blurPx).toBeLessThan(0.1);
+  });
+});
+
 describe("nearestFocusIndex", () => {
   it("picks the slide closest to the centre line", () => {
     expect(nearestFocusIndex([-1.8, -0.9, 0.05, 1.1])).toBe(2);
@@ -95,6 +143,22 @@ describe("nearestFocusIndex", () => {
 
   it("breaks ties toward the earlier slide, so scrolling cannot flicker", () => {
     expect(nearestFocusIndex([0.5, -0.5])).toBe(0);
+  });
+
+  it("holds the current slide until a rival is clearly closer", () => {
+    // Two slides all but equidistant: the one already in focus keeps it, so the
+    // calculator's mode cannot flicker across the boundary between them.
+    expect(nearestFocusIndex([0.5, 0.48], 0)).toBe(0);
+    expect(nearestFocusIndex([0.5, 0.48], 1)).toBe(1);
+  });
+
+  it("does switch once the rival has genuinely taken over", () => {
+    const clear = 0.5 - FOCUS_SWITCH_MARGIN - 0.02;
+    expect(nearestFocusIndex([0.5, clear], 0)).toBe(1);
+  });
+
+  it("ignores a held index that is no longer measurable", () => {
+    expect(nearestFocusIndex([Number.POSITIVE_INFINITY, 0.4], 0)).toBe(1);
   });
 
   it("falls back to the first slide when nothing has been measured", () => {

@@ -3,6 +3,7 @@
 import { useCallback, useRef } from "react";
 
 import { COMPARE_SLIDES } from "@/content/compare/slides";
+import { FOCUS_LOCK_DESKTOP, FOCUS_LOCK_MOBILE } from "@/lib/motion/scrollFocus";
 import { useDrawerOpenness } from "@/lib/motion/useDrawerOpenness";
 import { useMediaQuery, usePrefersReducedMotion } from "@/lib/motion/useMediaQuery";
 import { useScrollFocus } from "@/lib/motion/useScrollFocus";
@@ -34,8 +35,15 @@ export function CompareSection() {
   const reducedMotion = usePrefersReducedMotion();
   const isSheet = useMediaQuery(SHEET_QUERY);
 
+  /*
+   * The locked band is wider on a phone: the sheet variant is chosen at the
+   * same 700px, and the reader there is scrolling the copy itself rather than
+   * a page beside a drawer. `isSheet` is null until the client knows the
+   * viewport, and the desktop band is the safe default for that one frame.
+   */
   const { setSlideRef, focusIndex } = useScrollFocus(COMPARE_SLIDES.length, {
     reducedMotion,
+    lock: isSheet ? FOCUS_LOCK_MOBILE : FOCUS_LOCK_DESKTOP,
   });
   const { active, open, toggle } = useDrawerOpenness(sectionRef, {
     reducedMotion,

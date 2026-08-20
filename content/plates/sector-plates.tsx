@@ -25,15 +25,26 @@ export function SectorPlate({ plateId, drawn, className }: SectorPlateProps) {
 }
 
 const PLATE_GEOMETRY: Record<SectorPlateId, React.ReactNode> = {
+  /*
+   * A fitted-out workplace bay, drawn in elevation like the manufacturing and
+   * IT plates rather than as a plan: ceiling line and linear light, desk with
+   * monitor and task chair, glazed partition. The earlier drawing was a set of
+   * nested rectangles that could have been a floor plan or a kitchen; these are
+   * the objects a fit-out actually buys.
+   */
   "commercial-interiors": (
     <>
-      <path d="M15 109V19H184V109H15Z" />
-      <path d="M15 61H77V19M77 61V109M77 83H126V109M126 83V43H184" />
-      <rect x="29" y="31" width="32" height="18" rx="2" />
-      <path d="M37 49V56M53 49V56M88 30H126V61H88Z" />
-      <circle cx="96" cy="70" r="5" />
-      <circle cx="116" cy="70" r="5" />
-      <path d="M139 57H170V93H139ZM145 66H164M145 75H164M145 84H158" />
+      <path d="M12 116H188" />
+      <path d="M22 28H186" />
+      <path d="M56 28V38M44 38H72" />
+      <path d="M24 82H94M28 82V116M90 82V116M28 90H90" />
+      <path d="M42 56H76V78H42Z" />
+      <path d="M59 78V82" />
+      <path d="M100 90H128V96H100Z" />
+      <path d="M122 90V66H128V90" />
+      <path d="M114 96V106M104 108H124" />
+      <path d="M138 36H186V116M138 36V116M186 116H138" />
+      <path d="M154 36V116M170 36V116M138 72H186" />
     </>
   ),
   manufacturing: (
@@ -47,13 +58,31 @@ const PLATE_GEOMETRY: Record<SectorPlateId, React.ReactNode> = {
       <path d="M22 46H61M25 39H58M137 39H177M140 32H174" />
     </>
   ),
+  /*
+   * Plant on a site: a tracked excavator working beside a frame that is still
+   * going up. §15's descriptor for this sector is "plant, machinery and
+   * specialist assets", and the previous truss-over-grid read as generic
+   * geometry — it could as easily have been a bridge or a roof detail.
+   *
+   * The machine is deliberately not the wheeled crane the Compare plate
+   * borrows from the reference: different chassis, different job.
+   */
   construction: (
     <>
-      <path d="M20 109H184M42 109V35H155V109M42 55H155M42 79H155" />
-      <path d="M66 35V109M99 35V109M131 35V109" />
-      <path d="M24 99L99 15L175 99M99 15V35M99 15H174M158 15V68" />
-      <path d="M150 68H166V84H150Z" />
-      <path d="M25 99H42M155 99H176" />
+      <path d="M12 118H188" />
+      <path d="M116 118V64H172V118M116 92H172M134 64V118M154 64V118" />
+      <path d="M110 64H178M124 64V54M144 64V54M164 64V54" />
+      <circle cx="32" cy="110" r="6" />
+      <circle cx="78" cy="110" r="6" />
+      <circle cx="55" cy="112" r="3" />
+      <path d="M32 104H78M32 116H78" />
+      <path d="M40 78H88V104H40Z" />
+      <path d="M46 58H70V78H46Z" />
+      <path d="M50 62H66V74H50Z" />
+      <path d="M48 82L24 50L28 47L52 79Z" />
+      <path d="M26 49L14 76L19 78L31 51Z" />
+      <path d="M13 77L8 88L25 94L29 84Z" />
+      <path d="M9 90L12 96M17 92L20 98" />
     </>
   ),
   hospitality: (
@@ -66,15 +95,30 @@ const PLATE_GEOMETRY: Record<SectorPlateId, React.ReactNode> = {
       <path d="M119 106V96H181V106M42 106V96H101V106" />
     </>
   ),
+  /*
+   * Clinical infrastructure rather than a symbol: a wheeled patient bed under a
+   * vitals monitor, and an imaging gantry with its table run out. §15 asks for
+   * "medical-equipment geometry", and the drawing this replaces leaned on a
+   * plain cross inside a square to carry the meaning — the one piece of
+   * clip-art vocabulary the plate language avoids everywhere else.
+   */
   healthcare: (
     <>
-      <path d="M16 107H185M27 107V75H118V107M27 90H118M39 75V63H73V75" />
-      <path d="M118 107V45H178V107M130 57H166V84H130Z" />
-      <path d="M139 70H157M148 61V79" />
-      <circle cx="48" cy="108" r="7" />
-      <circle cx="101" cy="108" r="7" />
-      <path d="M25 41H78L87 51H108" />
-      <path d="M29 40L37 31L45 49L54 25L63 42L71 35L79 41" />
+      <path d="M12 116H188" />
+      <path d="M24 26H70V54H24Z" />
+      <path d="M29 42L35 33L40 48L46 29L51 42L55 36H65" />
+      <path d="M47 54V62M38 62H56" />
+      <path d="M22 86H92V98H22Z" />
+      <path d="M18 70H24V86H18Z" />
+      <path d="M90 76H96V86H90Z" />
+      <path d="M28 98V108M86 98V108" />
+      <circle cx="30" cy="112" r="4" />
+      <circle cx="84" cy="112" r="4" />
+      <path d="M100 74H126V82H100Z" />
+      <path d="M108 82V102M100 102H118" />
+      <path d="M126 44H184V104H126Z" />
+      <circle cx="155" cy="74" r="20" />
+      <circle cx="155" cy="74" r="9" />
     </>
   ),
   "it-infrastructure": (

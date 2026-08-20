@@ -1,9 +1,21 @@
 "use client";
 
-import { useCallback, useMemo, useRef, useState, type RefCallback } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type RefCallback,
+} from "react";
 
-import { focusAppearance, focusDistance, nearestFocusIndex } from "./scrollFocus";
-import { useScrollTick } from "./useScrollTick";
+import {
+  FOCUS_LOCK_DESKTOP,
+  focusAppearance,
+  focusDistance,
+  nearestFocusIndex,
+} from "./scrollFocus";
+import { requestScrollTick, useScrollTick } from "./useScrollTick";
 
 /**
  * §13's left-content focus effect: one argument in focus per screen.
@@ -19,6 +31,11 @@ import { useScrollTick } from "./useScrollTick";
  * those in state would re-render the section on every pixel of scroll to
  * produce a value only CSS ever reads.
  *
+ * The locked band lives in `scrollFocus`; the caller passes its width because
+ * it is the only part of the effect that differs between the desktop drawer and
+ * the mobile sheet (§9's recomposition), and the hook has no opinion about the
+ * viewport.
+ *
  * Under `prefers-reduced-motion` no appearance is written at all. The component
  * stylesheet neutralises the properties in the same breath, so the slides sit
  * at their resting state — present, sharp, unmoved — while the calculator still
@@ -27,11 +44,31 @@ import { useScrollTick } from "./useScrollTick";
  */
 export function useScrollFocus(
   count: number,
-  { reducedMotion = false }: { reducedMotion?: boolean } = {},
+  {
+    reducedMotion = false,
+    lock = FOCUS_LOCK_DESKTOP,
+  }: { reducedMotion?: boolean; lock?: number } = {},
 ) {
   const nodesRef = useRef<(HTMLElement | null)[]>([]);
   const distancesRef = useRef<number[]>([]);
   const [focusIndex, setFocusIndex] = useState(0);
+  /*
+   * The write callback must stay stable — `useScrollTick` resubscribes when it
+   * changes — but it needs the focused index to keep it sticky. Reading it
+   * through a ref keeps both true.
+   */
+  const focusIndexRef = useRef(0);
+  const lockRef = useRef(lock);
+
+  /*
+   * The band is read on the scroll frame, not during render, so it travels by
+   * ref — and a frame is pumped when it changes so that crossing the breakpoint
+   * repaints the slides against the new band instead of waiting for a scroll.
+   */
+  useEffect(() => {
+    lockRef.current = lock;
+    requestScrollTick();
+  }, [lock]);
 
   /**
    * One stable callback ref per slide. Regenerated only when the number of
@@ -67,15 +104,20 @@ export function useScrollFocus(
         const node = nodesRef.current[index];
         if (!node || !Number.isFinite(distance)) return;
 
-        const { opacity, blurPx, shiftPx } = focusAppearance(distance);
+        const { opacity, blurPx, shiftPx } = focusAppearance(
+          distance,
+          lockRef.current,
+        );
         node.style.setProperty("--focus-opacity", opacity.toFixed(3));
         node.style.setProperty("--focus-blur", `${blurPx.toFixed(2)}px`);
         node.style.setProperty("--focus-shift", `${shiftPx.toFixed(2)}px`);
       });
     }
 
-    const next = nearestFocusIndex(distances);
-    setFocusIndex((current) => (current === next ? current : next));
+    const next = nearestFocusIndex(distances, focusIndexRef.current);
+    if (next === focusIndexRef.current) return;
+    focusIndexRef.current = next;
+    setFocusIndex(next);
   }, [reducedMotion]);
 
   useScrollTick(read, write);
