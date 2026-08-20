@@ -14,8 +14,8 @@ const launchOptions = executablePath ? { executablePath } : undefined;
 /**
  * User-flow and interaction tests (SOURCE_OF_TRUTH.md §19).
  *
- * Phase 10 adds the WebKit and real-mobile passes (QA-007); Phase 0 runs
- * Chromium only, at the viewport range the responsive checks care about.
+ * The full regression suite runs in Chromium. Phase 5 also runs the Why Assetly
+ * interaction suite in WebKit; Phase 10 broadens that second-engine coverage.
  */
 export default defineConfig({
   testDir: "./tests/e2e",
@@ -33,6 +33,11 @@ export default defineConfig({
     {
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
+    },
+    {
+      name: "webkit-why-us",
+      testMatch: /why-us\.spec\.ts/,
+      use: { ...devices["Desktop Safari"] },
     },
   ],
   webServer: {

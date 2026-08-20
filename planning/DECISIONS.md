@@ -276,6 +276,16 @@ Every important technical or product decision, including conflict resolutions fo
 
 ---
 
+### DEC-024 — Why Assetly exposes only the active face to screen readers
+
+- **Date**: 2026-08-20
+- **Decision**: Each Why Assetly card is a native button whose value name and `aria-pressed` state remain available at all times. Both visual 3D faces are hidden from the accessibility tree. The front state has a concise activation hint; the approved explanation is mounted as the button's polite description only while flipped and is removed again on return.
+- **Reason**: This gives assistive-technology users the same state-dependent information as sighted users without double-announcing the front and back or exposing visually hidden back copy before activation.
+- **Consequences**: Click, tap, Enter, and Space all use native button behavior. Multiple cards may remain open independently, while every card exposes exactly one current description.
+- **Status**: Active
+
+---
+
 ## Decision index
 
 | ID | Topic | Status |
@@ -303,3 +313,4 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-021 | Archive the two prototype HTML references | Active |
 | DEC-022 | Compare plates use the archived prototype's drafting language | Active |
 | DEC-023 | Compare uses qualitative tier bars without prototype math | Active |
+| DEC-024 | Why Assetly exposes only the active face to screen readers | Active |

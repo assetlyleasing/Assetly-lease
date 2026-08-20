@@ -259,7 +259,7 @@ Referenced open decisions (`OD-xx`) and resolved conflicts (`DEC-xxx`) are defin
 4. Implement desktop hover micro-feedback (contrast raise, 1–2px inward nudge, tiny arrow indicator) without triggering flip.
 5. Build the 2×2 shared-border ledger grid (desktop) collapsing to 1-column (mobile), with `min-height` locked consistently across front/back so flip never shifts page layout.
 6. Wire entry animation via `RevealOnScroll`: eyebrow/title fade in, 4 cells stagger (~0.12s), `opacity:0→1, translateY(16px)→0`. Cards never auto-flip on entrance.
-7. Build section heading ("WHY US" eyebrow + serif heading).
+7. Build section heading ("WHY US" eyebrow + "Why Assetly" serif heading).
 
 **Data/schema changes**: None.
 
@@ -267,7 +267,7 @@ Referenced open decisions (`OD-xx`) and resolved conflicts (`DEC-xxx`) are defin
 
 **Animation requirements**: Flip mechanics + entry stagger per §14, reduced-motion-safe (flip becomes an instant cross-fade or instant state swap rather than a 3D rotation when `prefers-reduced-motion: reduce`).
 
-**Accessibility requirements**: Each card is a keyboard-focusable button/element triggering flip on Enter/Space, not click-only; `aria-pressed` or equivalent state exposed; back-face content is reachable by screen readers only when flipped (or both faces announced with clear front/back labeling — decide and document one approach in `PROGRESS.md` when implemented); touch targets sized appropriately on mobile.
+**Accessibility requirements**: Each card is a native button triggering flip on Enter/Space as well as click/tap; `aria-pressed` exposes state. Per DEC-024, the visual 3D faces stay outside the accessibility tree, the button retains the value name, and its explanation is exposed as a polite description only while flipped. Touch targets remain appropriately sized on mobile.
 
 **Tests**:
 - Vitest: flip-state logic (independent per-card, no unintended coupling).

@@ -302,7 +302,9 @@ Four-step scroll sequence, each a near-full-screen argument slide:
 
 **Mobile**: 1-column stack (T, F, S, P), each a wide rectangular flip card with a consistent min-height on front/back so flipping never causes page jump. Tap to flip / tap again to return. No hover-dependent behavior.
 
-**Heading**: small Inter Tight eyebrow "WHY US" + serif heading, e.g. "Built around the way businesses actually acquire assets." (or the more restrained "Why Assetly").
+**Heading**: small Inter Tight eyebrow "WHY US" + serif heading **"Why Assetly"**.
+
+**Screen readers**: expose only the active face (DEC-024). The visual 3D faces are hidden from the accessibility tree; the native button keeps the value name and `aria-pressed` state. Its explanation exists as a polite description only while flipped and is removed again on return.
 
 ## 15. Sectors specification
 

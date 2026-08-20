@@ -78,13 +78,13 @@ Update this file at the end of every cycle per `LOOP.md` step 6. Do not skip ahe
 
 ## Phase 5 — Why Us
 
-- [ ] `WHY-001` Build `content/why-us/values.ts` with locked T/F/S/P front+back copy
-- [ ] `WHY-002` Build `FlipCard.tsx` (180° flip, click/tap only, independent per-card state)
-- [ ] `WHY-003` Implement desktop hover micro-feedback (no flip on hover)
-- [ ] `WHY-004` Build 2×2 → 1-column ledger grid with locked min-height (no layout jump)
-- [ ] `WHY-005` Wire entry stagger via `RevealOnScroll`
-- [ ] `WHY-006` Implement keyboard flip (Enter/Space) + `aria-pressed` state
-- [ ] `WHY-007` Playwright: flip correctness, keyboard pass, reduced-motion, cross-browser (Chromium+WebKit)
+- [x] `WHY-001` Build `content/why-us/values.ts` with locked T/F/S/P front+back copy
+- [x] `WHY-002` Build `FlipCard.tsx` (180° flip, click/tap only, independent per-card state)
+- [x] `WHY-003` Implement desktop hover micro-feedback (no flip on hover)
+- [x] `WHY-004` Build 2×2 → 1-column ledger grid with locked min-height (no layout jump)
+- [x] `WHY-005` Wire entry stagger via `RevealOnScroll`
+- [x] `WHY-006` Implement native-button keyboard flip, `aria-pressed`, and active-face-only descriptions (DEC-024)
+- [x] `WHY-007` Playwright: flip correctness, keyboard pass, reduced-motion, cross-browser (Chromium+WebKit)
 
 ## Phase 6 — Sectors
 

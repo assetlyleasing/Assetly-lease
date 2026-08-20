@@ -6,38 +6,45 @@ This file reflects the *current* state of the project, not a running chronologic
 
 ## Current Phase
 
-Phase 4 — Compare experience: **complete**, including the project-owner-directed plate and graph correction. Phases 0, 1 and 2 are complete. Phase 3 remains blocked on `OD-05`/`OD-06`; Phase 5 is unblocked.
+Phase 5 — Why Us: **complete**. Phases 0, 1, 2 and 4 are complete; Phase 4 also has its approved plate and qualitative-graph correction. Phase 3 remains blocked on `OD-05`/`OD-06`. Phase 6 is unblocked.
 
 ## Current Task
 
-`WHY-001` — build the locked T/F/S/P content for Phase 5, then the Why Assetly flip-card grid.
+`SECTOR-001` — build the locked six-sector content model for Phase 6. Plate production remains tied to `OD-04` at `SECTOR-002`.
 
 ## Status
 
-The homepage renders the shared shell, Hero, and corrected four-argument Compare sequence. Compare now uses the approved prototype-derived plate set and one persistent qualitative bar graph. Green after the correction: lint, typecheck, production build, 69 unit tests, and 78 Chromium Playwright tests.
+The homepage now renders the shared shell, Hero, corrected Compare sequence, and the completed Why Assetly section. Green at this boundary: lint, typecheck, production build, 71 unit tests, 86 Chromium Playwright tests, and 8 targeted WebKit Why Assetly tests.
 
 ## Completed This Cycle
 
-### Phase 4 correction
+### Phase 5 — Why Assetly
 
-- Archived the two late-arriving prototypes as `reference/home-2.html` and `reference/2-duty-cycle.html`, outside the application build. DEC-021 supersedes DEC-016's missing-files premise.
-- Replaced the initial interpreted Compare drawings with a 200×130 set: three plates adapted from `home-2.html` for Upfront Cash, Obsolescence, and Leverage, plus a matching Tax Treatment ledger drawing. `OD-03` is resolved (DEC-022).
-- Replaced the qualitative ledger rows with one persistent three-column graph. The frame stays mounted while each fill transitions between visual Low/Mid/High tiers (30%/60%/92%) and the approved outcome text changes. There are no prototype coefficients, numeric magnitudes, computed currency values, or asset-value input (DEC-023).
-- Set uniformly thicker fills after visual review: 44px desktop and 28px mobile. Lease remains Bottle; Loan/Purchase remain Olive.
-- Preserved the drawer/sheet openness model, manual override, scroll-to-slide mode row, fixed mobile height, single shared RAF loop, and exact approved copy.
-- Reduced motion now removes graph fill motion entirely rather than inheriting the global 120ms transition clamp.
+- Added the exact approved T/F/S/P value names and explanations in a typed `WhyUsValue` content model.
+- Replaced the homepage placeholder with a connected 2×2 ledger grid that recomposes to one column at 640px and below.
+- Built each card as an independent native button. Click, tap, Enter, and Space flip; multiple cards can remain open; hover only strengthens contrast and moves the cue by 1–2px.
+- Locked both absolutely positioned faces to one shared card-shell minimum height. Desktop and mobile bounding boxes remain unchanged before and after a flip.
+- Added the standard `RevealOnScroll` entrance and four-cell `rv-u` / `rv-d1..3` stagger without any automatic flip.
+- Added the 900ms 3D flip with proper perspective and hidden backfaces. Reduced motion removes the 3D transform and uses the standard short opacity swap.
+- Added Chromium coverage to the full suite and a targeted WebKit project for the complete Why Assetly interaction suite.
 
-### Visual defects found and fixed
+### Accessibility decision
 
-1. The first pass's 20–34px fills looked too needle-like at full drawer width; fixed with uniform 44px/28px fills after project-owner review.
-2. The longest outcome could overrun its grid column; fixed with constrained graph width and balanced, breakable value text.
-3. Mobile values extended below the visible 390×844 sheet frame; fixed by tightening internal spacing and the mobile plot clamp without changing sheet height.
+- **DEC-024** records the active-face-only approach. The visual 3D faces are outside the accessibility tree; the button's value name and `aria-pressed` state remain available. The explanation is mounted as a polite button description only while flipped, then removed on return.
+- This was chosen so assistive-technology users receive the same state-dependent explanation without hearing both faces or hidden back copy before activation.
+
+### Visual review
+
+- Reviewed rendered 1440×900 desktop front and mixed-flip states plus the complete 390×844 mobile column.
+- Increased the shared mobile card minimum height after the first preview placed the longest explanation's return cue too close to the clipped edge. The final preview keeps the copy and cue fully visible without changing height during activation.
+- Reconfirmed the project-owner-requested thicker Compare graph fills: uniform 44px desktop and 28px mobile.
 
 ## Decisions
 
 - **DEC-021** — archive both prototype HTML files under `reference/`.
 - **DEC-022** — approve the compact prototype-derived Compare plate set and resolve `OD-03`.
-- **DEC-023** — supersede only DEC-019's no-bars clause with qualitative tier bars; retain its ban on prototype calculator math/value input and retain scroll as the mode source of truth.
+- **DEC-023** — use qualitative Compare tier bars while retaining the ban on prototype calculator math and value input.
+- **DEC-024** — expose only the active Why Assetly face to screen readers.
 
 ## Tests Run
 
@@ -45,13 +52,13 @@ The homepage renders the shared shell, Hero, and corrected four-argument Compare
 |---|---|
 | `npm run lint` | Pass — 0 problems |
 | `npm run typecheck` | Pass |
-| `npm run test` | Pass — 69/69 |
-| `npx playwright test --project=chromium --workers=2` | Pass — 78/78 |
-| Compare RAF profile | Pass — p95 below 60ms and worst frame below 200ms in the guarded development-build profile |
-| `npm run build` | Pass — all routes |
-| Visual review | Pass — centred desktop and 390×844 mobile Compare states; all four plate/graph modes, stable sheet, reduced motion |
+| `npm run test` | Pass — 71/71 |
+| `npx playwright test --workers=2` | Pass — 94/94 (86 Chromium + 8 targeted WebKit) |
+| Compare RAF profile | Pass inside the full suite — p95 below 60ms and worst frame below 200ms in the guarded development-build profile |
+| `npm run build` | Pass — all routes statically generated |
+| Visual preview | Pass — desktop front/mixed states and complete 390×844 mobile grid |
 
-The Compare suite now additionally guards exact tier mappings, absence of numeric calculator data, persistent graph identity, tall visible plot dimensions, uniform bar width, reduced-motion transition removal, and all prior drawer/sheet/copy/performance behavior.
+The Phase 5 suite guards exact copy, independent and simultaneous flips, native keyboard behavior, hover never flipping, active-face descriptions, fixed card and section boxes, mobile one-column composition, overflow, and reduced-motion behavior in both engines.
 
 ## Issues / Blockers
 
@@ -59,25 +66,19 @@ The Compare suite now additionally guards exact tier mappings, absence of numeri
 2. `OD-02` — the Hero plate remains authored rather than designer-reviewed.
 3. `OD-01` — the logo is raster, no favicon exists, and Phase 8.5 still needs the loader letterform confirmed.
 4. `OD-05` / `OD-06` — no Firebase project or admin-auth decision; Phase 3 remains blocked.
-5. Bottle underline contrast on Pitch remains queued for Phase 10 QA.
-6. `npm audit` still reports six moderate advisories through `firebase-admin`; re-evaluate with Phase 3.
+5. `OD-04` — Phase 6 sector plate artwork still needs sourcing or approval before `SECTOR-002` can close.
+6. Bottle underline contrast on Pitch remains queued for Phase 10 QA.
+7. `npm audit` still reports six moderate advisories through `firebase-admin`; re-evaluate with Phase 3.
 
 ## Next Recommended Task
 
-Complete Phase 5 in order: `WHY-001` content, `WHY-002` flip card, `WHY-004` locked-height ledger grid, `WHY-003` hover-only micro-feedback, `WHY-005` reveal stagger, `WHY-006` keyboard and active-face-only accessibility, then `WHY-007` Chromium + WebKit verification.
-
-Locked implementation decisions for Phase 5:
-
-- Heading: **Why Assetly**.
-- Flip activation: click/tap and native-button Enter/Space only; never hover.
-- Screen readers: only the active face is exposed. The value name remains the button label; the explanation is exposed and politely announced only while flipped.
-- Front/back share one card-shell `min-height`, so flipping cannot shift the page.
+Start Phase 6 with `SECTOR-001`: implement the locked six-sector pool and approved short descriptors without inventing facts. Then resolve `OD-04` before authoring the six sector plates in `SECTOR-002`.
 
 ## Notes for Next Cycle
 
 - Run `npm run build` once before `npm run typecheck` on a clean checkout so Next.js route types exist.
 - Stop any existing `next dev` before Playwright starts its own server.
 - Use `page.emulateMedia({ reducedMotion: "reduce" })`; the fixture option does not reach the page here.
-- Reuse `RevealOnScroll` + `rv-u`/`rv-d1..3`, `Container`, `Eyebrow`, `SerifHeading`, `.sr-only`, and `usePrefersReducedMotion`.
+- Reuse the existing plate, reveal, typography, responsive, and shared-motion primitives.
 - Anything clearing the fixed nav uses `--nav-block`, not `--nav-h`.
-- Look at the page in a browser before calling the UI complete; this correction again found defects that automated assertions missed.
+- Keep UI completion dependent on desktop and mobile browser inspection; the mobile card-height adjustment was visible before it was a test failure.
