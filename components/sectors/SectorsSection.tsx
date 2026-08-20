@@ -50,8 +50,8 @@ export function SectorsSection() {
 
   return (
     <section id="sectors" className={styles.section} aria-labelledby="sectors-title">
-      <Container>
-        <RevealOnScroll>
+      <Container className={styles.shell}>
+        <RevealOnScroll className={styles.stack}>
           <header className={styles.header}>
             <Eyebrow className="rv-u">Sectors</Eyebrow>
             <SerifHeading

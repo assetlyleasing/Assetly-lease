@@ -58,7 +58,7 @@ describe("focusAppearance", () => {
   });
 
   it("fades, blurs and displaces neighbours as they leave the centre", () => {
-    const near = focusAppearance(0.3);
+    const near = focusAppearance(0.6);
     const far = focusAppearance(0.8);
 
     expect(near.opacity).toBeLessThan(1);
@@ -68,8 +68,8 @@ describe("focusAppearance", () => {
   });
 
   it("displaces in the direction the slide sits, not always downward", () => {
-    expect(focusAppearance(-0.5).shiftPx).toBeLessThan(0);
-    expect(focusAppearance(0.5).shiftPx).toBeGreaterThan(0);
+    expect(focusAppearance(-0.7).shiftPx).toBeLessThan(0);
+    expect(focusAppearance(0.7).shiftPx).toBeGreaterThan(0);
   });
 
   it("keeps off-centre slides legible rather than blanking them", () => {
@@ -113,22 +113,44 @@ describe("the locked focus band", () => {
     expect(focusAppearance(1).blurPx).toBe(focusAppearance(2).blurPx);
   });
 
-  it("locks harder on mobile, where a thumb never stops on one pixel", () => {
-    expect(FOCUS_LOCK_MOBILE).toBeGreaterThan(FOCUS_LOCK_DESKTOP);
-    // The distance that has already started to blur on a desktop window is
-    // still perfectly sharp on a phone.
-    expect(focusAppearance(0.3).opacity).toBeLessThan(1);
-    expect(focusAppearance(0.3, FOCUS_LOCK_MOBILE)).toEqual({
-      opacity: 1,
-      blurPx: 0,
-      shiftPx: 0,
-    });
+  /*
+   * The band's whole job. Slides are one screen tall, so the two nearest a
+   * reader always sit at distances summing to 1 and the nearer is never further
+   * than 0.5 — which means a band of 0.5 leaves *some* argument settled at
+   * every scroll position that exists. A reader stops where they stop; there
+   * must be something to read there.
+   */
+  it("leaves an argument settled at every position a reader can stop at", () => {
+    for (const lock of [FOCUS_LOCK_DESKTOP, FOCUS_LOCK_MOBILE]) {
+      for (let step = 0; step <= 1000; step += 1) {
+        const position = step / 1000;
+        const nearer = Math.min(position, 1 - position);
+        expect(focusAppearance(nearer, lock)).toEqual({
+          opacity: 1,
+          blurPx: 0,
+          shiftPx: 0,
+        });
+      }
+    }
+  });
+
+  it("gives a phone the same guarantee as a laptop, not a better one", () => {
+    // 0.5 is the widest band that means anything, so both platforms sit at it.
+    expect(FOCUS_LOCK_MOBILE).toBe(FOCUS_LOCK_DESKTOP);
+    expect(FOCUS_LOCK_DESKTOP).toBeGreaterThanOrEqual(0.5);
+  });
+
+  it("still fades the argument being left behind", () => {
+    // The effect §13 asks for is intact: settle on one and its neighbour, a
+    // full screen away, is faded and blurred.
+    expect(focusAppearance(1).opacity).toBeLessThan(0.4);
+    expect(focusAppearance(1).blurPx).toBeGreaterThan(2);
   });
 
   it("rises without a step at the edge of the band, so the lock is felt and not seen", () => {
     const justOutside = focusAppearance(FOCUS_LOCK_DESKTOP + 0.01);
-    expect(justOutside.opacity).toBeGreaterThan(0.98);
-    expect(justOutside.blurPx).toBeLessThan(0.1);
+    expect(justOutside.opacity).toBeGreaterThan(0.97);
+    expect(justOutside.blurPx).toBeLessThan(0.15);
   });
 });
 

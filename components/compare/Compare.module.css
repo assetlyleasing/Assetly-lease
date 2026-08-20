@@ -24,6 +24,18 @@
    * column overlapped the panel by the gutter's width.
    */
   --compare-drawer-width: clamp(340px, 44vw, 640px);
+  /*
+   * One source of truth for how tall the mobile sheet is. The sheet sets its
+   * own height from this and the slide reserves exactly this much at its foot,
+   * so the two cannot drift apart. They had: the sheet stood at `min(40svh,
+   * 42vh)` while the slide reserved `42svh` *plus* a full slide pad, about
+   * 93px more than the sheet ever occupied on a 390x844 screen. That surplus
+   * pushed the argument off its own optical centre and, on a short phone, made
+   * the slide taller than the screen it was supposed to be one of.
+   */
+  --compare-sheet-h: min(40svh, 42vh);
+  /* A deliberate breath between the copy and the sheet's top edge. Only that. */
+  --compare-sheet-gap: clamp(14px, 2.2vh, 26px);
 }
 
 /*
@@ -41,11 +53,21 @@
 }
 
 .slide {
-  /* §13/DESIGN_SYSTEM: each argument is a near-full-screen beat. */
-  min-height: 104svh;
+  /*
+   * §13/DESIGN_SYSTEM: each argument is a one-screen beat. Exactly one screen,
+   * not 104% of one — the extra 4svh bought nothing but dead travel between
+   * two settled states, four times over.
+   */
+  min-height: 100svh;
   display: flex;
   align-items: center;
   padding-block: var(--slide-pad);
+  /*
+   * The four resting positions of the page (DEC-042). Centre, because that is
+   * where the focus curve is at rest too — a snapped slide is a slide at
+   * distance zero, which is exactly the sharp, unshifted state §13 describes.
+   */
+  scroll-snap-align: center;
 }
 
 .slideInner {
@@ -133,7 +155,11 @@
 
   .slide {
     min-height: 100svh;
-    padding-bottom: calc(42svh + var(--slide-pad));
+    /*
+     * The sheet's own height plus one breath — not the sheet's height plus a
+     * full slide pad, which reserved far more room than the sheet needs.
+     */
+    padding-bottom: calc(var(--compare-sheet-h) + var(--compare-sheet-gap));
   }
 
   .body {

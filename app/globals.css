@@ -39,6 +39,31 @@ html {
    * no width at all. Overlay-scrollbar platforms ignore this.
    */
   scrollbar-gutter: stable;
+  /*
+   * The Compare arguments are the only snap targets on the page (§13, DEC-042).
+   * They are a sequence of four settled states, and coming to rest between two
+   * of them leaves the reader looking at two half-faded arguments and no whole
+   * one — a position the section has no meaning in.
+   *
+   * `proximity`, not `mandatory`. Mandatory was tried and is unusable here:
+   * with targets a full screen apart, any gesture shorter than half a screen is
+   * undone and returned to the target it started from — measured, the page did
+   * not advance past the first argument in thirty-four consecutive wheel
+   * gestures. And past the last argument there is no target ahead, so the
+   * section refuses to release the reader at all. Giving the next section a
+   * target only moves that trap one section down; the guarantee is not
+   * available on a document scroller without turning the entire page into a
+   * deck.
+   *
+   * Proximity keeps what is worth having: end a scroll near an argument and it
+   * settles on it, sharp and centred, rather than resting between two. End one
+   * anywhere else and the page simply stays there. Scrolling out of the section
+   * is ordinary scrolling.
+   *
+   * Only elements carrying `scroll-snap-align` are targets, so every other
+   * section scrolls exactly as it did.
+   */
+  scroll-snap-type: y proximity;
 }
 
 body {

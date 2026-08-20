@@ -70,11 +70,14 @@
   z-index: 2;
   /*
    * §13: expanded height 34–42svh, max 42vh — and, above everything else on
-   * mobile, stable. Fixed here rather than derived from the contents, so a
-   * longer reading scrolls inside the sheet instead of resizing it and pushing
-   * the page around (§20 layout stability).
+   * mobile, stable. Fixed rather than derived from the contents, so a longer
+   * reading scrolls inside the sheet instead of resizing it and pushing the
+   * page around (§20 layout stability).
+   *
+   * Declared by the section, not here, because the slide has to reserve the
+   * same figure at its foot and the two must not be able to disagree.
    */
-  height: min(40svh, 42vh);
+  height: var(--compare-sheet-h);
   transform: translateY(calc((1 - var(--compare-openness)) * 100%));
   border-top: var(--hairline);
 }

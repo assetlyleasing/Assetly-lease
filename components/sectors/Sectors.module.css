@@ -9,14 +9,39 @@
   display: flex;
   min-height: 100svh;
   flex-direction: column;
-  justify-content: center;
-  padding-block: calc(var(--nav-block) + clamp(6px, 1.6vh, 18px))
-    clamp(28px, 5vh, 56px);
+  /*
+   * A defined composition area rather than a centred block. The top clears the
+   * fixed nav and adds one deliberate gap; the bottom is one deliberate gap;
+   * everything between belongs to the heading and the grid, in that order.
+   *
+   * There is no `justify-content: center` on the desktop composition because
+   * there is nothing left over to centre — the grid below claims the remaining
+   * height itself. Centring is what left a dead band under the second row on
+   * short laptop ratios while the section still measured exactly one screen.
+   */
+  padding-block: calc(var(--nav-block) + clamp(8px, 1.8vh, 22px))
+    clamp(20px, 3.2vh, 44px);
   background: var(--paper);
 }
 
+/*
+ * The section's height has to reach the grid, and two layout-neutral wrappers
+ * stand between them — the page gutter and the reveal container. Both are
+ * shared primitives, so rather than give either of them opinions about height,
+ * this section passes them its own classes and makes them pass the height
+ * through.
+ */
+.shell,
+.stack {
+  display: flex;
+  min-height: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+}
+
 .header {
-  margin-bottom: clamp(20px, 3.4vh, 40px);
+  flex: 0 0 auto;
+  margin-bottom: clamp(16px, 2.6vh, 32px);
 }
 
 .heading {
@@ -25,6 +50,14 @@
 
 .grid {
   display: grid;
+  /*
+   * Takes the height the header leaves rather than asking for a height of its
+   * own. With `1fr` rows the two rows then split whatever that is, so the
+   * second row's bottom border lands on the section's bottom padding at any
+   * window height instead of wherever a fixed cell height happened to put it.
+   */
+  flex: 1 1 auto;
+  min-height: 0;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   grid-auto-rows: 1fr;
   border-top: var(--hairline);
@@ -33,16 +66,16 @@
 }
 
 /*
- * §15 puts four sectors on screen at once and changes one of them at a time.
- * That only reads if all four are genuinely in view, so the cell is capped
- * against the viewport's *height* — the dimension that decides how much of the
- * grid fits. Keyed to width (28vw) it reached 390px on a laptop, putting the
- * 2x2 grid at 780px inside a 900px window with a 150px heading above it, so
- * the rotation ran largely off-screen.
+ * §15 puts four sectors on screen at once and changes one of them at a time,
+ * which only reads if all four are genuinely in view. The grid above decides
+ * how tall a cell is; this is only the floor beneath that, for a window too
+ * short to give the composition its space. Being a floor rather than the
+ * driver is the point — as the driver it left the grid shorter than the space
+ * available and put a dead band under the second row.
  */
 .cell {
   min-width: 0;
-  min-height: clamp(202px, 27vh, 262px);
+  min-height: clamp(164px, 21vh, 214px);
   border-right: var(--hairline);
   border-bottom: var(--hairline);
 }
@@ -144,7 +177,26 @@
  * dropped as §15 already allows — which fits four inside one screen.
  */
 @media (max-width: 640px) {
+  /*
+   * Mobile is left as it is (DEC-032): four short cells of a fixed height,
+   * centred in the section, on the padding it already had. The desktop rule
+   * above would stretch them to fill the screen, which is a different
+   * composition rather than a smaller one.
+   *
+   * The centring happens here and not on the section: the section's only flex
+   * child now grows to fill it, so the section has nothing left to distribute.
+   */
+  .section {
+    padding-block: calc(var(--nav-block) + clamp(6px, 1.6vh, 18px))
+      clamp(28px, 5vh, 56px);
+  }
+
+  .stack {
+    justify-content: center;
+  }
+
   .grid {
+    flex: 0 0 auto;
     grid-template-columns: 1fr;
   }
 

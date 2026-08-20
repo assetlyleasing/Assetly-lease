@@ -35,18 +35,29 @@ const MAX_SHIFT_PX = 22;
  * The locked band, as a fraction of the viewport height either side of the
  * centre line. A slide inside it is exactly at rest: opaque, sharp, unmoved.
  *
- * On a 900px window that is ~230px of scroll — far more than the few pixels a
- * trackpad or a settling smooth-scroll moves, and enough that leaving the state
- * reads as a decision rather than a twitch.
+ * Half a screen, which is the whole of it — and that number is not a taste.
+ * Slides are one screen tall, so two neighbours always sit at distances that
+ * sum to 1, and the nearer of them is therefore never further than 0.5 away.
+ * A band of 0.5 is exactly the band that makes *some* argument settled at
+ * every scroll position there is.
+ *
+ * That is the property the section needs. A reader stops scrolling wherever
+ * they stop; with a narrower band, stopping between two arguments left both of
+ * them faded and blurred and neither of them readable — a state the section has
+ * no meaning in, and one a reader can sit in indefinitely. Widening the band
+ * removes the state rather than making it shorter or harder to land on, which
+ * is why this is the fix and scroll snapping was not (DEC-042).
  */
-export const FOCUS_LOCK_DESKTOP = 0.26;
+export const FOCUS_LOCK_DESKTOP = 0.5;
 
 /**
- * Mobile locks harder. The slide is a full `100svh` there and the copy sits
- * directly under the reader's thumb, so §13's "content clarity first" needs a
- * band that survives a normal flick — ~0.34 of an 844px screen is ~287px.
+ * Mobile used to lock harder than desktop, because a thumb never parks a slide
+ * on an exact pixel and §13 puts "content clarity first". It no longer can:
+ * 0.5 is the widest band that means anything, so both platforms now sit at it
+ * and a phone gets the same guarantee rather than a better one. Kept as its own
+ * export because the two are separate decisions that presently agree.
  */
-export const FOCUS_LOCK_MOBILE = 0.34;
+export const FOCUS_LOCK_MOBILE = 0.5;
 
 /**
  * Where the transition finishes, as a fraction of the viewport height. Short of
