@@ -1,0 +1,20 @@
+/* The page gutter, §9: clamp(20px, 5vw, 60px). */
+
+.container {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/*
+ * §9 sets no maximum measure, but unbounded full-bleed text becomes unreadable
+ * on wide displays. Sections that genuinely want the full width opt out with
+ * the `bleed` variant instead of re-implementing the gutter.
+ */
+.wide {
+  max-width: 1560px;
+}
+
+.bleed {
+  max-width: none;
+}

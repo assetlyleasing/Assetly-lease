@@ -1,0 +1,21 @@
+/*
+ * The site's "label" voice, §7: Inter Tight, uppercase, 9–11px, wide tracking.
+ * Used for section eyebrows (TRUSTED BY, WHY US, CONTACT) and every other small
+ * piece of UI chrome that is not a link.
+ */
+
+.eyebrow {
+  display: block;
+  font-family: var(--u);
+  font-size: var(--u-size);
+  font-weight: 500;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: var(--u-track-wide);
+  color: var(--moss);
+}
+
+/* On the two dark surfaces secondary text is Khaki (§6). */
+.onDark {
+  color: var(--khaki);
+}

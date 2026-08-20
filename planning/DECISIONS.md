@@ -172,10 +172,10 @@ Every important technical or product decision, including conflict resolutions fo
 
 ---
 
-### DEC-015 — PROPOSED: self-host the three brand fonts via `next/font/local` if Google Fonts is unreachable at build time
+### DEC-015 — WITHDRAWN: self-host the three brand fonts via `next/font/local` if Google Fonts is unreachable at build time
 
-- **Date**: 2026-08-20
-- **Status**: **Proposed — not applied. Needs confirmation before any code changes.**
+- **Date**: 2026-08-20 (proposed); withdrawn 2026-08-20
+- **Status**: **Withdrawn — not applied, and no longer needed.** The proposal's own closing condition was met: `npm run build` was re-run on a machine with normal internet access and succeeded, fetching all three families from Google Fonts without error. The blockage was specific to the sandbox's egress proxy, not to the project. `app/layout.tsx` keeps `next/font/google` exactly as §7 specifies, and no font binaries are vendored into the repository. Should a future build environment block Google Fonts again, the plan recorded below is still the right one — reopen it as a new decision rather than editing this entry.
 - **Problem**: `app/layout.tsx` loads DM Serif Display, DM Serif Text, and Inter Tight through `next/font/google` per §7 and `MASTER_PLAN.md` Phase 0 task 4. `next/font/google` downloads the font files from `fonts.googleapis.com` / `fonts.gstatic.com` **at build time**. In the sandboxed environment Phase 0 was built in, both hosts are blocked at the egress proxy (`CONNECT tunnel failed, 403`), so `next build` fails with three `Failed to fetch <font> from Google Fonts` errors and nothing else. Type-checking and linting pass unaffected.
 - **Proposal**: If, and only if, the build also fails on a machine with normal internet access, vendor the three families as `.woff2` files (for example from the `@fontsource` packages on npm, which the same environment can reach) and load them with `next/font/local`, keeping the same `--font-dm-serif-display` / `--font-dm-serif-text` / `--font-inter-tight` variable names so `styles/tokens.css` and every consuming component stay untouched.
 - **Alternatives considered**: Setting `HTTP_PROXY`/`HTTPS_PROXY` so Next.js can reach Google Fonts; loading the fonts with a plain `<link>` to the Google Fonts CSS instead of `next/font`.
@@ -191,6 +191,21 @@ Every important technical or product decision, including conflict resolutions fo
 - **Decision**: `FOUND-008` is closed without archiving anything. No `reference/` folder is created.
 - **Reason**: The prototypes the task refers to (`home-2.html`, `index.html`, `assetly-home.html`, `1-residual.html`, `2-duty-cycle.html`, `3-white-paper.html`, `4-position.html`, `previews.html`) are not in the working tree, and `git log --all --diff-filter=A` confirms no `.html` file has ever been committed to this repository. `assests/` holds `plan.md`, `DESIGN_SYSTEM.md`, the visiting-card PDF, a one-page PPTX, and the raster/PSD logo files — no HTML. There is nothing to archive or exclude from the build.
 - **Consequences**: `DEC-008` still stands as the record of *why* the site is Next.js rather than static HTML, and `DESIGN_SYSTEM.md` remains the surviving second-hand description of the `home-2.html` prototype's tokens, motion primitives, and patterns — it is now the only reference to that prototype's behaviour. If the original HTML files turn up outside the repository, adding them under `reference/` later is still worthwhile for the motion detail `DESIGN_SYSTEM.md` only summarises; that would be a new task, not a reopening of this one.
+- **Status**: Active
+
+---
+
+### DEC-017 — Nav wordmark is the serif "assetly" lockup, and the bar runs wider than the page gutter
+
+- **Date**: 2026-08-20
+- **Decision**: Three changes to the navigation as specified in `SOURCE_OF_TRUTH.md` §10, all approved directly by the user while reviewing the built Phase 1 shell:
+  1. The nav wordmark is **"assetly"** alone. The "Leasing" suffix is dropped from the bar. The Footer keeps the full "assetly leasing" lockup per §17.
+  2. The wordmark is set in **DM Serif Display (`--d`)**, matching the Footer's brand treatment, rather than in the Inter Tight uppercase label voice. Every other label in the bar — the four nav links — stays in the §7 UI voice.
+  3. The bar is inset by a new `--nav-gutter` (`clamp(12px, 1.6vw, 26px)`) instead of the page gutter `--gutter` (`clamp(20px,5vw,60px)`), so it spans nearly the full display width with a small edge gap.
+- **Reason**: Reviewed against the running site. The user's words: "assetly leasing (only assetly enough no leasing), the header, expand the length horizontal to use the laptop screen with little gap", and then, on seeing the Footer's brand block, "font in footer perfect, keep like that only for header assetly also."
+- **Alternatives considered**: Keeping §10 verbatim — full "Assetly Leasing" wordmark, Inter Tight uppercase at 9–11px, aligned to the page gutter.
+- **Why rejected**: §10's own closing principle is that the navbar is "supporting chrome — minimal, premium, editorial, financial, quiet, precise." Dropping the redundant suffix and letting the bar breathe the full width serves that principle better than the literal text did; the company name in full still appears in the Footer, so nothing is lost. The serif wordmark also makes the mark-plus-name read as one brand lockup in both places on the site rather than as two different treatments.
+- **Consequences**: §10's "Typography" line now governs the nav **links** only, not the wordmark. `--nav-gutter` is a second horizontal inset token and is used by the navigation alone — sections continue to align to `--gutter`, so the bar deliberately over-runs the content measure. `BRAND.navWordmark` and `BRAND.footerWordmark` are separate constants because the two lockups now genuinely differ.
 - **Status**: Active
 
 ---
@@ -213,5 +228,6 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-012 | Gmail compose + mailto over backend email | Active |
 | DEC-013 | Hero brand-signature loader replaces old Hero entry; built as Phase 8.5 | Active |
 | DEC-014 | Phase 0 exits with Firebase deferred; SDK wired from env vars only | Active |
-| DEC-015 | Self-host brand fonts via `next/font/local` if Google Fonts is unreachable | **Proposed** |
+| DEC-015 | Self-host brand fonts via `next/font/local` if Google Fonts is unreachable | **Withdrawn** |
 | DEC-016 | `FOUND-008` prototype archival closed as not applicable | Active |
+| DEC-017 | Nav wordmark = serif "assetly"; bar wider than the page gutter | Active |

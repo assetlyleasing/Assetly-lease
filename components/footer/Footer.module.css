@@ -1,0 +1,186 @@
+/*
+ * Footer, SOURCE_OF_TRUTH.md §17.
+ *
+ * A continuation of the nav's dark-surface system, not a generic footer: same
+ * Pitch/Ivory/Khaki trio, same typography discipline, restrained borders, and
+ * no cards, shadows, gradients or decorative containers.
+ */
+
+.footer {
+  background: var(--pitch);
+  color: var(--khaki);
+  padding-block: var(--section-pad) clamp(20px, 3vh, 32px);
+}
+
+.zones {
+  display: grid;
+  gap: clamp(36px, 5vw, 64px);
+  padding-bottom: clamp(34px, 5vh, 60px);
+}
+
+/* ---- Brand zone --------------------------------------------------------- */
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42em;
+  font-family: var(--d);
+  font-size: clamp(26px, 4.4vw, 38px);
+  line-height: 1;
+  color: var(--ivory);
+  transition: opacity var(--dur-toggle) var(--eio);
+}
+
+.wordmark:hover {
+  opacity: 0.78;
+}
+
+.mark {
+  font-size: 1.35em;
+}
+
+.tagline {
+  font-family: var(--s);
+  font-size: clamp(15px, 1.4vw, 18px);
+  color: var(--khaki);
+}
+
+/* ---- Navigation zone ---------------------------------------------------- */
+
+.navGroups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(24px, 4vw, 48px);
+}
+
+.groupHeading {
+  margin-bottom: 16px;
+}
+
+.groupList {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+/*
+ * Footer links are UI chrome, so Inter Tight (§17). Khaki to Ivory on hover,
+ * with a thin underline growing left to right over 400–600ms and no movement.
+ */
+.link {
+  position: relative;
+  display: inline-block;
+  align-self: flex-start;
+  font-family: var(--u);
+  font-size: clamp(10px, 1vw, 12px);
+  text-transform: uppercase;
+  letter-spacing: var(--u-track-tight);
+  color: var(--khaki);
+  transition: color var(--dur-underline) var(--eio);
+}
+
+.link::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: -3px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--dur-underline) var(--eio);
+}
+
+.link:hover,
+.link:focus-visible {
+  color: var(--ivory);
+}
+
+.link:hover::after,
+.link:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* ---- Official information zone ------------------------------------------ */
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(22px, 3vh, 32px);
+}
+
+.infoHeading {
+  margin-bottom: 12px;
+}
+
+/*
+ * §17: UI labels are sans, but the actual information is serif. Applies to the
+ * address, the email and the phone number alike.
+ */
+.infoBody {
+  font-family: var(--s);
+  font-size: clamp(14px, 1.15vw, 16px);
+  line-height: 1.55;
+  color: var(--ivory);
+  font-style: normal;
+}
+
+.infoLink {
+  color: var(--ivory);
+  transition: color var(--dur-underline) var(--eio);
+  border-bottom: 1px solid transparent;
+}
+
+.infoLink:hover,
+.infoLink:focus-visible {
+  border-bottom-color: var(--khaki);
+}
+
+.addressLine {
+  display: block;
+}
+
+/* ---- Legal bar ---------------------------------------------------------- */
+
+.legal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding-top: clamp(18px, 2.6vh, 26px);
+  border-top: 1px solid rgba(231, 227, 212, 0.12);
+}
+
+.legalLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(16px, 2.4vw, 30px);
+}
+
+/* ---- Responsive --------------------------------------------------------- */
+
+/*
+ * §17 mobile: brand block, rule, the two nav groups side by side where width
+ * allows, rule, contact and office, rule, legal. The rules are the borders
+ * already drawn between zones, so nothing extra is introduced for mobile.
+ */
+@media (max-width: 900px) {
+  .zones > * + * {
+    padding-top: clamp(30px, 4vh, 44px);
+    border-top: 1px solid rgba(231, 227, 212, 0.12);
+  }
+}
+
+@media (min-width: 901px) {
+  .zones {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr) minmax(0, 1.1fr);
+  }
+}

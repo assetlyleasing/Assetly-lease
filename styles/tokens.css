@@ -66,6 +66,8 @@
   --dur-settle: 1.7s; /* hero mark settle */
   --dur-draw: 2.6s; /* plate stroke draw */
   --dur-toggle: 0.7s; /* nav scroll transition, drawer and hover toggles */
+  --dur-underline: 0.5s; /* link underline growth — §17 specifies 400–600ms */
+  --dur-menu: 0.6s; /* hamburger-to-X and overlay entrance — §10 specifies 0.5–0.7s */
   --dur-reduced: 0.12s; /* clamp applied under prefers-reduced-motion */
 
   /* Reveal stagger steps (.d1/.d2/.d3). */
@@ -76,6 +78,12 @@
   /* ---- §9 Space and rhythm ---------------------------------------------- */
 
   --gutter: clamp(20px, 5vw, 60px); /* horizontal page gutter */
+  /*
+   * The navigation runs wider than the page gutter — it sits close to the
+   * screen edges with only a small inset, so the bar spans the display rather
+   * than matching the text measure (DEC-017).
+   */
+  --nav-gutter: clamp(12px, 1.6vw, 26px);
   --section-pad: clamp(56px, 11vh, 120px); /* section vertical padding */
   --slide-pad: clamp(50px, 9vh, 90px); /* argument-slide vertical padding */
   /*
@@ -93,4 +101,13 @@
 
   /* Minimum effective touch target (§20). */
   --touch-min: 44px;
+
+  /*
+   * Height of the fixed navigation. §10 fixes the nav's type scale and calls it
+   * "compact" but states no height, so this is an implementation default in the
+   * same spirit as --body-size above. It exists as a token because anchored
+   * sections offset their scroll position by it (§20 layout stability) — the
+   * fixed bar must not cover the top of whatever a nav link scrolls to.
+   */
+  --nav-h: clamp(56px, 7vh, 74px);
 }

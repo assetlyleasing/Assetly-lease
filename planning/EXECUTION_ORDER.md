@@ -10,24 +10,24 @@ Update this file at the end of every cycle per `LOOP.md` step 6. Do not skip ahe
 
 - [x] `FOUND-001` Scaffold Next.js App Router + TypeScript project, no Tailwind
 - [x] `FOUND-002` Add `styles/tokens.css` (colors §6, fonts §7, easing §8, spacing §9)
-- [x] `FOUND-003` Global reset + base typography in `app/globals.css`; load fonts via `next/font/google` — code complete; the Google Fonts fetch itself is unverified, see `FOUND-009` and `DECISIONS.md` DEC-015
+- [x] `FOUND-003` Global reset + base typography in `app/globals.css`; load fonts via `next/font/google` — complete and verified: the Google Fonts fetch succeeds on a networked machine, so `DECISIONS.md` DEC-015 is **Withdrawn**
 - [x] `FOUND-004` Establish folder structure (`app/(site)/`, `app/admin/`, `components/`, `lib/`, `content/`)
 - [!] `FOUND-005` Create/configure Firebase project(s); resolve `OD-05` (env split, project IDs) — **blocked on `OD-05`**: creating the project needs Assetly Firebase console access. Deliberately deferred to Phase 3 / Phase 11 per `DECISIONS.md` DEC-014, which `MASTER_PLAN.md`'s Phase 0 exit criteria explicitly permit. Blocks `TRUST-001`–`TRUST-004` and `DEPLOY-001`; blocks nothing in Phase 1 or Phase 2
 - [x] `FOUND-006` Wire `lib/firebase/client.ts` + `.env.local` (gitignored) — init only, no consumers yet — `client.ts` and `admin.ts` read from env vars and stay uninitialised when the environment is incomplete; `.env.local.example` is committed, and the real `.env.local` waits on `OD-05`
 - [x] `FOUND-007` Configure Vitest + Playwright with smoke tests
 - [x] `FOUND-008` Archive static prototype HTML files into `reference/`, remove from build output — **closed as not applicable**: no `.html` file exists in the working tree or anywhere in git history. Nothing to archive; no `reference/` folder created. See `DECISIONS.md` DEC-016
-- [~] `FOUND-009` Verify: `next build` passes, lint/typecheck clean, blank page renders tokens/fonts correctly 320px–1920px — lint, typecheck, 3 unit tests and 14 Playwright tests (320px–1920px) all pass, and `next build` succeeds on every route. The **only** unverified item is the `next/font/google` download, which the build environment's egress proxy blocks; re-run `npm run build` on a networked machine to close this out (`DECISIONS.md` DEC-015)
+- [x] `FOUND-009` Verify: `next build` passes, lint/typecheck clean, blank page renders tokens/fonts correctly 320px–1920px — **closed 2026-08-20**. Re-run on a networked machine: `next build` passes on all routes *including* the three `next/font/google` downloads, lint and typecheck are clean, and the Playwright responsive sweep passes 320px–1920px. DEC-015's self-hosting proposal is unnecessary and is now **Withdrawn**
 
 ## Phase 1 — Shared site shell
 
-- [ ] `NAV-001` Build `Nav.tsx`: fixed, transparent-over-hero → Pitch-on-scroll (0.7s), logo+wordmark unit, desktop link row
-- [ ] `NAV-002` Build `MobileMenu.tsx`: hamburger → X, full-width top overlay (DEC-004), staggered entrance
-- [ ] `NAV-003` Wire Nav link targets (Compare/Sectors/Contact = anchor scroll on `/`; About = route to `/about`)
-- [ ] `FOOT-001` Build `Footer.tsx`: three-zone desktop layout, mobile vertical recomposition
-- [ ] `FOOT-002` Wire Footer nav groups + official info (email/phone/full address) + legal bar with auto year
-- [ ] `SHELL-001` Build `RevealOnScroll.tsx` (shared `.rv/.u` IntersectionObserver pattern + stagger classes)
-- [ ] `SHELL-002` Build `SerifHeading.tsx`, `Eyebrow.tsx`, `Container.tsx` primitives
-- [ ] `SHELL-003` Playwright: nav/footer keyboard pass, mobile overlay focus trap, reduced-motion check
+- [x] `NAV-001` Build `Nav.tsx`: fixed, transparent-over-hero → Pitch-on-scroll (0.7s), logo+wordmark unit, desktop link row — wordmark/inset revised per `DECISIONS.md` DEC-017
+- [x] `NAV-002` Build `MobileMenu.tsx`: hamburger → X, full-width top overlay (DEC-004), staggered entrance — focus trap, Escape-to-close with focus restore, `inert` while closed, body scroll lock
+- [x] `NAV-003` Wire Nav link targets (Compare/Sectors/Contact = anchor scroll on `/`; About = route to `/about`) — the anchor-vs-route rule lives in `lib/scroll.ts` + `SiteLinkAnchor`, shared with the Footer
+- [x] `FOOT-001` Build `Footer.tsx`: three-zone desktop layout, mobile vertical recomposition
+- [x] `FOOT-002` Wire Footer nav groups + official info (email/phone/full address) + legal bar with auto year — legal items are labels, not links, until Phase 9 builds the routes (`LEGAL-002`)
+- [x] `SHELL-001` Build `RevealOnScroll.tsx` (shared `.rv/.u` IntersectionObserver pattern + stagger classes) — classes are global and prefixed `rv-u`/`rv-d1..3`
+- [x] `SHELL-002` Build `SerifHeading.tsx`, `Eyebrow.tsx`, `Container.tsx` primitives — plus `LogoMark.tsx` and `SiteLinkAnchor.tsx`
+- [x] `SHELL-003` Playwright: nav/footer keyboard pass, mobile overlay focus trap, reduced-motion check — 33 shell tests, all passing
 
 ## Phase 2 — Hero and plate system
 

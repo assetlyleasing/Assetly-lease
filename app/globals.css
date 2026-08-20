@@ -139,6 +139,56 @@ b {
   outline-offset: 3px;
 }
 
+/* ---- Anchor targets ----------------------------------------------------- */
+
+/*
+ * The navigation is fixed, so anything a nav link scrolls to must reserve the
+ * bar's height or the bar lands on top of it. Declared here rather than in the
+ * scroll helper so it applies equally to native hash navigation (arriving at
+ * /#compare from /about), which the helper never runs for.
+ */
+:target,
+[id] {
+  scroll-margin-top: var(--nav-h);
+}
+
+/* ---- Shared reveal primitive (§8) --------------------------------------- */
+
+/*
+ * The scroll-triggered reveal every section uses. `RevealOnScroll` observes the
+ * .rv container and adds .in; children opt in with .rv-u and stagger with
+ * .rv-d1/.rv-d2/.rv-d3.
+ *
+ * These live in global scope, not a CSS Module, because §8 defines them as one
+ * site-wide motion primitive shared across unrelated components. DESIGN_SYSTEM
+ * calls them `.u` and `.d1`; they are prefixed here so single-letter class
+ * names cannot collide with section markup.
+ */
+.rv .rv-u {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity var(--dur-reveal) var(--e),
+    transform var(--dur-reveal) var(--e);
+}
+
+.rv.in .rv-u {
+  opacity: 1;
+  transform: none;
+}
+
+.rv.in .rv-d1 {
+  transition-delay: var(--stagger-1);
+}
+
+.rv.in .rv-d2 {
+  transition-delay: var(--stagger-2);
+}
+
+.rv.in .rv-d3 {
+  transition-delay: var(--stagger-3);
+}
+
 /* ---- Reduced motion ----------------------------------------------------- */
 
 /*
@@ -151,6 +201,17 @@ b {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  /*
+   * Revealed content must be present, not merely revealed faster — an element
+   * left at opacity 0 waiting on an observer is a content bug, not a motion
+   * preference.
+   */
+  .rv .rv-u {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 
   *,

@@ -1,0 +1,190 @@
+/*
+ * Primary navigation, SOURCE_OF_TRUTH.md §10.
+ *
+ * Two states: transparent over the Hero, and a dark floating pill once
+ * scrolled. The §10 closing principle governs every judgement call here — the
+ * navbar is supporting chrome, not a section of its own.
+ */
+
+.header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 100;
+  /* Wider than the page gutter so the bar spans the display (DEC-017). */
+  padding: 10px var(--nav-gutter);
+  /* The bar is the only thing that should catch the pointer; the gutter around
+   * it must not sit on top of the Hero. */
+  pointer-events: none;
+}
+
+.bar {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(16px, 4vw, 48px);
+  min-height: var(--nav-h);
+  padding-inline: clamp(14px, 2.2vw, 26px);
+  border: 1px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  /*
+   * §10: ~0.7s, cubic-bezier(.65,0,.35,1), and explicitly "no sudden
+   * snapping". Colour, border and radius all cross-fade together so the pill
+   * appears to condense rather than switch on.
+   */
+  transition:
+    background-color var(--dur-toggle) var(--eio),
+    border-color var(--dur-toggle) var(--eio),
+    border-radius var(--dur-toggle) var(--eio),
+    color var(--dur-toggle) var(--eio);
+}
+
+/* Transparent state sits over the Paper hero: Olive mark, Ink wordmark. */
+.header:not([data-solid="true"]) .bar {
+  color: var(--ink);
+}
+
+/* Scrolled state, §10: Pitch surface, Ivory wordmark, Khaki links. */
+.header[data-solid="true"] .bar {
+  background-color: var(--pitch);
+  border-color: rgba(231, 227, 212, 0.08);
+  border-radius: 999px;
+  color: var(--ivory);
+}
+
+/* ---- Brand -------------------------------------------------------------- */
+
+.brand {
+  /*
+   * Above the mobile overlay, which covers the bar. Without this the header
+   * loses its mark the moment the menu opens and stops reading as a header.
+   */
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42em;
+  /*
+   * The wordmark is the brand lockup, not UI chrome, so it uses the display
+   * serif and matches the Footer's treatment exactly (DEC-017). Every other
+   * label in the bar stays in the §7 Inter Tight label voice.
+   */
+  font-family: var(--d);
+  font-size: clamp(19px, 1.5vw, 25px);
+  line-height: 1;
+  color: inherit;
+  /* §10: hover is a subtle opacity shift only — no decorative animation. */
+  transition: opacity var(--dur-toggle) var(--eio);
+}
+
+.brand:hover {
+  opacity: 0.7;
+}
+
+.mark {
+  /* Matches the Footer's mark-to-wordmark proportion. */
+  font-size: 1.35em;
+  color: var(--olive);
+  transition: color var(--dur-toggle) var(--eio);
+}
+
+.header[data-solid="true"] .mark {
+  color: var(--ivory);
+}
+
+/*
+ * With the overlay open the brand sits on the Pitch panel regardless of scroll
+ * position, so it takes the dark-surface colours (§6) whether or not the bar
+ * itself has gone solid yet.
+ */
+.header[data-menu-open="true"] .bar {
+  color: var(--ivory);
+}
+
+.header[data-menu-open="true"] .mark {
+  color: var(--ivory);
+}
+
+/* ---- Desktop links ------------------------------------------------------ */
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: clamp(18px, 2.6vw, 40px);
+}
+
+.link {
+  position: relative;
+  display: inline-block;
+  padding-block: 6px;
+  font-family: var(--u);
+  font-size: var(--u-size);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: var(--u-track-tight);
+  color: var(--moss);
+  transition:
+    color var(--dur-toggle) var(--eio),
+    opacity var(--dur-toggle) var(--eio);
+}
+
+.header[data-solid="true"] .link {
+  color: var(--khaki);
+}
+
+/*
+ * §10: hover raises opacity and grows a thin Bottle underline horizontally.
+ * The colour shift carries the same information, so the feedback does not
+ * depend on the underline being noticed (§20).
+ */
+.link::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--bottle);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--dur-underline) var(--eio);
+}
+
+.link:hover,
+.link:focus-visible {
+  color: var(--ink);
+}
+
+.header[data-solid="true"] .link:hover,
+.header[data-solid="true"] .link:focus-visible {
+  color: var(--ivory);
+}
+
+.link:hover::after,
+.link:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* ---- Responsive --------------------------------------------------------- */
+
+/*
+ * §9 puts mobile drawer/sheet behaviour at 700px; the nav collapses to the
+ * hamburger and full-width overlay (DEC-004) at the same point.
+ */
+@media (max-width: 700px) {
+  .links {
+    display: none;
+  }
+}
+
+/* ---- Reduced motion ----------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .bar,
+  .brand,
+  .mark,
+  .link,
+  .link::after {
+    transition-duration: var(--dur-reduced);
+  }
+}

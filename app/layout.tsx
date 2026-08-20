@@ -43,6 +43,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      // globals.css sets `scroll-behavior: smooth`; this tells Next.js it is
+      // deliberate, so route transitions still jump to the top instead of
+      // animating the whole page scroll.
+      data-scroll-behavior="smooth"
       className={`${dmSerifDisplay.variable} ${dmSerifText.variable} ${interTight.variable}`}
     >
       <body>{children}</body>

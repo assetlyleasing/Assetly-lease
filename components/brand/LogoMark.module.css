@@ -1,0 +1,23 @@
+/*
+ * The Assetly "a." brand mark.
+ *
+ * Drawn as a CSS mask rather than an <img> so the mark takes its colour from
+ * `currentColor`. That is what §5's surface rule needs: Olive on the paper
+ * surface, Ivory on the two dark surfaces (scrolled nav, footer), from one
+ * asset and with no second file to keep in sync.
+ *
+ * The source is the supplied 2048px raster. OD-01 (a true vector lockup) is
+ * still open — when it lands, only this file changes.
+ */
+
+.mark {
+  display: block;
+  /* Intrinsic proportions of the supplied artwork (2048 × 1902). */
+  aspect-ratio: 2048 / 1902;
+  height: 1em;
+  width: auto;
+  background-color: currentColor;
+  -webkit-mask: url("/brand/assetly-mark.png") no-repeat center / contain;
+  mask: url("/brand/assetly-mark.png") no-repeat center / contain;
+  flex: none;
+}

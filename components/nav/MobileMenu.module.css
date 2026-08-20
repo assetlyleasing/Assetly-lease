@@ -1,0 +1,169 @@
+/*
+ * Mobile navigation, §10 and DEC-004: hamburger that becomes an X, opening a
+ * full-width top overlay on the Pitch surface — deliberately not a side drawer.
+ */
+
+.toggle {
+  display: none;
+  position: relative;
+  z-index: 2;
+  /* §20: ~44px effective hit area even though the icon is much smaller. */
+  width: var(--touch-min);
+  height: var(--touch-min);
+  margin-inline-end: -10px;
+  color: inherit;
+}
+
+@media (max-width: 700px) {
+  .toggle {
+    display: block;
+  }
+}
+
+/* ---- Hamburger ---------------------------------------------------------- */
+
+/*
+ * Two thin strokes, §10's "minimal 2–3 line icon". They translate to the centre
+ * and counter-rotate into an X, so the icon transforms rather than swapping.
+ */
+.bar {
+  position: absolute;
+  left: 50%;
+  width: 20px;
+  height: 1px;
+  margin-left: -10px;
+  background: currentColor;
+  transition:
+    transform var(--dur-menu) var(--eio),
+    background-color var(--dur-toggle) var(--eio);
+}
+
+.barTop {
+  top: 50%;
+  transform: translateY(-4px);
+}
+
+.barBottom {
+  top: 50%;
+  transform: translateY(3px);
+}
+
+.toggle[aria-expanded="true"] .bar {
+  /* The overlay is Pitch, so the X must read as Ivory regardless of the
+   * nav's own scrolled state underneath it. */
+  background: var(--ivory);
+}
+
+.toggle[aria-expanded="true"] .barTop {
+  transform: translateY(0) rotate(45deg);
+}
+
+.toggle[aria-expanded="true"] .barBottom {
+  transform: translateY(0) rotate(-45deg);
+}
+
+/* ---- Overlay ------------------------------------------------------------ */
+
+.overlay {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 1;
+  background: var(--pitch);
+  padding-top: calc(var(--nav-h) + 26px);
+  padding-bottom: clamp(28px, 6vh, 56px);
+  padding-inline: var(--gutter);
+  /*
+   * Collapses upward from behind the bar. Transformed rather than height-
+   * animated so the entrance stays on the compositor.
+   */
+  transform: translateY(-100%);
+  visibility: hidden;
+  transition:
+    transform var(--dur-menu) var(--eio),
+    visibility 0s linear var(--dur-menu);
+}
+
+.overlay[data-open="true"] {
+  transform: translateY(0);
+  visibility: visible;
+  transition:
+    transform var(--dur-menu) var(--eio),
+    visibility 0s;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.item {
+  border-top: 1px solid rgba(231, 227, 212, 0.1);
+}
+
+.item:last-child {
+  border-bottom: 1px solid rgba(231, 227, 212, 0.1);
+}
+
+.link {
+  display: block;
+  /* §10: large touch spacing. */
+  padding-block: clamp(16px, 2.6vh, 22px);
+  font-family: var(--u);
+  font-size: clamp(11px, 3vw, 13px);
+  text-transform: uppercase;
+  letter-spacing: var(--u-track-wide);
+  color: var(--khaki);
+  /* §10: subtle staggered fade/slide entrance. */
+  opacity: 0;
+  transform: translateY(-8px);
+  transition:
+    opacity var(--dur-toggle) var(--e),
+    transform var(--dur-toggle) var(--e),
+    color var(--dur-toggle) var(--eio);
+}
+
+.overlay[data-open="true"] .link {
+  opacity: 1;
+  transform: none;
+}
+
+/* Stagger each row in behind the panel itself. */
+.overlay[data-open="true"] .item:nth-child(1) .link {
+  transition-delay: 0.14s;
+}
+
+.overlay[data-open="true"] .item:nth-child(2) .link {
+  transition-delay: calc(0.14s + var(--stagger-1));
+}
+
+.overlay[data-open="true"] .item:nth-child(3) .link {
+  transition-delay: calc(0.14s + var(--stagger-2));
+}
+
+.overlay[data-open="true"] .item:nth-child(4) .link {
+  transition-delay: calc(0.14s + var(--stagger-3));
+}
+
+.link:hover,
+.link:focus-visible {
+  color: var(--ivory);
+}
+
+/* ---- Reduced motion ----------------------------------------------------- */
+
+/*
+ * §8: the panel and its rows arrive at their final state immediately. The
+ * stagger delays are cleared too — a delayed row is still a row that is not
+ * there yet, however short its transition.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .bar,
+  .overlay,
+  .link {
+    transition-duration: var(--dur-reduced);
+  }
+
+  .overlay[data-open="true"] .link {
+    transition-delay: 0s;
+  }
+}

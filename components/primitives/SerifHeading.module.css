@@ -1,0 +1,35 @@
+/*
+ * Serif headings, §7.
+ *
+ * Family, weight, tabular numerals, and the italic-in-Moss emphasis device are
+ * already document defaults in globals.css, so this file only carries the size
+ * scale. §7 requires every headline size to be a clamp(), never a fixed px.
+ *
+ * The three steps are the ends of the ranges the approved specs actually name:
+ * the Hero headline (§11) and the section/panel range recorded in
+ * DESIGN_SYSTEM §3.
+ */
+
+.heading {
+  font-family: var(--d);
+}
+
+/* §11 Hero main line. */
+.display {
+  font-size: clamp(31px, 6.4vw, 76px);
+}
+
+/* Section headlines — Compare slides, Why Us, Sectors, Contact. */
+.section {
+  font-size: clamp(27px, 5.4vw, 64px);
+}
+
+/* Panel and sub-section headings. */
+.panel {
+  font-size: clamp(24px, 4.4vw, 48px);
+}
+
+/* On the two dark surfaces the wordmark and headings go Ivory (§6). */
+.onDark {
+  color: var(--ivory);
+}
