@@ -17,7 +17,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: calc(var(--nav-h) + clamp(40px, 8vh, 90px)) var(--gutter)
+  padding: calc(var(--nav-block) + clamp(40px, 8vh, 90px)) var(--gutter)
     clamp(40px, 8vh, 90px);
   overflow: hidden;
 }

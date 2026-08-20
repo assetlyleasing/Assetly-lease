@@ -11,7 +11,7 @@
   inset: 0 0 auto;
   z-index: 100;
   /* Wider than the page gutter so the bar spans the display (DEC-017). */
-  padding: 10px var(--nav-gutter);
+  padding: var(--nav-pad) var(--nav-gutter);
   /* The bar is the only thing that should catch the pointer; the gutter around
    * it must not sit on top of the Hero. */
   pointer-events: none;

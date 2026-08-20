@@ -110,4 +110,18 @@
    * fixed bar must not cover the top of whatever a nav link scrolls to.
    */
   --nav-h: clamp(56px, 7vh, 74px);
+
+  /*
+   * The inset between the bar and the top of the screen — the gap that makes
+   * the scrolled state read as a floating pill (DEC-017).
+   */
+  --nav-pad: 10px;
+
+  /*
+   * What the fixed navigation actually occupies: the bar plus its inset above
+   * and below. This, not --nav-h, is the figure anything clearing the nav must
+   * use — a section that reserves only the bar's own height still has its top
+   * 20px covered, which is what --nav-h existed to prevent.
+   */
+  --nav-block: calc(var(--nav-h) + 2 * var(--nav-pad));
 }

@@ -222,6 +222,30 @@ Every important technical or product decision, including conflict resolutions fo
 
 ---
 
+### DEC-019 — The Compare calculator carries no bars, magnitudes or value input; its mode row jumps rather than switches
+
+- **Date**: 2026-08-20
+- **Decision**: The calculator renders each argument as three labelled rows — Lease, Loan, Purchase — showing only the outcome text §13 supplies. It has no bar chart, no computed figures, and no asset-value slider. Its one control beyond the open/close tab is a row of the four argument indices, which reports the argument currently in focus (`aria-pressed`) and, on click, scrolls to that argument rather than setting the calculator's mode directly.
+- **Reason**: Two separate constraints point the same way. First, `SOURCE_OF_TRUTH.md` §13 gives each argument a row of qualitative outcomes and says of the second one, pointedly, "No artificial percentage here" — a bar has a height, and there is no approved number to derive one from, so drawing one would mean inventing a business figure, which §24 forbids outright. Second, §13 makes scroll position the calculator's only input ("automatic and context-aware, tied to scroll position"); a control that set the mode itself would be a second source of truth that the next scroll frame would immediately overrule.
+- **Alternatives considered**: (a) The prototype's instrument as `DESIGN_SYSTEM.md` §8 documents it — a three-column bar chart with heights driven by mode data, plus a `<input type="range">` asset-value control and a computed readout. (b) Mode buttons that set the active reading directly, per DESIGN_SYSTEM's `data-m` switches.
+- **Why rejected**: (a) would require rate assumptions, residual assumptions and a lease-versus-loan model that no supplied Assetly material contains — the prototype's numbers were illustrative placeholders, and shipping placeholders as a financial comparison on a live B2B site is exactly the fabrication the baseline prohibits. If real figures are supplied later this can be revisited as a new decision. (b) fights the scroll-driven model rather than serving it; jumping to the argument instead keeps one input and, as a side effect, gives keyboard visitors a way to reach the other three readings that scrolling alone did not (§20's `aria-pressed` requirement is satisfied either way).
+- **Consequences**: The Lease row carries the Bottle accent as editorial emphasis on the argument being made, which is explicitly not a claim about magnitude. `OD-13` is opened in `SOURCE_OF_TRUTH.md` §25 for whether the section needs a disclaimer line, since the approved copy states tax outcomes as fact and no wording may be invented. `DESIGN_SYSTEM.md` §8 remains the reference for the drawer's *mechanism* — the scroll-scrubbed openness model, the manual override, the content reflow — all of which are implemented as it describes.
+- **Status**: Active
+
+---
+
+### DEC-020 — `--nav-block` is what sections clear, not `--nav-h`
+
+- **Date**: 2026-08-20
+- **Decision**: `styles/tokens.css` gains `--nav-pad` (the inset between the bar and the edge of the screen) and `--nav-block: calc(var(--nav-h) + 2 * var(--nav-pad))`. Everything that clears the fixed navigation — the anchor `scroll-margin-top` in `globals.css`, the Hero's top padding, the mobile overlay's — now uses `--nav-block`. `--nav-h` continues to mean the bar's own height and is used by the bar itself.
+- **Reason**: A real defect, found while building Compare. `--nav-h` is `clamp(56px, 7vh, 74px)`, but the header renders that plus its own `10px` inset above and below, so the fixed navigation occupies 20px more than any section reserved for it. A section scrolled to from a nav link had its top 20px covered by the bar — precisely what the comment on `--nav-h` in `styles/tokens.css` says the token exists to prevent.
+- **Alternatives considered**: Adding the 20px into the `scroll-margin-top` calculation directly; enlarging `--nav-h` to include the inset.
+- **Why rejected**: A literal `calc(var(--nav-h) + 20px)` restates a number that lives in `Nav.module.css` and would drift the moment the inset changed. Folding the inset into `--nav-h` would break the bar's own `min-height`, which correctly refers to the bar and not the header around it. Two tokens with one derived from the other keeps each name meaning one thing.
+- **Consequences**: `tests/e2e/shell.spec.ts`'s "the fixed nav never covers the top of a scrolled-to section" now passes because the site is correct, rather than because the assertion caught a frame mid-scroll — which is how it had been passing. Phase 8.5 should note that the loader's "A" settle target is measured against the Hero's padding, which moved by 20px with this change.
+- **Status**: Active
+
+---
+
 ## Decision index
 
 | ID | Topic | Status |
@@ -244,3 +268,5 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-016 | `FOUND-008` prototype archival closed as not applicable | Active |
 | DEC-017 | Nav wordmark = serif "assetly"; bar wider than the page gutter | Active |
 | DEC-018 | Hero main line = "The lighter balance sheet." (supersedes DEC-001's headline) | Active |
+| DEC-019 | Compare calculator: no bars/magnitudes/value input; mode row jumps | Active |
+| DEC-020 | `--nav-block` is what sections clear, not `--nav-h` | Active |

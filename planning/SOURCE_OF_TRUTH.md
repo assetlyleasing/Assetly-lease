@@ -527,3 +527,4 @@ Only **Privacy Policy** and **Terms of Use** are reserved (Footer links) for now
 | OD-10 | Whether/when a Cookie Policy becomes required (depends on future analytics/consent decisions — none planned currently) | Phase 9 |
 | OD-11 | Trusted By actual partner/client logo assets and names (populated via admin after launch, not a build blocker) | Post-launch content |
 | OD-12 | Production/staging domain name(s) | Phase 11 |
+| OD-13 | Whether the Compare section needs a disclaimer line beneath the calculator. §13's approved copy states tax and finance outcomes as fact ("Full rentals deductible", "180-day usage restriction", "GST input credit continues to apply") and the prototype DESIGN_SYSTEM describes carried an "illustrative disclaimer" element, but no wording has been supplied and none may be invented (§24) | Phase 4 polish / Phase 9 legal |

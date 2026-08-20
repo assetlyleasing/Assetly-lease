@@ -60,18 +60,18 @@ Update this file at the end of every cycle per `LOOP.md` step 6. Do not skip ahe
 
 ## Phase 4 — Compare experience
 
-- [ ] `COMPARE-001` Build `content/compare/slides.ts` with exact locked copy for all 4 slides
-- [ ] `COMPARE-002` Build `ArgumentSlide.tsx`
-- [ ] `COMPARE-003` Implement `useScrollFocus` (shared RAF distance-from-center effect)
-- [ ] `COMPARE-004` Build `CalculatorDrawer.tsx` desktop variant (chevron tab, Field panel, bar/row display)
-- [ ] `COMPARE-005` Implement `useDrawerOpenness` (continuous scroll-scrubbed 0–1 value + manual override)
-- [ ] `COMPARE-006` Implement calculator mode auto-sync + content transition (700–900ms)
-- [ ] `COMPARE-007` Implement per-slide plate draw-on-activation (reuse `Plate.tsx`)
-- [ ] `COMPARE-008` Build mobile bottom-sheet variant (stable height across slide changes)
-- [ ] `COMPARE-009` Implement section entry/exit (drawer hidden pre-Hero-exit, exits before Why Us)
-- [ ] `COMPARE-010` Author/source 4 Compare plate artworks (Lease/Loan/Purchase direction) — resolves `OD-03`
-- [ ] `COMPARE-011` Playwright: scroll-through sync correctness, manual override, mobile height stability
-- [ ] `COMPARE-012` Performance profile: RAF loop frame-rate check during scroll
+- [x] `COMPARE-001` Build `content/compare/slides.ts` with exact locked copy for all 4 slides — guarded by `tests/unit/compareCopy.test.ts`, which asserts the headlines, copy and all twelve readings verbatim
+- [x] `COMPARE-002` Build `ArgumentSlide.tsx`
+- [x] `COMPARE-003` Implement `useScrollFocus` (shared RAF distance-from-center effect) — pure curve in `lib/motion/scrollFocus.ts`
+- [x] `COMPARE-004` Build `CalculatorDrawer.tsx` desktop variant (chevron tab, Field panel, row display) — no bars or magnitudes, see `DECISIONS.md` DEC-019
+- [x] `COMPARE-005` Implement `useDrawerOpenness` (continuous scroll-scrubbed 0–1 value + manual override) — pure math in `lib/motion/drawerOpenness.ts`, unit-tested without a DOM
+- [x] `COMPARE-006` Implement calculator mode auto-sync + content transition (800ms) — plus a mode row that jumps rather than switching, so scroll position stays the only input (DEC-019)
+- [x] `COMPARE-007` Implement per-slide plate draw-on-activation (reuse `Plate.tsx`) — `Plate` reused unmodified, as Phase 2's exit criterion required
+- [x] `COMPARE-008` Build mobile bottom-sheet variant (stable height across slide changes) — height fixed in CSS and asserted pixel-exact across all four arguments
+- [x] `COMPARE-009` Implement section entry/exit (drawer hidden pre-Hero-exit, exits before Why Us)
+- [~] `COMPARE-010` Author/source 4 Compare plate artworks (Lease/Loan/Purchase direction) — artwork authored in-house and shipping (`content/plates/compare-plates.tsx`); `OD-03` stays **open** pending design review, since §13's direction was interpreted rather than supplied by a designer. Same standing as `HERO-002`
+- [x] `COMPARE-011` Playwright: scroll-through sync correctness, manual override, mobile height stability — 30 Compare tests in `tests/e2e/compare.spec.ts`
+- [x] `COMPARE-012` Performance profile: RAF loop frame-rate check during scroll — median 19.1ms, p95 25.6ms, 1 frame of 190 over 32ms, none over 50ms (dev build, headless Chromium); guarded by a test
 
 ## Phase 5 — Why Us
 

@@ -149,7 +149,31 @@ b {
  */
 :target,
 [id] {
-  scroll-margin-top: var(--nav-h);
+  scroll-margin-top: var(--nav-block);
+}
+
+/* ---- Screen-reader-only text -------------------------------------------- */
+
+/*
+ * Visible to assistive technology, invisible on screen. §20 needs this
+ * wherever a control is drawn as a bare symbol — the calculator's chevron tab,
+ * the mobile sheet's triangle handle — and the symbol alone would announce as
+ * nothing useful.
+ *
+ * Global rather than a module class because it is a site-wide accessibility
+ * primitive, like the reveal below, not one section's styling.
+ */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  border: 0;
+  /* inset(50%) rather than a 1px rect: it survives text zoom and RTL. */
+  clip-path: inset(50%);
 }
 
 /* ---- Shared reveal primitive (§8) --------------------------------------- */

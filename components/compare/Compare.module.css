@@ -1,0 +1,155 @@
+/*
+ * Compare — the four argument slides (SOURCE_OF_TRUTH.md §13).
+ *
+ * The calculator that sits alongside them has its own stylesheet; the only
+ * thing shared across the boundary is `--compare-openness`, written to the
+ * section by `useDrawerOpenness` and inherited by both. That single property
+ * is what keeps the drawer's travel and the narrative's width in lockstep —
+ * §13 wants the page to visibly make room for the panel, not be overlaid by it.
+ */
+
+.compare {
+  position: relative;
+  /*
+   * Declared so the section has a defined openness before the first frame is
+   * written. Without it the width calculation below is invalid on first paint
+   * and the column renders at full width for a frame.
+   */
+  --compare-openness: 0;
+}
+
+/*
+ * §13's content reflow. Left-anchored on purpose — no auto margins — so the
+ * column gives up its right-hand side to the drawer rather than recentring
+ * itself underneath it. The inner Container keeps its own measure centred
+ * within whatever width is left, so at rest this is indistinguishable from any
+ * other section on the page.
+ *
+ * 44% mirrors the drawer's own `clamp(340px, 44vw, 640px)`.
+ */
+.slides {
+  width: calc(100% - var(--compare-openness) * 44%);
+  transition: none;
+}
+
+.slide {
+  /* §13/DESIGN_SYSTEM: each argument is a near-full-screen beat. */
+  min-height: 104svh;
+  display: flex;
+  align-items: center;
+  padding-block: var(--slide-pad);
+}
+
+.slideInner {
+  width: 100%;
+}
+
+/*
+ * The focus effect (§13). The three custom properties are written every frame
+ * by `useScrollFocus`; the fallbacks are the resting state, so a slide that has
+ * never been measured is simply in focus rather than invisible.
+ */
+.body {
+  /*
+   * Sized for the narrowed column, not the full page. The drawer is open for
+   * almost the whole section, so a measure set against the wide state would
+   * reflow the headline every time the panel moved — and a measure set in `ch`
+   * would be computed from the body font while the headline is set two and a
+   * half times larger, which strands the headline in a third of the space it
+   * has (four and five lines deep, at that).
+   */
+  max-width: clamp(320px, 46vw, 660px);
+  opacity: var(--focus-opacity, 1);
+  filter: blur(var(--focus-blur, 0px));
+  transform: translateY(var(--focus-shift, 0px));
+  will-change: opacity, filter, transform;
+}
+
+/* ---- Plate -------------------------------------------------------------- */
+
+.plateWrap {
+  width: clamp(104px, 13vw, 168px);
+  aspect-ratio: 4 / 3;
+  margin-bottom: clamp(20px, 3.4vh, 34px);
+}
+
+/* ---- Copy --------------------------------------------------------------- */
+
+.index {
+  display: block;
+  font-family: var(--d);
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(15px, 1.3vw, 19px);
+  line-height: 1;
+  color: var(--moss);
+  margin-bottom: clamp(12px, 1.8vh, 18px);
+}
+
+.headline {
+  /*
+   * DESIGN_SYSTEM §9's range for the full-bleed statement slide, which is what
+   * an argument slide is — rather than `SerifHeading`'s section step, whose
+   * upper end is set against the full page width and overshoots badly once the
+   * drawer has taken 44% of it.
+   */
+  font-size: clamp(28px, 3.8vw, 52px);
+  margin-bottom: var(--gap-heading);
+  /*
+   * The headline is authored as spans so one word can carry the §7 italic. Left
+   * to itself `text-wrap: balance` from globals.css then breaks the two
+   * sentences unevenly; pretty keeps the ragged edge without stranding a word.
+   */
+  text-wrap: pretty;
+}
+
+.copy {
+  font-family: var(--s);
+  font-size: clamp(15px, 1.25vw, 18px);
+  line-height: 1.62;
+  color: var(--moss);
+  max-width: 42ch;
+}
+
+/* ---- Mobile ------------------------------------------------------------- */
+
+/*
+ * §9: recomposed, not shrunk. The narrative never narrows here — the sheet
+ * takes the bottom of the screen rather than the right of it — so the slide
+ * reserves the sheet's height as padding and centres what is left above it.
+ * That reservation is why the sheet covers no copy at any point in the section.
+ */
+@media (max-width: 700px) {
+  .slides {
+    width: 100%;
+  }
+
+  .slide {
+    min-height: 100svh;
+    padding-bottom: calc(42svh + var(--slide-pad));
+  }
+
+  .body {
+    max-width: none;
+  }
+
+  .plateWrap {
+    width: clamp(96px, 30vw, 132px);
+  }
+}
+
+/* ---- Reduced motion ----------------------------------------------------- */
+
+/*
+ * §8: the focus effect is a continuous, scroll-driven change to opacity, blur
+ * and position across content the visitor is reading — precisely what the
+ * preference exists to stop. Neutralised here as well as in the hook, so the
+ * slides are sharp and still even if a stale custom property is left on a node.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .body {
+    opacity: 1;
+    filter: none;
+    transform: none;
+    will-change: auto;
+  }
+}

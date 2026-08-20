@@ -1,0 +1,272 @@
+/*
+ * The Compare calculator (SOURCE_OF_TRUTH.md §13).
+ *
+ * Two mechanisms, one panel. The desktop drawer travels on X from the right
+ * edge; the mobile sheet travels on Y from the bottom. Both are driven by the
+ * same inherited `--compare-openness`, and both keep their control pinned
+ * outside their own leading edge so it stays on screen when the panel is not.
+ */
+
+/* ---- Desktop drawer ----------------------------------------------------- */
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  height: 100svh;
+  width: clamp(340px, 44vw, 640px);
+  /*
+   * Translating the whole drawer — control included — is what puts the tab
+   * flush against the right edge of the screen when the panel is closed.
+   */
+  transform: translateX(calc((1 - var(--compare-openness)) * 100%));
+}
+
+/*
+ * §13: "extremely minimal — small triangle/chevron on the drawer edge
+ * (~10–14px), no text, larger invisible hit area." The button is the invisible
+ * 44px target (§20); the disc inside it is the visible control.
+ */
+.tab {
+  position: absolute;
+  top: 50%;
+  left: calc(var(--touch-min) * -1);
+  width: var(--touch-min);
+  height: var(--touch-min);
+  margin-top: calc(var(--touch-min) / -2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tabFace {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--bottle);
+  color: var(--ivory);
+  font-family: var(--u);
+  font-size: 13px;
+  line-height: 1;
+  transition: background var(--dur-toggle) var(--eio);
+}
+
+.tab:hover .tabFace {
+  background: var(--pitch);
+}
+
+/* ---- Mobile sheet ------------------------------------------------------- */
+
+.sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  /*
+   * §13: expanded height 34–42svh, max 42vh — and, above everything else on
+   * mobile, stable. Fixed here rather than derived from the contents, so a
+   * longer reading scrolls inside the sheet instead of resizing it and pushing
+   * the page around (§20 layout stability).
+   */
+  height: min(40svh, 42vh);
+  transform: translateY(calc((1 - var(--compare-openness)) * 100%));
+  border-top: var(--hairline);
+}
+
+/* §13: a tiny centred triangle at the sheet's top edge, no text label. */
+.handle {
+  position: absolute;
+  top: calc(var(--touch-min) * -1);
+  left: 50%;
+  width: var(--touch-min);
+  height: var(--touch-min);
+  margin-left: calc(var(--touch-min) / -2);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-direction: column;
+}
+
+.handleFace {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 26px;
+  background: var(--field);
+  border: var(--hairline);
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+  color: var(--bottle);
+  font-size: 11px;
+  line-height: 1;
+}
+
+/* ---- The panel ---------------------------------------------------------- */
+
+.panel {
+  height: 100%;
+  overflow-y: auto;
+  /* §13: the calculator sits on Field, the site's recessed-panel surface (§6). */
+  background: var(--field);
+  border-left: var(--hairline);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(26px, 4.4vh, 44px);
+  padding: var(--card-pad-lg);
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ---- Mode row ----------------------------------------------------------- */
+
+/*
+ * A readout that is also a control: it shows which argument is being read, and
+ * clicking one scrolls there. §20 asks for `aria-pressed` on mode switches,
+ * which is what gives a keyboard visitor a way to reach the other three
+ * readings without hunting for them by scroll.
+ */
+.modes {
+  display: flex;
+  gap: clamp(14px, 1.6vw, 22px);
+}
+
+.mode {
+  font-family: var(--d);
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(14px, 1.2vw, 17px);
+  line-height: 1;
+  color: var(--moss);
+  padding-bottom: 6px;
+  border-bottom: 1px solid transparent;
+  transition:
+    color var(--dur-toggle) var(--eio),
+    border-color var(--dur-toggle) var(--eio);
+}
+
+.mode:hover {
+  color: var(--ink);
+}
+
+.mode[aria-pressed="true"] {
+  color: var(--bottle);
+  border-bottom-color: var(--bottle);
+}
+
+/* ---- Reading ------------------------------------------------------------ */
+
+/*
+ * §13's context transition: "fade + 4–8px vertical movement, 700–900ms,
+ * cubic-bezier(.22,1,.36,1)". Replayed by React remounting this subtree under
+ * a new key, so it fires on the change itself rather than on a timer.
+ */
+@keyframes readingChange {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.reading {
+  animation: readingChange 800ms var(--e);
+}
+
+.title {
+  font-size: clamp(24px, 2.4vw, 36px);
+  margin-bottom: clamp(20px, 3.2vh, 32px);
+}
+
+.columns {
+  display: flex;
+  flex-direction: column;
+  border-top: var(--hairline);
+}
+
+/*
+ * The ledger-line treatment §9 uses everywhere: shared hairlines, no gaps, no
+ * floating cards.
+ */
+.column {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 18px;
+  padding-block: clamp(12px, 2vh, 20px);
+  border-bottom: var(--hairline);
+}
+
+.columnLabel {
+  font-family: var(--u);
+  font-size: var(--u-size);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: var(--u-track-wide);
+  color: var(--moss);
+  white-space: nowrap;
+}
+
+.columnValue {
+  font-family: var(--d);
+  font-size: clamp(17px, 1.7vw, 25px);
+  line-height: 1.15;
+  text-align: right;
+  color: var(--ink);
+}
+
+/*
+ * The Lease row carries the accent. §13 reserves Bottle for "active
+ * controls/emphasis", and this is the argument the section is making — it is
+ * editorial weight, not a claim about magnitude, which matters because §13
+ * forbids inventing one ("no artificial percentage here").
+ */
+.column[data-lead="true"] .columnLabel,
+.column[data-lead="true"] .columnValue {
+  color: var(--bottle);
+}
+
+/* ---- Mobile panel ------------------------------------------------------- */
+
+@media (max-width: 700px) {
+  .panel {
+    border-left: none;
+    justify-content: flex-start;
+    gap: clamp(16px, 2.4vh, 24px);
+    padding: var(--card-pad);
+  }
+
+  .title {
+    margin-bottom: clamp(12px, 2vh, 18px);
+  }
+
+  .columnValue {
+    font-size: clamp(16px, 4.4vw, 21px);
+  }
+}
+
+/* ---- Reduced motion ----------------------------------------------------- */
+
+/*
+ * §8. The reading still changes — the calculator is information and must keep
+ * following the reader — but it changes without moving, and the openness the
+ * panel travels on has already been snapped rather than scrubbed by
+ * `computeOpenness`, so the panel arrives rather than slides.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .reading {
+    animation: none;
+  }
+}
