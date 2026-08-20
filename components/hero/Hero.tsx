@@ -4,7 +4,11 @@ import { useCallback, useLayoutEffect, useRef } from "react";
 
 import { LogoMark } from "@/components/brand/LogoMark";
 import { Plate } from "@/components/plate/Plate";
-import { HERO_PLATE_VIEWBOX, HeroPlateArtwork } from "@/content/plates/hero-plate";
+import {
+  HERO_MOBILE_PLATE_MODE,
+  HERO_PLATE_VIEWBOX,
+  HeroPlateArtwork,
+} from "@/content/plates/hero-plate";
 import { HERO } from "@/content/site/hero";
 import { useCursorParallax } from "@/lib/motion/useCursorParallax";
 import type { HeroLoaderPhase } from "@/lib/motion/useHeroLoaderSequence";
@@ -100,15 +104,22 @@ export function Hero({
       data-opening-phase={openingPhase}
       data-opening-complete={openingPhase === "done"}
     >
-      <div ref={plateLayerRef} className={styles.plateLayer}>
-        <Plate
-          viewBox={HERO_PLATE_VIEWBOX}
-          drawn={start}
-          className={styles.plate}
-          preserveAspectRatio="xMidYMid meet"
-        >
-          <HeroPlateArtwork />
-        </Plate>
+      <div
+        ref={plateLayerRef}
+        className={styles.plateLayer}
+        data-mobile-plate-mode={HERO_MOBILE_PLATE_MODE}
+      >
+        <div className={styles.plateFrame}>
+          <Plate
+            viewBox={HERO_PLATE_VIEWBOX}
+            drawn={start}
+            opacity={0.2}
+            className={styles.plate}
+            preserveAspectRatio="xMidYMid meet"
+          >
+            <HeroPlateArtwork />
+          </Plate>
+        </div>
       </div>
 
       <div className={styles.content}>
