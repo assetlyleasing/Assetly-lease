@@ -124,12 +124,29 @@
 }
 
 /*
+ * A positioned child cannot escape an ancestor stacking context. Lift the
+ * content context while the shared mark is fixed so the opaque loader does not
+ * cover it; the headline and subline remain in their masked pre-reveal states.
+ */
+.hero:not([data-opening-phase="done"]) .content {
+  z-index: 201;
+}
+
+/*
  * The brand mark. Phase 8.5 animates the loader's "A" to exactly this
  * position, so its size and placement are a hand-off contract — change them
  * and the loader's settle lands in the wrong place.
  */
-.mark {
+.markAnchor {
   font-size: clamp(46px, 8.5vw, 104px);
+  display: grid;
+  place-items: center;
+  width: calc(1em * 2048 / 1902);
+  height: 1em;
+}
+
+.mark {
+  font-size: inherit;
   color: var(--olive);
   opacity: 0;
   transform: translateY(20px) scale(0.95);
@@ -142,6 +159,88 @@
   transition:
     opacity var(--dur-settle) var(--e),
     transform var(--dur-settle) var(--e);
+}
+
+/*
+ * The opening mark has already completed its settle. Releasing that same node
+ * back into normal flow must not trigger the older 1.7s Hero-mark entrance a
+ * second time or it visibly drifts after the proposition begins.
+ */
+.hero[data-opening-complete="true"] .mark {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+/* ---- Opening hand-off (SOURCE_OF_TRUTH.md §11a) ----------------------- */
+
+@keyframes loaderDoubleBlink {
+  0%,
+  36%,
+  48%,
+  84%,
+  100% {
+    opacity: 1;
+  }
+
+  18%,
+  66% {
+    opacity: 0.25;
+  }
+}
+
+.openingMark {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 201;
+  width: auto;
+  font-size: clamp(94px, 14vw, 168px);
+  color: var(--ivory);
+  opacity: 1;
+  transform: translate(-50%, -50%);
+  will-change: top, left, font-size, transform, color, opacity;
+}
+
+.openingMark.prepare {
+  opacity: 1;
+}
+
+.openingMark.signature {
+  animation: loaderDoubleBlink 1.7s var(--eio) both;
+}
+
+.openingMark.recede {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(0.72);
+  transition: transform 0.65s var(--eio);
+}
+
+.openingMark.settle,
+.openingMark.hold,
+.openingMark.reveal {
+  top: var(--loader-target-y, 50%);
+  left: var(--loader-target-x, 50%);
+  font-size: var(--loader-target-size, clamp(46px, 8.5vw, 104px));
+  opacity: 1;
+  transform: translate(-50%, -50%);
+}
+
+.openingMark.settle {
+  transition:
+    top 0.85s var(--e),
+    left 0.85s var(--e),
+    font-size 0.85s var(--e),
+    transform 0.85s var(--e);
+}
+
+.openingMark.hold {
+  color: var(--ivory);
+}
+
+.openingMark.reveal {
+  color: var(--olive);
+  transition: color 0.42s var(--e);
 }
 
 /* ---- Headline ----------------------------------------------------------- */
@@ -232,6 +331,17 @@
 
   .plateLayer {
     transform: none;
+    transition: none;
+  }
+
+  .openingMark {
+    top: var(--loader-target-y, 50%);
+    left: var(--loader-target-x, 50%);
+    font-size: var(--loader-target-size, clamp(46px, 8.5vw, 104px));
+    color: var(--olive);
+    opacity: 1;
+    transform: translate(-50%, -50%);
+    animation: none;
     transition: none;
   }
 }

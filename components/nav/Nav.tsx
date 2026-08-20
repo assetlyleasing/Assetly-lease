@@ -9,6 +9,7 @@ import { MobileMenu } from "@/components/nav/MobileMenu";
 import { SiteLinkAnchor } from "@/components/primitives/SiteLinkAnchor";
 import { BRAND, NAV_LINKS } from "@/content/site/navigation";
 import { scrollToSection } from "@/lib/scroll";
+import "@/lib/motion/homeOpeningReplay";
 
 import styles from "./Nav.module.css";
 
