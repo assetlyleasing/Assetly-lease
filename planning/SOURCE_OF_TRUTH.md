@@ -168,7 +168,7 @@ Final principle: the navbar is supporting chrome — minimal, premium, editorial
 
 **Plate — meaning and behavior**
 
-The hero plate is a single continuous traced-line illustration representing **Access → Scale → Grow**: it should read gradually, like an architectural/engineering drawing, subtly combining an asset/equipment form, a financial-flow/leasing path, and an upward expansion gesture — never a literal infographic or icon. Actual SVG artwork is not yet produced (`OPEN DECISION`, §25).
+The hero plate is a single continuous traced-line illustration representing **Access → Scale → Grow**: it should read gradually, like an architectural/engineering drawing, subtly combining an asset/equipment form, a financial-flow/leasing path, and an upward expansion gesture — never a literal infographic or icon. As drawn (DEC-037) the asset is `reference/home-2.html`'s own wheeled crane, mirrored so its boom reaches back across the plate and works over a floored building at the far left; the leasing path leaves the crane's deck and the expansion is three open frames stepping up from it. The artwork remains authored rather than designer-supplied (`OPEN DECISION` `OD-02`, §25).
 
 Three-stage dynamic behavior:
 
@@ -190,7 +190,7 @@ Three-stage dynamic behavior:
 
 **3. Loader colors** — background Pitch `#21241A`; "A"/brand mark Ivory `#E7E3D4`; tagline Khaki `#B1AD77`. This is the same dark-surface token trio used by nav/footer (§6, §10, §17). Bottle Green `#25453A` is never used as the opening background — it stays reserved for interactive/active-state emphasis elsewhere.
 
-**4. Slow double blink** — only the "A" blinks; the tagline stays static throughout. Sequence: visible → dim → visible → brief breath → dim → visible. The two dips share one continuous 1.7s eased curve, with a dim floor of 25% opacity (never fully disappears). The breath between them is deliberately short so the signature remains calm without reading as a stalled loading indicator (DEC-031).
+**4. Slow double blink** — only the "A" blinks; the tagline stays static throughout. Sequence: visible → dim → visible → brief breath → dim → visible. The two dips share one continuous 2.4s near-sine curve — roughly 0.9s per blink, as this section asks — with a dim floor of 25% opacity (never fully disappears). The breath between them is deliberately short so the signature remains calm without reading as a stalled loading indicator (DEC-031).
 
 **5. "A" recedes** — after the second blink, the "A" slowly scales down and appears to move backward (a controlled camera pull-back). No morph, no mask expansion, no shape transformation, no additional graphic transition.
 
@@ -261,7 +261,7 @@ Four-step scroll sequence, each a near-full-screen argument slide:
 
 **Openness model**: openness is a continuous 0–1 value (not boolean), recomputed every scroll frame relative to two measured zones (hero-bottom → value-grid-top) with a soft ~40vh easing band at each edge — a physically scrubbed panel, not a snap. Manual override (clicking the tab) sets an override flag and tweens to target over ~500ms cubic ease-out; auto-sync logic goes silent once overridden.
 
-**Plate animation**: each argument slide's plate draws once on activation, `stroke-dashoffset: 2200 → 0` over 2.6s, stays visible at the argument-slide opacity level. The approved 200×130 set adapts `reference/home-2.html`'s building/capital plate for Upfront Cash — whose left half is that reference's own hero crane, mirrored about its bounding box so the boom hangs outward (DEC-035) — its asset/lifecycle plate for Obsolescence, and its balance-scale plate for Leverage; Tax Treatment uses a matching ledger-to-recurring-line drawing authored in the same compact drafting language. All four are inline geometry rendered by the shared `Plate` component.
+**Plate animation**: each argument slide's plate draws once on activation, `stroke-dashoffset: 2200 → 0` over 2.6s, stays visible at the argument-slide opacity level. The approved 200×130 set adapts `reference/home-2.html`'s building/capital plate for Upfront Cash, its asset/lifecycle plate for Obsolescence, and its balance-scale plate for Leverage; Tax Treatment uses a matching ledger-to-recurring-line drawing authored in the same compact drafting language. All four are inline geometry rendered by the shared `Plate` component.
 
 **Left content focus effect**: active argument = fully opaque, sharp, aligned at rest; previous/next = slightly faded, subtly blurred, slightly displaced. One argument in focus per screen, driven by a single RAF loop computing distance-from-viewport-center. "At rest" is a band, not a point (DEC-034): a slide stays completely sharp for 0.26 viewport heights either side of centre — 0.34 on mobile — and only then begins the fade, blur and displacement, which reach full effect by 0.86. The focused index is sticky by 0.08 so the calculator's mode cannot oscillate at a boundary.
 
@@ -335,7 +335,7 @@ Four-step scroll sequence, each a near-full-screen argument slide:
 
 **Entrance**: heading fades in → four cards reveal with slight stagger → initial four plates draw → automatic rotation starts after entrance settles.
 
-**Desktop hover**: pauses rotation, slightly raises plate opacity, card stays physically stable — no scale-up.
+**Desktop hover**: holds the hovered card out of the rotation and slightly raises that card's plate opacity; the other three keep rotating on the same cadence (DEC-038). The card stays physically stable — no scale-up. Hover does not pause the grid; keyboard focus does, and is the section's deliberate pause mechanism.
 
 **Mobile**: no hover-dependent interaction; the four stacked cells passively continue the same 2.5s one-card-at-a-time rotation.
 

@@ -26,7 +26,7 @@ function documentIsHidden() {
 }
 
 export function SectorsSection() {
-  const [hovered, setHovered] = useState(false);
+  const [hoveredSlot, setHoveredSlot] = useState<number | null>(null);
   const [focused, setFocused] = useState(false);
   const hidden = useSyncExternalStore(subscribeVisibility, documentIsHidden, () => false);
   const reducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
@@ -38,7 +38,13 @@ export function SectorsSection() {
     itemCount: SECTORS.length,
     visibleCount: 4,
     entered,
-    paused: hovered || focused || hidden,
+    /*
+     * Hover holds one card, not the grid (DEC-038). Keyboard focus still stops
+     * everything: it is the deliberate, keyboard-reachable pause the section
+     * owes an auto-updating region, and the grid's label says so.
+     */
+    paused: focused || hidden,
+    holdSlot: hoveredSlot,
     disabled: reducedMotion !== false,
   });
 
@@ -66,8 +72,7 @@ export function SectorsSection() {
             aria-live="off"
             data-sectors-grid
             data-reduced-motion={reducedMotion === true ? "true" : "false"}
-            onMouseEnter={() => setHovered(true)}
-            onMouseLeave={() => setHovered(false)}
+            onMouseLeave={() => setHoveredSlot(null)}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
           >
@@ -79,6 +84,7 @@ export function SectorsSection() {
                   className={`${styles.cell} rv-u ${DELAYS[slotIndex]}`.trim()}
                   role="listitem"
                   data-sector-slot={slotIndex}
+                  onMouseEnter={() => setHoveredSlot(slotIndex)}
                 >
                   <SectorCard sector={sector} swapping={swappingSlot === slotIndex} />
                 </div>

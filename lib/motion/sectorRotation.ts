@@ -33,3 +33,19 @@ export function advanceSectorRotation(
     nextSlotIndex: (state.nextSlotIndex + 1) % visibleIndices.length,
   };
 }
+
+/**
+ * Pass over a slot without changing what it shows.
+ *
+ * The slot cursor moves on; the item cursor does not, so the sector that was
+ * queued for the skipped slot keeps its place and arrives in the next one
+ * instead. Nothing is dropped from the rotation — only deferred by one slot.
+ */
+export function skipSectorRotationSlot(
+  state: SectorRotationState,
+): SectorRotationState {
+  return {
+    ...state,
+    nextSlotIndex: (state.nextSlotIndex + 1) % state.visibleIndices.length,
+  };
+}

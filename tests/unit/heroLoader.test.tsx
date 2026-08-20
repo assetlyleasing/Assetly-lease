@@ -33,7 +33,7 @@ describe("Hero opening sequence", () => {
 
   it("uses two calm blinks and a short reduced-motion hand-off", () => {
     expect(HERO_LOADER_DURATIONS.prepare).toBe(150);
-    expect(HERO_LOADER_DURATIONS.signature).toBe(1700);
+    expect(HERO_LOADER_DURATIONS.signature).toBe(2400);
     expect(HERO_LOADER_DURATIONS.recede).toBe(650);
     expect(HERO_LOADER_DURATIONS.settle).toBe(850);
     expect(HERO_LOADER_DURATIONS.hold).toBe(320);

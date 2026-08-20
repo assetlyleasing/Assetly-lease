@@ -74,14 +74,22 @@ test.describe("Sectors — content and rotation", () => {
       .toBeLessThan(2200);
   });
 
-  test("hover and keyboard focus pause before another swap", async ({ page }) => {
+  test("hovering one card holds that card and only that card", async ({ page }) => {
+    await showSectors(page);
+
+    await page.locator(`${GRID} [data-sector-slot="1"]`).hover();
+    const held = await sectorIds(page);
+    await page.waitForTimeout(4200);
+    const after = await sectorIds(page);
+
+    expect(after[1]).toBe(held[1]);
+    const moved = [0, 2, 3].filter((slot) => after[slot] !== held[slot]);
+    expect(moved.length).toBeGreaterThan(0);
+  });
+
+  test("keyboard focus pauses the whole grid", async ({ page }) => {
     await showSectors(page);
     const grid = page.locator(GRID);
-
-    await grid.hover();
-    const onHover = await sectorIds(page);
-    await page.waitForTimeout(3200);
-    expect(await sectorIds(page)).toEqual(onHover);
 
     await page.mouse.move(0, 0);
     await grid.focus();

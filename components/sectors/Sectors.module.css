@@ -123,7 +123,12 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .grid:hover .plate {
+  /*
+   * The card, not the grid. Hover now holds one card out of the rotation
+   * (DEC-038), so the lift has to mark the card that is actually being held —
+   * lifting all four would say the whole grid had stopped, which it has not.
+   */
+  .card:hover .plate {
     opacity: 0.78;
   }
 }

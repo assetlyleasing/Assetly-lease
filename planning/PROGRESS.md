@@ -10,11 +10,13 @@ Phase 8.5 (the Hero opening loader) is **merged into `main`**, alongside the own
 
 ## Current Task
 
-Verifying the merged tree. The loader now precedes every load of `/`, and the section specs written before it existed have to account for that.
+None outstanding. The next unblocked work is Phase 9.
 
 ## Status
 
 Two lines of work that ran in parallel are now one. `phase/hero-opening-loader` carried the opening sequence; `main` carried seven corrections to already-built sections. Neither touched the other's components, and the merge conflicted only where both had appended to the same shared files.
+
+A second owner review followed the merge and produced three further corrections — the crane belongs to the Hero plate rather than to Compare Slide 01, hovering a sector card should hold that card rather than the grid, and the opening blink should be slower and smoother.
 
 ## Completed This Cycle
 
@@ -22,9 +24,21 @@ Two lines of work that ran in parallel are now one. `phase/hero-opening-loader` 
 
 The homepage opens with the approved Pitch signature — the `a.` mark and `ACCESS · SCALE · GROW` — before handing off to the Hero. One persistent mark node runs through the whole sequence and lands on a destination measured from the rendered layout rather than a duplicated coordinate. The double blink is one continuous 1.7s curve with two 25% dips; recede is 650ms, settle 850ms, then the mark holds completely still for 320ms before the overlay clears. Nothing moves after landing. The loader plays on a full document load of `/` only — never on `/about`, never on a client-side return to `/` — recorded by a module-scope flag, so there is no storage read and no hydration branch.
 
-### Slide 01's plate (DEC-035)
+### The crane moved to the Hero plate (DEC-037, superseding DEC-035)
 
-The left half was redrawn from the canonical reference rather than invented: the wheeled crane in `reference/home-2.html`'s hero plate, mirrored about its own bounding box so the boom hangs outward, scaled 0.2 onto the plate's ground line. The transform is recorded in the file so the drawing can be re-derived instead of guessed at.
+The mirrored reference crane was put into Compare Slide 01 on the first pass. It was the right drawing in the wrong plate: it comes from the reference's *hero* plate and belongs in ours. Slide 01 is back to its original geometry untouched, and the Hero plate's ACCESS element is now that crane — mirrored about its own bounding box so the boom reaches back across the plate — working over a floored building at the far left, where a bare vertical drawing edge used to sit and where the composition was otherwise empty under the boom. The Scale curve now leaves the crane's deck.
+
+Both figures are reference geometry under transforms recorded in the file. The building keeps the reference's own floor spacing and gains a storey rather than being stretched to height.
+
+### Hovering a sector card holds that card (DEC-038)
+
+Hover paused the whole grid, so on desktop — where the pointer often simply rests inside the section — the rotation the section exists to show was frequently not running. The hovered slot is now passed over when its turn comes and the tick spends itself on the next slot, so the other three keep changing on the same 1.2s cadence and the held card does not move. The sector queued for a held slot is deferred by one slot, not dropped, so the cycle still shows all six. The plate-opacity lift moved from the grid to the card, so it says "this card is held" rather than "the grid has stopped".
+
+Keyboard focus still pauses everything. It is now the only full pause, which is what an auto-updating region owes a reader and what the grid's own label already promises.
+
+### The opening blink is slower and smoother (DEC-039)
+
+Two things made it read as a switch being thrown rather than an eye closing: `--eio` is a toggle/drawer curve that spends most of a segment moving fast, and at 1.7s each blink lasted about 610ms — below the 0.8–1.0s §11a itself asks for. It now runs 2.4s on a near-sine ease-in-out, about 910ms per blink. Shape, dim floor, static tagline and everything after the blink are unchanged.
 
 ### A locked focus band on the four arguments (DEC-034)
 
@@ -68,8 +82,11 @@ The mobile sheet was recomposed so a step and its primary action are on screen t
 - **DEC-032** — Why Assetly and Sectors are composed to resolve inside one viewport.
 - **DEC-033** — the Contact map is real OpenStreetMap geography, baked to static paths (supersedes DEC-026).
 - **DEC-034** — the Compare focus effect holds a locked band before it transitions.
-- **DEC-035** — Slide 01's left half is the reference hero crane, mirrored.
+- **DEC-035** — Slide 01's left half is the reference hero crane, mirrored (superseded by DEC-037).
 - **DEC-036** — nothing that holds a parked panel may be a scroll container.
+- **DEC-037** — the reference crane belongs to the Hero plate, not to Compare Slide 01.
+- **DEC-038** — hovering a sector card holds that card, not the grid.
+- **DEC-039** — the opening blink is slower and runs on a near-sine curve.
 
 ## Tests Run
 
@@ -97,7 +114,8 @@ Phase 9, beginning with `LEGAL-001`. Its wording decisions are owner work and mu
 
 ## Notes for Next Cycle
 
-- Every spec that loads `/` now loads the opening sequence with it. Specs written before Phase 8.5 must wait past it.
+- Every spec that loads `/` now loads the ~4.8s opening sequence with it. Specs written before Phase 8.5 must wait past it.
+- `HERO_LOADER_DURATIONS.signature` and the `loaderDoubleBlink` duration in `Hero.module.css` are the same number in two places. Changing one without the other is a bug, not a mismatch.
 - `content/plates/bengaluru-map.ts` is generated. To move the window or refresh the data, re-run an Overpass query for the bbox in its header; do not edit the numbers.
 - The flip card cannot grow to fit its copy — both faces are absolutely positioned inside a cell of fixed height — so any type change in Why Assetly needs the back faces re-measured at 1280×720 and 375×667.
 - `overflow: clip` rather than `hidden` for any box that hides something positioned outside it.

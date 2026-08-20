@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   advanceSectorRotation,
   createSectorRotationState,
+  skipSectorRotationSlot,
   type SectorRotationState,
 } from "./sectorRotation";
 
@@ -20,12 +21,18 @@ type RotationViewState = {
  * slots in rotation, a 1.2s interval still leaves each individual card in place
  * for 4.8s, so its plate finishes the 2.6s draw well before that slot comes
  * round again. The swap itself stays at §15's 450ms.
+ *
+ * `paused` stops the grid; `holdSlot` stops one slot. They are different things
+ * on purpose (DEC-038): reading one card should not freeze the other three, so
+ * a held slot is passed over and the tick spends itself on the next slot
+ * instead, leaving the cadence intact.
  */
 export function useOneOutOneIn({
   itemCount,
   visibleCount,
   entered,
   paused,
+  holdSlot = null,
   disabled,
   initialDelayMs = 3000,
   intervalMs = 1200,
@@ -35,6 +42,8 @@ export function useOneOutOneIn({
   visibleCount: number;
   entered: boolean;
   paused: boolean;
+  /** A slot to leave alone — the one under the pointer — or `null`. */
+  holdSlot?: number | null;
   disabled: boolean;
   initialDelayMs?: number;
   intervalMs?: number;
@@ -46,10 +55,15 @@ export function useOneOutOneIn({
     swappingSlot: null,
   });
   const pausedRef = useRef(paused);
+  const holdSlotRef = useRef(holdSlot);
 
   useEffect(() => {
     pausedRef.current = paused;
   }, [paused]);
+
+  useEffect(() => {
+    holdSlotRef.current = holdSlot;
+  }, [holdSlot]);
 
   useEffect(() => {
     if (!entered || disabled) return;
@@ -67,10 +81,25 @@ export function useOneOutOneIn({
           return;
         }
 
-        setView((current) => ({
-          ...current,
-          swappingSlot: current.rotation.nextSlotIndex,
-        }));
+        setView((current) => {
+          let rotation = current.rotation;
+
+          /*
+           * Step past the held slot. Bounded by the slot count so that even a
+           * nonsensical hold value cannot spin here; in practice a pointer is
+           * over at most one card, so this runs at most once.
+           */
+          const slots = rotation.visibleIndices.length;
+          for (
+            let step = 0;
+            step < slots && rotation.nextSlotIndex === holdSlotRef.current;
+            step += 1
+          ) {
+            rotation = skipSectorRotationSlot(rotation);
+          }
+
+          return { rotation, swappingSlot: rotation.nextSlotIndex };
+        });
 
         swapTimer = setTimeout(() => {
           if (cancelled) return;

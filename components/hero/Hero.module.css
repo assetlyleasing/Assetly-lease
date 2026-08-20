@@ -176,15 +176,15 @@
 
 @keyframes loaderDoubleBlink {
   0%,
-  36%,
-  48%,
-  84%,
+  38%,
+  50%,
+  88%,
   100% {
     opacity: 1;
   }
 
-  18%,
-  66% {
+  19%,
+  69% {
     opacity: 0.25;
   }
 }
@@ -207,7 +207,15 @@
 }
 
 .openingMark.signature {
-  animation: loaderDoubleBlink 1.7s var(--eio) both;
+  /*
+   * Not `--eio`. That curve is built for toggles and drawers — it spends most
+   * of a segment moving fast — and on an opacity dip it reads as a switch being
+   * thrown rather than an eye closing. This is the gentler, near-sine
+   * ease-in-out: the mark leaves and returns to full opacity slowly and never
+   * has a fast middle. At 2.4s each blink lasts ~910ms, inside the 0.8–1.0s per
+   * blink §11a asked for and which the earlier 1.7s undershot (DEC-039).
+   */
+  animation: loaderDoubleBlink 2.4s cubic-bezier(0.45, 0.05, 0.55, 0.95) both;
 }
 
 .openingMark.recede {

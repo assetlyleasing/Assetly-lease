@@ -99,7 +99,7 @@ test.describe("Hero opening loader", () => {
         taglineX: number;
         taglineY: number;
       }> = [];
-      const end = performance.now() + 1650;
+      const end = performance.now() + 2350;
       while (
         performance.now() < end &&
         document

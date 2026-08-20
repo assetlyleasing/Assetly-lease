@@ -11,29 +11,12 @@
 
 export const COMPARE_PLATE_VIEWBOX = "0 0 200 130";
 
-/**
- * 01 — the asset is put to work on the left while the capital reserve stays
- * intact on the right.
- *
- * The right half is the reference argument plate's own geometry, unchanged.
- * The left half is the wheeled crane from `reference/home-2.html`'s hero plate
- * — the same drawing, not an approximation of it — mirrored about its own
- * bounding box so the boom hangs toward the outside of the composition instead
- * of over the reserve, then scaled by 0.2 and set on this plate's ground line.
- * Every coordinate below is that transform applied to the reference numbers:
- * `x' = 127.4 - 0.2x`, `y' = 62.8 + 0.2y`.
- */
+/** 01 — capital remains in the operating structure rather than leaving at once. */
 export function UpfrontCashPlate() {
   return (
     <>
-      <path d="M14 118h172" />
-      <path d="M103.4 118V96.4H82.6V118M103.4 96.4L89 84.8H66.6V96.4" />
-      <path d="M66.6 84.8L13.8 64.4M13.8 64.4L10 72.8L17.6 76Z" />
-      <path d="M89 84.8V76H52.2M52.2 76V84.8M77.4 76V68.4H29.4V76" />
-      <circle cx="94.2" cy="108.8" r="6.6" />
-      <circle cx="94.2" cy="108.8" r="2.4" />
-      <circle cx="75.4" cy="108.8" r="6.6" />
-      <circle cx="75.4" cy="108.8" r="2.4" />
+      <path d="M14 118h172M40 118V52h52v66M40 52h52M52 52V32h28v20" />
+      <path d="M52 74h28M52 92h28" />
       <path d="M120 118V44h48v74M120 66h48M120 88h48" />
       <circle cx="144" cy="30" r="13" />
       <path d="M144 17v-9M144 43v9M131 30h-9M157 30h9" />

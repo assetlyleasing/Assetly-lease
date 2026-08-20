@@ -406,6 +406,36 @@ Every important technical or product decision, including conflict resolutions fo
 
 ---
 
+### DEC-037 - The reference crane belongs to the Hero plate, not to Compare Slide 01
+
+- **Date**: 2026-08-21
+- **Decision**: Compare Slide 01 keeps its original plate. The reference's wheeled crane, mirrored about its own bounding box, moves to the Hero plate as its ACCE§ element, working over a floored building placed at the far left where a bare vertical drawing edge used to be. This supersedes DEC-035.
+- **Reason**: DEC-035 read the owner's "recover the hanging crane and mirror it" as an instruction about Slide 01, because that was the plate under review at the time. It was an instruction about the drawing, not about the slide: the crane came from the reference's *hero* plate and belongs in ours. Slide 01's original plate was never the thing that was wrong. Separately, the left drawing edge was a bare vertical line carrying no meaning, and the lower left of the plate was empty under the boom - one building answers both.
+- **Consequences**: §13's Slide 01 plate note returns to "retained capital"; §11's hero plate paragraph now names a crane and a building rather than an abstract open frame, which suits §11's own "asset/equipment form" better than the frame did. Both figures are reference geometry under transforms recorded in the file (`x' = 660 - 0.95x`, `y' = 297.8 + 0.95y` for the crane; the building keeps the reference's floor spacing and gains a storey rather than being stretched). The Scale curve now leaves the crane's deck instead of the old frame's flank, and is shorter for it. `OD-02` stays open: the plate is still authored rather than designer-reviewed.
+- **Status**: Active
+
+---
+
+### DEC-038 - Hovering a sector card holds that card, not the grid
+
+- **Date**: 2026-08-21
+- **Decision**: Pointer hover no longer pauses the Sectors rotation. The hovered slot is passed over when its turn comes and the tick spends itself on the next slot instead, so the other three cards keep changing on the same 1.2s cadence. Keyboard focus continues to pause the whole grid. The plate-opacity lift moves from the grid to the card.
+- **Reason**: The owner's review was that the rotation should not stop because the pointer happens to be over the section - only the card actually being read should stay put. Pausing the whole grid on hover also meant that on desktop, where the pointer often rests inside the section, the rotation the section exists to show was frequently not running at all.
+- **Consequences**: §15's "Desktop hover: pauses rotation" is amended. Keyboard focus is now the only full pause, which is what the section owes an auto-updating region and what the grid's own label already promises; that behaviour and its label are load-bearing and must not be removed with it. A held slot defers its queued sector by one slot rather than dropping it, so the cycle still shows all six. Because the lift now marks one card, it says "this card is held" rather than "the grid has stopped", which is the truth.
+- **Status**: Active
+
+---
+
+### DEC-039 - The opening blink is slower and runs on a near-sine curve
+
+- **Date**: 2026-08-21
+- **Decision**: The double blink runs for 2.4s rather than 1.7s, on `cubic-bezier(0.45, 0.05, 0.55, 0.95)` rather than `--eio`. The shape is unchanged: two dips to 25%, a breath between them, the tagline static throughout. This amends DEC-031's duration and easing only.
+- **Reason**: The owner asked for the blink alone to be slower and smoother, everything else in the opening being right. Two things made it read as a switch rather than an eye: `--eio` is a toggle/drawer curve that spends most of a segment moving fast, and at 1.7s each blink lasted about 610ms - below the 0.8-1.0s §11a itself asks for. At 2.4s each blink is about 910ms, back inside that range.
+- **Consequences**: `HERO_LOADER_DURATIONS.signature` and the C§ animation duration must stay equal; they are the same number in two places by necessity, and a change to one is a bug without the other. The whole opening lengthens from about 4.1s to about 4.8s, which every Playwright spec that loads `/` now waits through. Reduced motion is unaffected - it never plays the blink.
+- **Status**: Active
+
+---
+
 ## Decision index
 
 | ID | Topic | Status |
@@ -444,5 +474,8 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-032 | Why Assetly and Sectors resolve inside one viewport | Active |
 | DEC-033 | Contact map uses real OpenStreetMap geography | Active |
 | DEC-034 | Compare focus holds a locked band before transitioning | Active |
-| DEC-035 | Slide 01's left half is the mirrored reference crane | Active |
+| DEC-035 | Slide 01's left half is the mirrored reference crane | Superseded by DEC-037 |
 | DEC-036 | Nothing holding a parked panel may be a scroll container | Active |
+| DEC-037 | The reference crane belongs to the Hero plate | Active |
+| DEC-038 | Hovering a sector card holds that card, not the grid | Active |
+| DEC-039 | The opening blink is slower and runs on a near-sine curve | Active |

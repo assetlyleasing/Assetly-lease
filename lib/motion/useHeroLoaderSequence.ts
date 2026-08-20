@@ -16,7 +16,13 @@ export type HeroLoaderPhase =
 
 export const HERO_LOADER_DURATIONS = {
   prepare: 150,
-  signature: 1700,
+  /*
+   * The same number as `loaderDoubleBlink`'s duration in `Hero.module.css`, and
+   * it has to be: this timer is what ends the phase the animation is playing
+   * in. Changing one without the other either cuts the second blink off or
+   * leaves the mark sitting still on a finished animation (DEC-039).
+   */
+  signature: 2400,
   recede: 650,
   settle: 850,
   hold: 320,
