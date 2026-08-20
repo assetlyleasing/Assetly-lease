@@ -19,6 +19,13 @@ const launchOptions = executablePath ? { executablePath } : undefined;
  */
 export default defineConfig({
   testDir: "./tests/e2e",
+  /*
+   * Playwright's default is 30s. Since Phase 8.5 every load of `/` plays the
+   * ~4.8s opening before a spec can touch the page, and the specs that check
+   * one thing across several viewport sizes navigate three or four times, so
+   * the default no longer covers a passing test.
+   */
+  timeout: 75_000,
   fullyParallel: true,
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 2 : 0,

@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./support/opening";
 
 /**
  * FOUND-009: the foundation must render correctly from 320px to 1920px.

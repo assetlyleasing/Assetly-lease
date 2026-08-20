@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./support/opening";
 
 /**
  * Phase 0 smoke test (MASTER_PLAN.md Phase 0, "Tests"): the root route responds

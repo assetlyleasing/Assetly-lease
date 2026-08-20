@@ -1,4 +1,6 @@
-import { expect, test, type Page } from "@playwright/test";
+import { type Page } from "@playwright/test";
+
+import { expect, test } from "./support/opening";
 
 const SECTION = "#contact";
 const PANEL = "#contact-panel";

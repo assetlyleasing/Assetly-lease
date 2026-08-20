@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./support/opening";
 
 /**
  * Phase 2 — Hero and plate system (§11).

@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./support/opening";
 
 const BODY =
   "Assetly helps businesses access the assets they need through structured operating leases, with a focus on preserving working capital, reducing ownership risk, and maintaining financial flexibility. Its approach combines tailored structuring, fast turnaround, multi-sector expertise, and strong funding partners.";

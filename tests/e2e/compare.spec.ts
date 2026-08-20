@@ -1,4 +1,6 @@
-import { expect, test, type Page } from "@playwright/test";
+import { type Page } from "@playwright/test";
+
+import { expect, test } from "./support/opening";
 
 /**
  * Phase 4 — the Compare experience (§13).
