@@ -34,3 +34,9 @@ next-env.d.ts
 .DS_Store
 Thumbs.db
 *.log
+
+# vercel
+.vercel
+
+# certificates
+*.pem

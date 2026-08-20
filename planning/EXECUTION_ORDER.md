@@ -8,15 +8,15 @@ Update this file at the end of every cycle per `LOOP.md` step 6. Do not skip ahe
 
 ## Phase 0 — Foundation
 
-- [ ] `FOUND-001` Scaffold Next.js App Router + TypeScript project, no Tailwind
-- [ ] `FOUND-002` Add `styles/tokens.css` (colors §6, fonts §7, easing §8, spacing §9)
-- [ ] `FOUND-003` Global reset + base typography in `app/globals.css`; load fonts via `next/font/google`
-- [ ] `FOUND-004` Establish folder structure (`app/(site)/`, `app/admin/`, `components/`, `lib/`, `content/`)
-- [ ] `FOUND-005` Create/configure Firebase project(s); resolve `OD-05` (env split, project IDs)
-- [ ] `FOUND-006` Wire `lib/firebase/client.ts` + `.env.local` (gitignored) — init only, no consumers yet
-- [ ] `FOUND-007` Configure Vitest + Playwright with smoke tests
-- [ ] `FOUND-008` Archive static prototype HTML files into `reference/`, remove from build output
-- [ ] `FOUND-009` Verify: `next build` passes, lint/typecheck clean, blank page renders tokens/fonts correctly 320px–1920px
+- [x] `FOUND-001` Scaffold Next.js App Router + TypeScript project, no Tailwind
+- [x] `FOUND-002` Add `styles/tokens.css` (colors §6, fonts §7, easing §8, spacing §9)
+- [x] `FOUND-003` Global reset + base typography in `app/globals.css`; load fonts via `next/font/google` — code complete; the Google Fonts fetch itself is unverified, see `FOUND-009` and `DECISIONS.md` DEC-015
+- [x] `FOUND-004` Establish folder structure (`app/(site)/`, `app/admin/`, `components/`, `lib/`, `content/`)
+- [!] `FOUND-005` Create/configure Firebase project(s); resolve `OD-05` (env split, project IDs) — **blocked on `OD-05`**: creating the project needs Assetly Firebase console access. Deliberately deferred to Phase 3 / Phase 11 per `DECISIONS.md` DEC-014, which `MASTER_PLAN.md`'s Phase 0 exit criteria explicitly permit. Blocks `TRUST-001`–`TRUST-004` and `DEPLOY-001`; blocks nothing in Phase 1 or Phase 2
+- [x] `FOUND-006` Wire `lib/firebase/client.ts` + `.env.local` (gitignored) — init only, no consumers yet — `client.ts` and `admin.ts` read from env vars and stay uninitialised when the environment is incomplete; `.env.local.example` is committed, and the real `.env.local` waits on `OD-05`
+- [x] `FOUND-007` Configure Vitest + Playwright with smoke tests
+- [x] `FOUND-008` Archive static prototype HTML files into `reference/`, remove from build output — **closed as not applicable**: no `.html` file exists in the working tree or anywhere in git history. Nothing to archive; no `reference/` folder created. See `DECISIONS.md` DEC-016
+- [~] `FOUND-009` Verify: `next build` passes, lint/typecheck clean, blank page renders tokens/fonts correctly 320px–1920px — lint, typecheck, 3 unit tests and 14 Playwright tests (320px–1920px) all pass, and `next build` succeeds on every route. The **only** unverified item is the `next/font/google` download, which the build environment's egress proxy blocks; re-run `npm run build` on a networked machine to close this out (`DECISIONS.md` DEC-015)
 
 ## Phase 1 — Shared site shell
 

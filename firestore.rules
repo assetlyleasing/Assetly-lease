@@ -1,0 +1,21 @@
+rules_version = '2';
+
+// Assetly — Firestore security rules.
+//
+// SKELETON ONLY. Phase 0 ships a deny-by-default baseline so that an
+// accidentally-deployed project is closed rather than open. The real rules are
+// written in Phase 3 (TRUST-004) against the schema in SOURCE_OF_TRUTH.md §18:
+//
+//   siteSections/trustedBy       public read; write restricted to admin UIDs
+//   trustedLogos/{logoId}        public read where active == true;
+//                                write restricted to admin UIDs
+//
+// Do not relax anything here without also updating §18 and DECISIONS.md.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

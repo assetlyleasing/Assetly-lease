@@ -1,0 +1,96 @@
+/*
+ * Assetly design tokens.
+ *
+ * Transcribed from planning/SOURCE_OF_TRUTH.md:
+ *   §6 colour tokens, §7 typography, §8 motion principles, §9 responsive principles.
+ *
+ * This file is the single source of design primitives for the site. Components
+ * consume these custom properties through their own CSS Modules (DEC-009) and
+ * must not hard-code colour, easing, or spacing values.
+ *
+ * Do not add a token here that is not backed by an approved decision in
+ * SOURCE_OF_TRUTH.md. `--soot: #1D1D14` exists in the old prototype as an
+ * unused reserve and is deliberately omitted per §6.
+ */
+
+:root {
+  /* ---- §6 Colour -------------------------------------------------------- */
+
+  --paper: #f6f4ec; /* page base — warm, never white */
+  --field: #e7e2ce; /* recessed/contrast panels: calculator, map, card backs */
+  --ink: #26261b; /* primary text */
+  --olive: #40402d; /* brand marks, plate strokes, icon fills on light surfaces */
+  --moss: #5c5c46; /* italic emphasis words, eyebrows, secondary labels */
+  --line: rgba(38, 38, 27, 0.15); /* hairline borders and dividers */
+  --bottle: #25453a; /* THE interactive accent — CTAs, active states, hover underlines */
+  --pitch: #21241a; /* dark surface — scrolled nav background, footer background */
+  --khaki: #b1ad77; /* secondary text and underlines on dark surfaces */
+  --ivory: #e7e3d4; /* logo/wordmark text on dark surfaces */
+
+  /* ---- §7 Typography ---------------------------------------------------- */
+
+  /*
+   * Font families are supplied by next/font/google in app/layout.tsx, which
+   * exposes each one as a CSS variable on <html>. The in-var fallback keeps the
+   * family chain valid even if that variable is missing entirely, so a font
+   * failure degrades to Georgia / system-ui rather than collapsing the whole
+   * declaration.
+   */
+  --d: var(--font-dm-serif-display, "DM Serif Display"), Georgia, serif; /* headlines, numerals, indices */
+  --s: var(--font-dm-serif-text, "DM Serif Text"), Georgia, serif; /* body copy, supporting paragraphs, italics */
+  --u: var(--font-inter-tight, "Inter Tight"), system-ui, sans-serif; /* all UI chrome */
+
+  /* UI "label" voice — small, uppercase, wide tracking (§7). */
+  --u-size: clamp(9px, 0.72vw, 11px);
+  --u-track-tight: 0.17em;
+  --u-track-wide: 0.26em;
+
+  /*
+   * Base body copy. §7 fixes the font families and the UI label voice but does
+   * not specify a base body size, so these are implementation defaults for the
+   * document root only. Every section that specifies its own scale (e.g. the
+   * Hero subline, §11) overrides them locally rather than changing these.
+   */
+  --body-size: clamp(15px, 1.15vw, 17px);
+  --body-leading: 1.62;
+
+  /* ---- §8 Motion -------------------------------------------------------- */
+
+  --e: cubic-bezier(0.22, 1, 0.36, 1); /* entrances — fast start, soft settle */
+  --eio: cubic-bezier(0.65, 0, 0.35, 1); /* toggles, hovers, drawers — symmetric ease-in-out */
+
+  /* Durations used by the shared motion primitives (§8). */
+  --dur-mask: 1.25s; /* line-mask text reveal */
+  --dur-fade: 1.1s; /* simple fade-in */
+  --dur-reveal: 1s; /* scroll-triggered reveal */
+  --dur-settle: 1.7s; /* hero mark settle */
+  --dur-draw: 2.6s; /* plate stroke draw */
+  --dur-toggle: 0.7s; /* nav scroll transition, drawer and hover toggles */
+  --dur-reduced: 0.12s; /* clamp applied under prefers-reduced-motion */
+
+  /* Reveal stagger steps (.d1/.d2/.d3). */
+  --stagger-1: 0.12s;
+  --stagger-2: 0.24s;
+  --stagger-3: 0.36s;
+
+  /* ---- §9 Space and rhythm ---------------------------------------------- */
+
+  --gutter: clamp(20px, 5vw, 60px); /* horizontal page gutter */
+  --section-pad: clamp(56px, 11vh, 120px); /* section vertical padding */
+  --slide-pad: clamp(50px, 9vh, 90px); /* argument-slide vertical padding */
+  /*
+   * §9 gives card padding as a range — clamp(22–28px, 3–4vh, 32–48px). It is
+   * split into the two concrete ends of that range rather than picking one
+   * midpoint, so a section can choose the compact or the roomy card.
+   */
+  --card-pad: clamp(22px, 3vh, 32px);
+  --card-pad-lg: clamp(28px, 4vh, 48px);
+  --gap-heading: 18px; /* heading-to-body gap, tight */
+  --gap-heading-lg: clamp(26px, 4.4vh, 44px); /* heading-to-body gap, large jumps */
+  --marquee-gap: clamp(40px, 6vw, 90px); /* Trusted By logo spacing (§12) */
+
+  --hairline: 1px solid var(--line); /* every border in the ledger-line grid system */
+
+  /* Minimum effective touch target (§20). */
+  --touch-min: 44px;
+}

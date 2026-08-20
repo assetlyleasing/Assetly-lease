@@ -1,0 +1,16 @@
+rules_version = '2';
+
+// Assetly — Cloud Storage security rules.
+//
+// SKELETON ONLY. Deny-by-default until Phase 3 (TRUST-004) writes the real
+// rules: public read of the Trusted By logo objects, writes restricted to
+// authenticated admin UIDs, with the upload constraints validated in
+// lib/validation/logoUpload.ts (SVG/PNG/WebP, <= 2MB).
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

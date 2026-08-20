@@ -160,6 +160,41 @@ Every important technical or product decision, including conflict resolutions fo
 
 ---
 
+### DEC-014 — Phase 0 exits with the Firebase project deferred; the SDK is wired from environment variables only
+
+- **Date**: 2026-08-20
+- **Decision**: Phase 0 ships `lib/firebase/client.ts` and `lib/firebase/admin.ts` configured entirely from environment variables, with a committed `.env.local.example` listing every required key and **no** real `.env.local` and **no** Firebase project. `OD-05` (project ID, dev/staging/production split, custom domain) stays open and moves to Phase 3 (which is the first phase that actually reads from Firebase) and Phase 11 (deployment). Both modules are lazy and return `null` when the environment is incomplete, so an unconfigured project cannot throw at import time or during a build.
+- **Reason**: Creating the Firebase project needs console access to the Assetly account, which the implementing agent does not have. `MASTER_PLAN.md`'s Phase 0 exit criteria explicitly allow this path — "OD-05 resolved (or explicitly deferred with a stub project for local dev only, documented in `PROGRESS.md`)" — and nothing else in Phase 0, Phase 1, or Phase 2 depends on a live project.
+- **Alternatives considered**: (a) Blocking Phase 0 until the project exists. (b) Creating a throwaway personal Firebase project as a stub.
+- **Why rejected**: (a) would idle Phases 1 and 2, which have no Firebase dependency at all, behind an account-access problem. (b) would put a credential and a project ID into the repository's history that nobody intends to keep, and would have to be migrated and revoked later — worse than having no project.
+- **Consequences**: `isFirebaseConfigured()` / `isFirebaseAdminConfigured()` are the contract: every caller must treat the accessors as nullable and degrade rather than assert. This suits §12/§18/§21, which already require Trusted By to fail silently. `TRUST-001` through `TRUST-004` cannot start until `OD-05` and `OD-06` are resolved. `firestore.rules` and `storage.rules` ship deny-by-default so that an accidentally-created project is closed rather than open.
+- **Status**: Active
+
+---
+
+### DEC-015 — PROPOSED: self-host the three brand fonts via `next/font/local` if Google Fonts is unreachable at build time
+
+- **Date**: 2026-08-20
+- **Status**: **Proposed — not applied. Needs confirmation before any code changes.**
+- **Problem**: `app/layout.tsx` loads DM Serif Display, DM Serif Text, and Inter Tight through `next/font/google` per §7 and `MASTER_PLAN.md` Phase 0 task 4. `next/font/google` downloads the font files from `fonts.googleapis.com` / `fonts.gstatic.com` **at build time**. In the sandboxed environment Phase 0 was built in, both hosts are blocked at the egress proxy (`CONNECT tunnel failed, 403`), so `next build` fails with three `Failed to fetch <font> from Google Fonts` errors and nothing else. Type-checking and linting pass unaffected.
+- **Proposal**: If, and only if, the build also fails on a machine with normal internet access, vendor the three families as `.woff2` files (for example from the `@fontsource` packages on npm, which the same environment can reach) and load them with `next/font/local`, keeping the same `--font-dm-serif-display` / `--font-dm-serif-text` / `--font-inter-tight` variable names so `styles/tokens.css` and every consuming component stay untouched.
+- **Alternatives considered**: Setting `HTTP_PROXY`/`HTTPS_PROXY` so Next.js can reach Google Fonts; loading the fonts with a plain `<link>` to the Google Fonts CSS instead of `next/font`.
+- **Trade-offs**: Self-hosting removes a third-party build-time dependency and a runtime origin, and is generally better for privacy and for first paint (§21 makes Hero rendering the top performance priority). It costs roughly 200–400KB of committed binary assets and means font updates become a manual step. A plain `<link>` was not proposed because it gives up `next/font`'s automatic preloading and layout-shift protection, which §20's layout-stability rule cares about.
+- **Why it is only a proposal**: The blockage may be specific to the sandbox rather than to the project. Silently swapping the font strategy would change an approved §7 implementation detail on the strength of one environment's network policy. Confirm the failure reproduces on a real development machine first.
+- **Next step**: Run `npm run build` on a networked machine. If it succeeds, close this entry as `Withdrawn`. If it fails identically, apply the proposal and move this entry to `Active`.
+
+---
+
+### DEC-016 — `FOUND-008` (archive the static HTML prototypes) closed as not applicable
+
+- **Date**: 2026-08-20
+- **Decision**: `FOUND-008` is closed without archiving anything. No `reference/` folder is created.
+- **Reason**: The prototypes the task refers to (`home-2.html`, `index.html`, `assetly-home.html`, `1-residual.html`, `2-duty-cycle.html`, `3-white-paper.html`, `4-position.html`, `previews.html`) are not in the working tree, and `git log --all --diff-filter=A` confirms no `.html` file has ever been committed to this repository. `assests/` holds `plan.md`, `DESIGN_SYSTEM.md`, the visiting-card PDF, a one-page PPTX, and the raster/PSD logo files — no HTML. There is nothing to archive or exclude from the build.
+- **Consequences**: `DEC-008` still stands as the record of *why* the site is Next.js rather than static HTML, and `DESIGN_SYSTEM.md` remains the surviving second-hand description of the `home-2.html` prototype's tokens, motion primitives, and patterns — it is now the only reference to that prototype's behaviour. If the original HTML files turn up outside the repository, adding them under `reference/` later is still worthwhile for the motion detail `DESIGN_SYSTEM.md` only summarises; that would be a new task, not a reopening of this one.
+- **Status**: Active
+
+---
+
 ## Decision index
 
 | ID | Topic | Status |
@@ -177,3 +212,6 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-011 | Firestore scoped to Trusted By only | Active |
 | DEC-012 | Gmail compose + mailto over backend email | Active |
 | DEC-013 | Hero brand-signature loader replaces old Hero entry; built as Phase 8.5 | Active |
+| DEC-014 | Phase 0 exits with Firebase deferred; SDK wired from env vars only | Active |
+| DEC-015 | Self-host brand fonts via `next/font/local` if Google Fonts is unreachable | **Proposed** |
+| DEC-016 | `FOUND-008` prototype archival closed as not applicable | Active |
