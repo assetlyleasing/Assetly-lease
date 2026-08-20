@@ -446,6 +446,27 @@ Every important technical or product decision, including conflict resolutions fo
 
 ---
 
+### DEC-041 - Sectors composes against a height budget, not a cell minimum
+
+- **Date**: 2026-08-21
+- **Decision**: On desktop the section is a defined composition area: the nav is cleared, one gap above and one below are declared, the header takes what it needs, and the grid claims everything that is left. `.cell`'s `min-height` drops from `clamp(202px, 27vh, 262px)` to `clamp(164px, 21vh, 214px)` and becomes a floor for windows too short for the composition rather than the thing deciding the grid's height. The section passes its own classes to the shared `Container` and `RevealOnScroll` so the height reaches the grid through them. Mobile keeps its existing centred composition and fixed cells unchanged.
+- **Reason**: DEC-032 made the section measure exactly one viewport, which it did - but the grid asked for a height of its own and the leftover was centred, so on short laptop ratios a dead band sat under the second row while the row above it was tighter than it needed to be. The section fitted without resolving: nothing was clipped, yet the composition did not use the screen it had claimed.
+- **Consequences**: At 1440x900 / 1280x800 / 1024x768 the second row's bottom border now lands on the section's bottom padding - 871/900, 774/800, 743/768 - and cells grow from 297/267/243px to 328/287/277px. Because the grid takes the leftover height, a change to the heading's type or the section's padding moves straight into the cells rather than into a gap. `.cell`'s minimum is now a floor: a window too short for the composition grows the section instead of clipping it, which is the same rule DEC-032 relies on. Mobile is measurably unchanged - same cell heights, same centring, same padding.
+- **Status**: Active
+
+---
+
+### DEC-042 - The focus lock is half a screen, so no resting position is blank
+
+- **Date**: 2026-08-21
+- **Decision**: The locked band widens to 0.5 viewport heights on both desktop and mobile. The transition is otherwise unchanged - `FOCUS_FULL` stays 0.86, `FOCUS_SWITCH_MARGIN` stays 0.08. The slide becomes exactly one screen on desktop (`100svh`, from `104svh`), and the mobile foot reserves the sheet's own height plus one small gap through a shared `--compare-sheet-h`. No scroll snapping. Amends DEC-034, which stands in principle.
+- **Reason**: Slides are one screen tall, so the two nearest a reader always sit at distances summing to 1 and the nearer is never further than 0.5 away. A band of 0.5 is therefore exactly the band that leaves some argument settled at every scroll position there is. That property is the requirement: a reader stops where they stop, and with a narrower band, stopping between two arguments left both faded and blurred and neither readable - a state the section has no meaning in and one a reader can sit in indefinitely. Measured before the change, four of eight resting positions inside the section had no fully sharp argument; after, none.
+- **Consequences**: §13's effect is intact - settle on an argument and its neighbour a screen away is still at 0.28 opacity and blurred - but the fade can no longer be rested inside. `FOCUS_LOCK_MOBILE` and `FOCUS_LOCK_DESKTOP` now hold the same value, because 0.5 is the widest band that means anything and a phone cannot be given a better guarantee than a laptop; they stay separate exports because they are separate decisions that presently agree. Every slide is exactly one viewport at all six checked sizes, and the mobile foot exceeds the sheet by 14-20px rather than 93. The sheet's height and the slide's reserve are one declaration and cannot drift apart again.
+- **Rejected**: C§ scroll snapping, in both strengths, on measurement. `mandatory` is unusable here: with targets a full screen apart, any gesture shorter than half a screen is undone and returned to where it started - the page did not advance past the first argument in thirty-four consecutive wheel gestures - and past the last argument there is no target ahead, so the section would not release the reader at all. Giving the following section a target only moves that trap one section down. `proximity` does not trap, but it does not deliver the guarantee either, and it collided with something already true of this page: §10's `[id] { scroll-margin-top: var(--nav-block) }`, which exists so anchor links clear the fixed nav, enlarges an id'd element's snap area at the top, so centring that area put the section half a nav-height low and left the calculator at 0.952 openness where the first argument is read. Snapping is not the mechanism this needs; the band is.
+- **Status**: Active
+
+---
+
 ## Decision index
 
 | ID | Topic | Status |
@@ -490,3 +511,5 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-038 | Hovering a sector card holds that card, not the grid | Active |
 | DEC-039 | The opening blink is slower and runs on a near-sine curve | Active |
 | DEC-040 | Hero plate frames the copy; combined Access/Grow is the approved phone mode | Active |
+| DEC-041 | Sectors composes against a height budget, not a cell minimum | Active |
+| DEC-042 | Focus lock is half a screen; no resting position is blank | Active |

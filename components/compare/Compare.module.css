@@ -62,12 +62,6 @@
   display: flex;
   align-items: center;
   padding-block: var(--slide-pad);
-  /*
-   * The four resting positions of the page (DEC-042). Centre, because that is
-   * where the focus curve is at rest too — a snapped slide is a slide at
-   * distance zero, which is exactly the sharp, unshifted state §13 describes.
-   */
-  scroll-snap-align: center;
 }
 
 .slideInner {
