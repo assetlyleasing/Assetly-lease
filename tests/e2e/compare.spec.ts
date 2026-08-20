@@ -10,6 +10,7 @@ import { expect, test, type Page } from "@playwright/test";
 
 const CALCULATOR = '[aria-controls="compare-calculator"]';
 const PANEL = "#compare-calculator";
+const GRAPH = `${PANEL} [data-compare-graph]`;
 
 const SLIDES = [
   {
@@ -17,24 +18,28 @@ const SLIDES = [
     headline: "Preserve capital. Keep your business moving.",
     title: "Upfront Cash",
     values: ["Low", "10–25% margin", "100% upfront"],
+    tiers: ["low", "mid", "high"],
   },
   {
     id: "obsolescence",
     headline: "Use the asset. Not the ownership risk.",
     title: "Risk of Obsolescence",
     values: ["Assetly bears it", "You bear it", "You bear it"],
+    tiers: ["low", "high", "high"],
   },
   {
     id: "tax-treatment",
     headline: "A simpler path to deduction.",
     title: "Tax Treatment",
     values: ["Full rental deductible", "Depreciation + interest", "Depreciation only"],
+    tiers: ["high", "mid", "low"],
   },
   {
     id: "leverage",
     headline: "Keep leverage light. Keep capacity available.",
     title: "Leverage Impact",
     values: ["Minimal", "Raises Debt/Equity", "Drains cash"],
+    tiers: ["low", "high", "high"],
   },
 ];
 
@@ -168,6 +173,12 @@ test.describe("compare — the calculator", () => {
         await expect(values.nth(column)).toHaveText(value);
       }
 
+      const fills = page.locator(`${GRAPH} [data-tier]`);
+      await expect(fills).toHaveCount(3);
+      for (const [column, tier] of slide.tiers.entries()) {
+        await expect(fills.nth(column)).toHaveAttribute("data-tier", tier);
+      }
+
       // The mode row reports the same argument.
       await expect(
         page.locator(`${PANEL} button[aria-pressed="true"]`),
@@ -176,6 +187,50 @@ test.describe("compare — the calculator", () => {
         page.locator(`${PANEL} button[aria-pressed="true"]`),
       ).toContainText(slide.title);
     }
+  });
+
+  test("keeps one graph mounted while its qualitative tiers transition", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    await centreSlide(page, 0);
+
+    await page.locator(GRAPH).evaluate((node) => {
+      (window as typeof window & { compareGraphNode?: Element }).compareGraphNode =
+        node;
+    });
+
+    await centreSlide(page, 2);
+    expect(
+      await page.evaluate(
+        () =>
+          (window as typeof window & { compareGraphNode?: Element })
+            .compareGraphNode === document.querySelector("[data-compare-graph]"),
+      ),
+    ).toBe(true);
+
+    const fills = page.locator(`${GRAPH} [data-tier]`);
+    await expect(fills.nth(0)).toHaveAttribute("data-tier", "high");
+    await expect(fills.nth(1)).toHaveAttribute("data-tier", "mid");
+    await expect(fills.nth(2)).toHaveAttribute("data-tier", "low");
+  });
+
+  test("renders a tall, slender, fully visible graph", async ({ page }) => {
+    await page.goto("/");
+    await centreSlide(page, 0);
+
+    const fill = (await page.locator(`${GRAPH} [data-tier]`).first().boundingBox())!;
+    const track = (await page
+      .locator(`${GRAPH} [data-tier]`)
+      .first()
+      .locator("xpath=..")
+      .boundingBox())!;
+
+    expect(track.height).toBeGreaterThanOrEqual(189);
+    expect(track.height).toBeLessThanOrEqual(271);
+    expect(fill.width).toBeGreaterThanOrEqual(43);
+    expect(fill.width).toBeLessThanOrEqual(45);
+    expect(fill.width).toBeLessThan(track.width * 0.6);
   });
 
   test("syncs backwards too, not only on the way down", async ({ page }) => {
@@ -475,6 +530,11 @@ test.describe("compare — reduced motion (§8)", () => {
     const tab = page.locator(CALCULATOR);
     await tab.click();
     await expect(tab).toHaveAttribute("aria-expanded", "false");
+
+    await expect(page.locator(`${GRAPH} [data-tier]`).first()).toHaveCSS(
+      "transition-duration",
+      "0s",
+    );
   });
 });
 

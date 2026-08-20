@@ -24,12 +24,9 @@ export function compareSlideDomId(slideId: string): string {
  * perspective", not four calculators — so the panel is a single stable frame
  * whose readings change, and only the readings animate on a context change.
  *
- * There are no bars, magnitudes or rate inputs here, though the prototype
- * DESIGN_SYSTEM §8 describes had all three. §13 gives each argument a row of
- * three qualitative outcomes and says of the second one, pointedly, "no
- * artificial percentage here" — so drawing a bar would mean inventing a height
- * the approved content does not contain. The Lease column is emphasised because
- * it is the argument being made, which is editorial, not a claim of magnitude.
+ * The three bars use approved qualitative tiers only. They are one persistent
+ * graph whose fills move as the focused slide changes; there are no prototype
+ * coefficients, computed figures, value inputs, or hidden numeric claims.
  */
 export function CalculatorPanel({
   slide,
@@ -77,26 +74,30 @@ export function CalculatorPanel({
         </div>
       </header>
 
-      {/*
-       * Keyed by slide, so React replaces the subtree and the entry animation
-       * plays again — §13's fade plus 4–8px of vertical movement on every
-       * context change. The heading is inside it because the reading and its
-       * name change together and should move together.
-       */}
-      <div className={styles.reading} key={slide.id}>
-        <h2 id={CALCULATOR_TITLE_ID} className={styles.title}>
-          {slide.title}
-        </h2>
+      <div className={styles.reading}>
+        <div className={styles.readingHeading} key={slide.id}>
+          <h2 id={CALCULATOR_TITLE_ID} className={styles.title}>
+            {slide.title}
+          </h2>
+          <p className={styles.metric}>{slide.metricLabel}</p>
+        </div>
 
-        <dl className={styles.columns}>
+        <dl className={styles.graph} data-compare-graph>
           {slide.columns.map((column) => (
             <div
               key={column.label}
-              className={styles.column}
+              className={styles.bar}
               data-lead={column.lead ? "true" : "false"}
             >
+              <div className={styles.track} aria-hidden="true">
+                <span className={styles.fill} data-tier={column.tier} />
+              </div>
               <dt className={styles.columnLabel}>{column.label}</dt>
-              <dd className={styles.columnValue}>{column.value}</dd>
+              <dd className={styles.columnValue}>
+                <span className={styles.valueSwap} key={`${slide.id}-${column.label}`}>
+                  {column.value}
+                </span>
+              </dd>
             </div>
           ))}
         </dl>

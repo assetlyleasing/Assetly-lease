@@ -210,13 +210,14 @@ Referenced open decisions (`OD-xx`) and resolved conflicts (`DEC-xxx`) are defin
 1. Build `content/compare/slides.ts` with the exact 4 slides' copy/data from §13 (Upfront Cash, Risk of Obsolescence, Tax Treatment, Leverage Impact) — do not paraphrase the locked headlines/copy.
 2. Build `ArgumentSlide.tsx`: plate + index number + headline (DM Serif Display, one italic word) + supporting copy (DM Serif Text), min-height ~104svh on desktop.
 3. Implement `useScrollFocus`: single shared RAF loop computing each slide's distance from viewport center, driving opacity/blur/translateY so the on-screen slide is sharp and neighbors dim/blur (§13 left-content focus effect).
-4. Build `CalculatorDrawer.tsx`: desktop right-side drawer (`width: clamp(340px,44vw,640px)`, Field background), minimal chevron tab (no text, `›`/`‹`), 3-column bar/row display of the active slide's calculator data.
+4. Build `CalculatorDrawer.tsx`: desktop right-side drawer (`width: clamp(340px,44vw,640px)`, Field background), minimal chevron tab (no text, `›`/`‹`), and one persistent 3-column qualitative bar graph. The graph keeps its DOM frame while 30% / 60% / 92% `low` / `mid` / `high` tiers and approved outcome text transition with the active slide; it has no coefficients, computed figures, or value input (DEC-023).
 5. Implement `useDrawerOpenness`: continuous openness value from scroll position across the hero-bottom→value-grid-top zone with soft ~40vh easing bands; content reflow (`width: 100-openness*44%` on desktop argument slides); manual override on tab click (500ms cubic ease-out tween, silences auto-sync until re-triggered).
 6. Implement calculator mode auto-sync: whichever slide has focus (from `useScrollFocus`) sets the drawer's active data set; transition fade + 4–8px vertical movement, 700–900ms, `--e`.
 7. Implement per-slide plate draw-on-activation (reusing `Plate.tsx` from Phase 2), 2.6s.
 8. Build mobile variant: bottom sheet (34–42svh expanded, 42vh max), tiny centered triangle handle (`▼`/`▲`, ~44px touch target), stable height across slide changes (content settles → plate draws → values transition → height stays fixed — no repeated push up/down).
 9. Implement section entry (drawer hidden pre-Hero-exit, opens as Slide 01 approaches) and exit (drawer slides away approaching Why Us, narrative returns to full width).
-10. Author/source the 4 Compare plate artworks per §13's Lease/Loan/Purchase direction (**resolves OD-03** when complete).
+10. Build the approved 200×130 Compare plate set: adapt three argument plates from archived `reference/home-2.html` and author Tax Treatment's missing ledger-to-recurring-line drawing in the same drafting language (**resolves OD-03**; DEC-022).
+11. Archive `home-2.html` and `2-duty-cycle.html` under `reference/`, outside the build, superseding DEC-016's now-invalid premise (DEC-021).
 
 **Data/schema changes**: None (static content per DEC-011).
 
@@ -227,17 +228,17 @@ Referenced open decisions (`OD-xx`) and resolved conflicts (`DEC-xxx`) are defin
 **Accessibility requirements**: Drawer tab has `aria-expanded`/`aria-controls`; calculator mode is programmatically associated with the currently-focused slide for screen readers (e.g. `aria-live="polite"` region announcing mode changes, used sparingly to avoid noise); keyboard users can navigate slides via normal scroll/tab order without being trapped by the RAF focus effect; touch targets meet the 44px minimum on mobile drawer controls.
 
 **Tests**:
-- Vitest: `useDrawerOpenness` math (zone boundaries, easing bands, override behavior) unit-tested independent of DOM; slide-to-calculator-mode mapping logic.
-- Playwright: scrolling through all 4 slides updates calculator content correctly and in sync; manual drawer toggle works and persists (closed stays closed) until reopened; mobile bottom sheet maintains stable height across slide transitions; desktop drawer reflows content width correctly.
+- Vitest: `useDrawerOpenness` math (zone boundaries, easing bands, override behavior) unit-tested independent of DOM; slide-to-calculator-mode mapping and qualitative tier logic.
+- Playwright: scrolling through all 4 slides updates calculator content and bar tiers correctly while preserving one graph node; manual drawer toggle works and persists (closed stays closed) until reopened; mobile bottom sheet maintains stable height across slide transitions; desktop drawer reflows content width correctly.
 - Responsive: full pass at mobile/tablet/laptop/desktop.
 - Performance: RAF loop doesn't cause dropped frames/jank during scroll (profile during test).
 - Reduced motion: openness/focus/plate animations collapse appropriately, drawer still functionally usable.
 
 **Exit criteria**: All 4 slides display correct locked copy/data; calculator auto-syncs correctly on scroll and supports manual override; mobile bottom sheet is stable (no layout jump); plates draw meaningfully; reduced-motion fallback confirmed; no dropped-frame regressions in profiling.
 
-**Risks**: This is the highest-complexity phase — RAF-driven scroll math is easy to get subtly wrong (drawer opening at the wrong scroll position, mode desync). Budget extra QA time. Plate artwork for Lease/Loan/Purchase (OD-03) is a real design deliverable, not incidental.
+**Risks**: This is the highest-complexity phase — RAF-driven scroll math is easy to get subtly wrong (drawer opening at the wrong scroll position, mode desync). Budget extra QA time. Qualitative bars must never acquire prototype coefficients or be described as measured financial magnitudes.
 
-**Open decisions**: OD-03.
+**Open decisions**: OD-13 (disclaimer wording, if any; not a Phase 4 implementation blocker).
 
 ---
 

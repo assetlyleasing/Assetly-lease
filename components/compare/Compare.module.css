@@ -68,8 +68,8 @@
 /* ---- Plate -------------------------------------------------------------- */
 
 .plateWrap {
-  width: clamp(104px, 13vw, 168px);
-  aspect-ratio: 4 / 3;
+  width: clamp(120px, 15vw, 190px);
+  aspect-ratio: 20 / 13;
   margin-bottom: clamp(20px, 3.4vh, 34px);
 }
 
@@ -133,7 +133,7 @@
   }
 
   .plateWrap {
-    width: clamp(96px, 30vw, 132px);
+    width: clamp(108px, 34vw, 148px);
   }
 }
 

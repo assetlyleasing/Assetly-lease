@@ -52,6 +52,20 @@ const TITLES = [
   "Leverage Impact",
 ];
 
+const METRICS = [
+  "Upfront requirement — lower is lighter",
+  "Customer ownership risk — lower is lighter",
+  "Deduction breadth — higher is broader",
+  "Capacity pressure — lower is lighter",
+];
+
+const TIERS = [
+  ["low", "mid", "high"],
+  ["low", "high", "high"],
+  ["high", "mid", "low"],
+  ["low", "high", "high"],
+];
+
 describe("Compare content (§13)", () => {
   it("has exactly the four arguments §13 defines, in order", () => {
     expect(COMPARE_SLIDES).toHaveLength(4);
@@ -76,6 +90,21 @@ describe("Compare content (§13)", () => {
     expect(
       COMPARE_SLIDES.map((slide) => slide.columns.map((column) => column.value)),
     ).toEqual(COLUMNS);
+  });
+
+  it("maps the approved outcomes to qualitative tiers only", () => {
+    expect(COMPARE_SLIDES.map((slide) => slide.metricLabel)).toEqual(METRICS);
+    expect(
+      COMPARE_SLIDES.map((slide) => slide.columns.map((column) => column.tier)),
+    ).toEqual(TIERS);
+
+    COMPARE_SLIDES.forEach((slide) => {
+      slide.columns.forEach((column) => {
+        expect(Object.values(column).some((value) => typeof value === "number")).toBe(
+          false,
+        );
+      });
+    });
   });
 
   it("labels every reading Lease, Loan and Purchase in that order", () => {

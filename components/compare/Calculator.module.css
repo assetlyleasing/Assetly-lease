@@ -163,13 +163,8 @@
   border-bottom-color: var(--bottle);
 }
 
-/* ---- Reading ------------------------------------------------------------ */
+/* ---- Reading and qualitative graph ------------------------------------- */
 
-/*
- * §13's context transition: "fade + 4–8px vertical movement, 700–900ms,
- * cubic-bezier(.22,1,.36,1)". Replayed by React remounting this subtree under
- * a new key, so it fires on the change itself rather than on a timer.
- */
 @keyframes readingChange {
   from {
     opacity: 0;
@@ -182,31 +177,78 @@
 }
 
 .reading {
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+  gap: clamp(16px, 2.8vh, 26px);
+}
+
+.readingHeading,
+.valueSwap {
   animation: readingChange 800ms var(--e);
 }
 
 .title {
   font-size: clamp(24px, 2.4vw, 36px);
-  margin-bottom: clamp(20px, 3.2vh, 32px);
+  margin-bottom: 8px;
 }
 
-.columns {
+.metric {
+  font-family: var(--u);
+  font-size: var(--u-size);
+  line-height: 1.4;
+  letter-spacing: var(--u-track);
+  text-transform: uppercase;
+  color: var(--moss);
+}
+
+.graph {
+  width: 100%;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(14px, 2.4vw, 30px);
+  align-items: end;
+}
+
+.bar {
   display: flex;
+  min-width: 0;
   flex-direction: column;
-  border-top: var(--hairline);
+  align-items: center;
+  text-align: center;
 }
 
-/*
- * The ledger-line treatment §9 uses everywhere: shared hairlines, no gaps, no
- * floating cards.
- */
-.column {
+.track {
+  width: 100%;
+  height: clamp(190px, 30vh, 270px);
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 18px;
-  padding-block: clamp(12px, 2vh, 20px);
-  border-bottom: var(--hairline);
+  align-items: flex-end;
+  justify-content: center;
+  border-bottom: 1px solid rgba(38, 38, 27, 0.28);
+}
+
+.fill {
+  display: block;
+  width: 44px;
+  height: 100%;
+  background: var(--olive);
+  transform: scaleY(var(--tier-scale));
+  transform-origin: center bottom;
+  transition: transform 800ms var(--e);
+  will-change: transform;
+}
+
+.fill[data-tier="low"] {
+  --tier-scale: 0.3;
+}
+
+.fill[data-tier="mid"] {
+  --tier-scale: 0.6;
+}
+
+.fill[data-tier="high"] {
+  --tier-scale: 0.92;
 }
 
 .columnLabel {
@@ -216,15 +258,29 @@
   text-transform: uppercase;
   letter-spacing: var(--u-track-wide);
   color: var(--moss);
+  margin-top: 12px;
   white-space: nowrap;
 }
 
 .columnValue {
+  width: 100%;
+  min-width: 0;
   font-family: var(--d);
-  font-size: clamp(17px, 1.7vw, 25px);
+  font-size: clamp(15px, 1.45vw, 22px);
   line-height: 1.15;
-  text-align: right;
   color: var(--ink);
+  margin-top: 6px;
+  min-height: 2.3em;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.valueSwap {
+  display: block;
+  width: 100%;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
 }
 
 /*
@@ -233,8 +289,12 @@
  * editorial weight, not a claim about magnitude, which matters because §13
  * forbids inventing one ("no artificial percentage here").
  */
-.column[data-lead="true"] .columnLabel,
-.column[data-lead="true"] .columnValue {
+.bar[data-lead="true"] .fill {
+  background: var(--bottle);
+}
+
+.bar[data-lead="true"] .columnLabel,
+.bar[data-lead="true"] .columnValue {
   color: var(--bottle);
 }
 
@@ -244,16 +304,50 @@
   .panel {
     border-left: none;
     justify-content: flex-start;
-    gap: clamp(16px, 2.4vh, 24px);
-    padding: var(--card-pad);
+    gap: clamp(10px, 1.8vh, 16px);
+    padding: 14px 18px 10px;
+  }
+
+  .head {
+    gap: 10px;
+  }
+
+  .reading {
+    gap: 8px;
   }
 
   .title {
-    margin-bottom: clamp(12px, 2vh, 18px);
+    font-size: clamp(18px, 5.6vw, 22px);
+    margin-bottom: 3px;
+  }
+
+  .metric {
+    font-size: 8px;
+    line-height: 1.25;
+  }
+
+  .graph {
+    gap: clamp(8px, 3vw, 14px);
+  }
+
+  .track {
+    height: clamp(92px, 11svh, 108px);
+  }
+
+  .fill {
+    width: 28px;
+  }
+
+  .columnLabel {
+    font-size: 8px;
+    margin-top: 7px;
   }
 
   .columnValue {
-    font-size: clamp(16px, 4.4vw, 21px);
+    font-size: clamp(13px, 3.7vw, 16px);
+    line-height: 1.05;
+    margin-top: 3px;
+    min-height: 2.1em;
   }
 }
 
@@ -266,7 +360,13 @@
  * `computeOpenness`, so the panel arrives rather than slides.
  */
 @media (prefers-reduced-motion: reduce) {
-  .reading {
+  .readingHeading,
+  .valueSwap {
     animation: none;
+  }
+
+  .fill {
+    transition: none !important;
+    will-change: auto;
   }
 }

@@ -246,6 +246,36 @@ Every important technical or product decision, including conflict resolutions fo
 
 ---
 
+### DEC-021 — Archive the prototype HTML files that appeared after Phase 0
+
+- **Date**: 2026-08-20
+- **Decision**: `assests/home-2.html` and `assests/2-duty-cycle.html` are archived as `reference/home-2.html` and `reference/2-duty-cycle.html`. They remain non-build visual and motion references.
+- **Reason**: DEC-016 closed the archival task because no HTML files existed at that time. The two original prototypes later appeared untracked, and `home-2.html` became the approved source for the corrected Compare plate language.
+- **Consequences**: DEC-016's historical finding remains intact but its "nothing to archive" consequence is superseded. No prototype copy, business facts, or runtime code enters the Next.js application merely because the files are retained.
+- **Status**: Active; supersedes DEC-016
+
+---
+
+### DEC-022 — Compare plates use the archived prototype's compact drafting language
+
+- **Date**: 2026-08-20
+- **Decision**: The Compare plate set uses a common 200×130 viewBox. Upfront Cash adapts `home-2.html`'s building/capital drawing, Obsolescence adapts its asset/lifecycle drawing, and Leverage adapts its balance-scale drawing. Tax Treatment had no source plate and is authored as an uneven ledger resolving into one recurring line in the same thin-stroke vocabulary.
+- **Reason**: Direct project-owner instruction to replace the initial interpreted plates with the drawings used in the same narrative position in `home-2.html`, generating only the missing plate in that style.
+- **Consequences**: `OD-03` is resolved and removed from `SOURCE_OF_TRUTH.md` §25. The generic `Plate` component and draw behavior remain unchanged.
+- **Status**: Active
+
+---
+
+### DEC-023 — Compare uses qualitative tier bars, without prototype calculator math
+
+- **Date**: 2026-08-20
+- **Decision**: The calculator is one persistent three-column graph. Its fills transition between visual `low` / `mid` / `high` tiers mapped to 30% / 60% / 92%, while the approved qualitative outcomes stay visible. Fills are uniformly 44px wide on desktop and 28px on mobile. The prototype's coefficients, asset-value slider, currency calculations, and computed outputs remain excluded; the mode row still scrolls to the corresponding argument.
+- **Reason**: The project owner requested a visible transitioning graph but explicitly limited `home-2.html` derivation to the plates. Qualitative tiers express the approved ordering without presenting invented figures as business data.
+- **Consequences**: This supersedes only DEC-019's no-bars clause. DEC-019's no-magnitudes/no-value-input rule and single scroll source of truth stay active. Reduced motion snaps fills directly to their destination tier.
+- **Status**: Active; supersedes DEC-019 in part
+
+---
+
 ## Decision index
 
 | ID | Topic | Status |
@@ -265,8 +295,11 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-013 | Hero brand-signature loader replaces old Hero entry; built as Phase 8.5 | Active |
 | DEC-014 | Phase 0 exits with Firebase deferred; SDK wired from env vars only | Active |
 | DEC-015 | Self-host brand fonts via `next/font/local` if Google Fonts is unreachable | **Withdrawn** |
-| DEC-016 | `FOUND-008` prototype archival closed as not applicable | Active |
+| DEC-016 | `FOUND-008` prototype archival closed as not applicable | Superseded by DEC-021 |
 | DEC-017 | Nav wordmark = serif "assetly"; bar wider than the page gutter | Active |
 | DEC-018 | Hero main line = "The lighter balance sheet." (supersedes DEC-001's headline) | Active |
-| DEC-019 | Compare calculator: no bars/magnitudes/value input; mode row jumps | Active |
+| DEC-019 | Compare calculator: no bars/magnitudes/value input; mode row jumps | Superseded in part by DEC-023 |
 | DEC-020 | `--nav-block` is what sections clear, not `--nav-h` | Active |
+| DEC-021 | Archive the two prototype HTML references | Active |
+| DEC-022 | Compare plates use the archived prototype's drafting language | Active |
+| DEC-023 | Compare uses qualitative tier bars without prototype math | Active |

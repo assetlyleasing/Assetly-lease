@@ -251,13 +251,15 @@ Four-step scroll sequence, each a near-full-screen argument slide:
 
 **Color**: left narrative on Paper; calculator on Field; Bottle reserved for active controls/emphasis. Full token set per §6, plus `--line: rgba(38,38,27,.15)`.
 
-**Calculator behavior**: automatic and context-aware, tied to scroll position — not four separate calculators but "one analytical instrument changing perspective." Internal content transition on context change: fade + `4–8px` vertical movement, `700–900ms`, `cubic-bezier(.22,1,.36,1)`.
+**Calculator behavior**: automatic and context-aware, tied to scroll position — not four separate calculators but "one analytical instrument changing perspective." The visual is one persistent three-column bar graph whose Lease/Loan/Purchase fills transition between qualitative `low` / `mid` / `high` tiers as the focused argument changes. These tiers are presentation categories only, mapped to 30% / 60% / 92% height; they are not financial quantities. The approved outcome text remains visible beneath each bar. Internal text and bar transitions run for 800ms with `cubic-bezier(.22,1,.36,1)`. Reduced motion applies the destination tier immediately.
+
+**Qualitative tier mapping**: Upfront requirement (lower is lighter) = Lease Low / Loan Mid / Purchase High; Customer ownership risk (lower is lighter) = Lease Low / Loan High / Purchase High; Deduction breadth (higher is broader) = Lease High / Loan Mid / Purchase Low; Capacity pressure (lower is lighter) = Lease Low / Loan High / Purchase High. No prototype coefficients, currency calculations, asset-value slider, or numeric magnitudes are used.
 
 **Drawer control**: extremely minimal — small triangle/chevron on the drawer edge (~10–14px), no text, larger invisible hit area. Closed `›` / open `‹`. If the visitor manually closes it, it stays closed until reopened.
 
 **Openness model**: openness is a continuous 0–1 value (not boolean), recomputed every scroll frame relative to two measured zones (hero-bottom → value-grid-top) with a soft ~40vh easing band at each edge — a physically scrubbed panel, not a snap. Manual override (clicking the tab) sets an override flag and tweens to target over ~500ms cubic ease-out; auto-sync logic goes silent once overridden.
 
-**Plate animation**: each argument slide's plate draws once on activation, `stroke-dashoffset: 2200 → 0` over 2.6s, stays visible at the argument-slide opacity level. Plate artwork for Lease (flexible modular/open framework), Loan (constrained/layered stack), Purchase (solid closed block) — direction only, no SVG assets produced yet (`OPEN DECISION`, §25).
+**Plate animation**: each argument slide's plate draws once on activation, `stroke-dashoffset: 2200 → 0` over 2.6s, stays visible at the argument-slide opacity level. The approved 200×130 set adapts `reference/home-2.html`'s building/capital plate for Upfront Cash, asset/lifecycle plate for Obsolescence, and balance-scale plate for Leverage; Tax Treatment uses a matching ledger-to-recurring-line drawing authored in the same compact drafting language. All four are inline geometry rendered by the shared `Plate` component.
 
 **Left content focus effect**: active argument = fully opaque, sharp, aligned at rest; previous/next = slightly faded, subtly blurred, slightly displaced. One argument in focus per screen, driven by a single RAF loop computing distance-from-viewport-center.
 
@@ -517,7 +519,6 @@ Only **Privacy Policy** and **Terms of Use** are reserved (Footer links) for now
 |---|---|---|
 | OD-01 | Vector Assetly logo/wordmark lockup (SVG) not yet in the repo | Nav, Footer, Hero (Phase 1–2) |
 | OD-02 | Hero plate SVG artwork ("Access → Scale → Grow" line drawing) — direction defined, asset not produced | Phase 2 exit |
-| OD-03 | Compare argument-slide plate artwork ×4 (Lease/Loan/Purchase framing) — direction defined, assets not produced | Phase 4 exit |
 | OD-04 | Sector plate artwork ×6 — direction defined, assets not produced | Phase 6 exit |
 | OD-05 | Firebase project config: project ID, environment variables, staging vs. production project split, custom domain | Phase 0 exit, Phase 11 |
 | OD-06 | Admin authentication method (email/password vs. Google SSO) and the list of authorized admin accounts | Phase 3 |

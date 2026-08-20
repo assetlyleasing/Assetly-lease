@@ -38,6 +38,9 @@ export type HeadlineSegment = {
   emphasis?: boolean;
 };
 
+/** Qualitative presentation tiers only; never financial magnitudes. */
+export type CalculatorTier = "low" | "mid" | "high";
+
 /**
  * One column of the calculator's three-way comparison. `lead` marks the Lease
  * column, which §13 reserves the Bottle accent for — editorial emphasis on the
@@ -48,6 +51,8 @@ export type CalculatorColumn = {
   label: string;
   /** The outcome, set in DM Serif Display as a "key calculator outcome". */
   value: string;
+  /** Drives the graph's relative visual tier without asserting a number. */
+  tier: CalculatorTier;
   lead?: boolean;
 };
 
@@ -57,6 +62,8 @@ export type CompareSlide = {
   index: string;
   /** The calculator's mode name when this slide has focus. */
   title: string;
+  /** Names the qualitative comparison and makes its direction explicit. */
+  metricLabel: string;
   headline: readonly HeadlineSegment[];
   copy: string;
   plate: ComponentType;
@@ -68,6 +75,7 @@ export const COMPARE_SLIDES: readonly CompareSlide[] = [
     id: "upfront-cash",
     index: "01",
     title: "Upfront Cash",
+    metricLabel: "Upfront requirement — lower is lighter",
     headline: [
       { text: "Preserve " },
       { text: "capital", emphasis: true },
@@ -76,15 +84,16 @@ export const COMPARE_SLIDES: readonly CompareSlide[] = [
     copy: "Access needed assets without a large upfront outlay; operating lease preserves working capital; loan may require 10–25% margin; outright purchase requires 100% upfront.",
     plate: UpfrontCashPlate,
     columns: [
-      { label: "Lease", value: "Low", lead: true },
-      { label: "Loan", value: "10–25% margin" },
-      { label: "Purchase", value: "100% upfront" },
+      { label: "Lease", value: "Low", tier: "low", lead: true },
+      { label: "Loan", value: "10–25% margin", tier: "mid" },
+      { label: "Purchase", value: "100% upfront", tier: "high" },
     ],
   },
   {
     id: "obsolescence",
     index: "02",
     title: "Risk of Obsolescence",
+    metricLabel: "Customer ownership risk — lower is lighter",
     headline: [
       { text: "Use the " },
       { text: "asset", emphasis: true },
@@ -93,15 +102,16 @@ export const COMPARE_SLIDES: readonly CompareSlide[] = [
     copy: "Operating lease means Assetly bears resale/obsolescence risk; loan/purchase means the customer bears it.",
     plate: ObsolescencePlate,
     columns: [
-      { label: "Lease", value: "Assetly bears it", lead: true },
-      { label: "Loan", value: "You bear it" },
-      { label: "Purchase", value: "You bear it" },
+      { label: "Lease", value: "Assetly bears it", tier: "low", lead: true },
+      { label: "Loan", value: "You bear it", tier: "high" },
+      { label: "Purchase", value: "You bear it", tier: "high" },
     ],
   },
   {
     id: "tax-treatment",
     index: "03",
     title: "Tax Treatment",
+    metricLabel: "Deduction breadth — higher is broader",
     headline: [
       { text: "A " },
       { text: "simpler", emphasis: true },
@@ -110,15 +120,16 @@ export const COMPARE_SLIDES: readonly CompareSlide[] = [
     copy: "Full rentals deductible without depreciation block-rate limits or the 180-day usage restriction; GST input credit continues to apply.",
     plate: TaxTreatmentPlate,
     columns: [
-      { label: "Lease", value: "Full rental deductible", lead: true },
-      { label: "Loan", value: "Depreciation + interest" },
-      { label: "Purchase", value: "Depreciation only" },
+      { label: "Lease", value: "Full rental deductible", tier: "high", lead: true },
+      { label: "Loan", value: "Depreciation + interest", tier: "mid" },
+      { label: "Purchase", value: "Depreciation only", tier: "low" },
     ],
   },
   {
     id: "leverage",
     index: "04",
     title: "Leverage Impact",
+    metricLabel: "Capacity pressure — lower is lighter",
     headline: [
       { text: "Keep leverage " },
       { text: "light", emphasis: true },
@@ -127,9 +138,9 @@ export const COMPARE_SLIDES: readonly CompareSlide[] = [
     copy: "Preserves bank credit lines and collateral capacity, lighter impact on Debt/Equity and Debt/EBITDA vs. loan-funded acquisition.",
     plate: LeverageImpactPlate,
     columns: [
-      { label: "Lease", value: "Minimal", lead: true },
-      { label: "Loan", value: "Raises Debt/Equity" },
-      { label: "Purchase", value: "Drains cash" },
+      { label: "Lease", value: "Minimal", tier: "low", lead: true },
+      { label: "Loan", value: "Raises Debt/Equity", tier: "high" },
+      { label: "Purchase", value: "Drains cash", tier: "high" },
     ],
   },
 ] as const;

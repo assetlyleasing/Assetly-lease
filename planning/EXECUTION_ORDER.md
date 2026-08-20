@@ -15,7 +15,7 @@ Update this file at the end of every cycle per `LOOP.md` step 6. Do not skip ahe
 - [!] `FOUND-005` Create/configure Firebase project(s); resolve `OD-05` (env split, project IDs) — **blocked on `OD-05`**: creating the project needs Assetly Firebase console access. Deliberately deferred to Phase 3 / Phase 11 per `DECISIONS.md` DEC-014, which `MASTER_PLAN.md`'s Phase 0 exit criteria explicitly permit. Blocks `TRUST-001`–`TRUST-004` and `DEPLOY-001`; blocks nothing in Phase 1 or Phase 2
 - [x] `FOUND-006` Wire `lib/firebase/client.ts` + `.env.local` (gitignored) — init only, no consumers yet — `client.ts` and `admin.ts` read from env vars and stay uninitialised when the environment is incomplete; `.env.local.example` is committed, and the real `.env.local` waits on `OD-05`
 - [x] `FOUND-007` Configure Vitest + Playwright with smoke tests
-- [x] `FOUND-008` Archive static prototype HTML files into `reference/`, remove from build output — **closed as not applicable**: no `.html` file exists in the working tree or anywhere in git history. Nothing to archive; no `reference/` folder created. See `DECISIONS.md` DEC-016
+- [x] `FOUND-008` Archive static prototype HTML files into `reference/`, remove from build output — originally closed as not applicable under DEC-016; completed when two prototypes later appeared and were archived during the Compare correction (DEC-021)
 - [x] `FOUND-009` Verify: `next build` passes, lint/typecheck clean, blank page renders tokens/fonts correctly 320px–1920px — **closed 2026-08-20**. Re-run on a networked machine: `next build` passes on all routes *including* the three `next/font/google` downloads, lint and typecheck are clean, and the Playwright responsive sweep passes 320px–1920px. DEC-015's self-hosting proposal is unnecessary and is now **Withdrawn**
 
 ## Phase 1 — Shared site shell
@@ -63,15 +63,18 @@ Update this file at the end of every cycle per `LOOP.md` step 6. Do not skip ahe
 - [x] `COMPARE-001` Build `content/compare/slides.ts` with exact locked copy for all 4 slides — guarded by `tests/unit/compareCopy.test.ts`, which asserts the headlines, copy and all twelve readings verbatim
 - [x] `COMPARE-002` Build `ArgumentSlide.tsx`
 - [x] `COMPARE-003` Implement `useScrollFocus` (shared RAF distance-from-center effect) — pure curve in `lib/motion/scrollFocus.ts`
-- [x] `COMPARE-004` Build `CalculatorDrawer.tsx` desktop variant (chevron tab, Field panel, row display) — no bars or magnitudes, see `DECISIONS.md` DEC-019
+- [x] `COMPARE-004` Build `CalculatorDrawer.tsx` desktop variant (chevron tab, Field panel, persistent qualitative bar graph) — no numeric magnitudes, coefficients or value input; DEC-023 supersedes DEC-019's no-bars clause
 - [x] `COMPARE-005` Implement `useDrawerOpenness` (continuous scroll-scrubbed 0–1 value + manual override) — pure math in `lib/motion/drawerOpenness.ts`, unit-tested without a DOM
 - [x] `COMPARE-006` Implement calculator mode auto-sync + content transition (800ms) — plus a mode row that jumps rather than switching, so scroll position stays the only input (DEC-019)
 - [x] `COMPARE-007` Implement per-slide plate draw-on-activation (reuse `Plate.tsx`) — `Plate` reused unmodified, as Phase 2's exit criterion required
 - [x] `COMPARE-008` Build mobile bottom-sheet variant (stable height across slide changes) — height fixed in CSS and asserted pixel-exact across all four arguments
 - [x] `COMPARE-009` Implement section entry/exit (drawer hidden pre-Hero-exit, exits before Why Us)
-- [~] `COMPARE-010` Author/source 4 Compare plate artworks (Lease/Loan/Purchase direction) — artwork authored in-house and shipping (`content/plates/compare-plates.tsx`); `OD-03` stays **open** pending design review, since §13's direction was interpreted rather than supplied by a designer. Same standing as `HERO-002`
+- [x] `COMPARE-010` Author/source 4 Compare plate artworks — approved 200×130 set adapts three archived `home-2.html` drawings and adds a matching Tax Treatment plate; `OD-03` resolved (DEC-022)
 - [x] `COMPARE-011` Playwright: scroll-through sync correctness, manual override, mobile height stability — 30 Compare tests in `tests/e2e/compare.spec.ts`
 - [x] `COMPARE-012` Performance profile: RAF loop frame-rate check during scroll — median 19.1ms, p95 25.6ms, 1 frame of 190 over 32ms, none over 50ms (dev build, headless Chromium); guarded by a test
+- [x] `COMPARE-013` Archive `home-2.html` and `2-duty-cycle.html` under `reference/`; supersede DEC-016's missing-files premise
+- [x] `COMPARE-014` Replace the calculator rows with one persistent, transitioning three-bar graph driven by qualitative tiers only
+- [x] `COMPARE-015` Re-test copy, graph identity/tier sync, drawer and sheet behavior, reduced motion, responsive layout, performance, and desktop/mobile visuals
 
 ## Phase 5 — Why Us
 
