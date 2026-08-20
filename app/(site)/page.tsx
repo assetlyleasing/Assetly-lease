@@ -1,6 +1,6 @@
 import { CompareSection } from "@/components/compare/CompareSection";
 import { ContactSection } from "@/components/contact/ContactSection";
-import { Hero } from "@/components/hero/Hero";
+import { HeroOpening } from "@/components/hero/HeroOpening";
 import { SectorsSection } from "@/components/sectors/SectorsSection";
 import { WhyUsSection } from "@/components/why-us/WhyUsSection";
 
@@ -13,7 +13,7 @@ import { WhyUsSection } from "@/components/why-us/WhyUsSection";
 export default function HomePage() {
   return (
     <main>
-      <Hero />
+      <HeroOpening />
       <CompareSection />
       <WhyUsSection />
       <SectorsSection />

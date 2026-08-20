@@ -57,7 +57,7 @@ test.describe("hero", () => {
             if (!line) return null;
             return getComputedStyle(line).transform;
           }),
-        { timeout: 6000 },
+        { timeout: 9000 },
       )
       .toMatch(/^(none|matrix\(1, 0, 0, 1, 0, 0\))$/);
 
@@ -90,7 +90,7 @@ test.describe("hero", () => {
             if (!stroke) return null;
             return getComputedStyle(stroke).strokeDashoffset;
           }),
-        { timeout: 6000 },
+        { timeout: 9000 },
       )
       .toBe("0px");
   });

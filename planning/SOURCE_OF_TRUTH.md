@@ -190,11 +190,11 @@ Three-stage dynamic behavior:
 
 **3. Loader colors** — background Pitch `#21241A`; "A"/brand mark Ivory `#E7E3D4`; tagline Khaki `#B1AD77`. This is the same dark-surface token trio used by nav/footer (§6, §10, §17). Bottle Green `#25453A` is never used as the opening background — it stays reserved for interactive/active-state emphasis elsewhere.
 
-**4. Slow double blink** — only the "A" blinks; the tagline stays static throughout. Sequence: visible → dim → visible → pause → dim → visible. Each blink ~0.8–1.0s, dim floor ~20–30% opacity (never fully disappears), a slight pause between the two blinks. Calm and deliberate — must not read as a notification/loading indicator.
+**4. Slow double blink** — only the "A" blinks; the tagline stays static throughout. Sequence: visible → dim → visible → brief breath → dim → visible. The two dips share one continuous 1.7s eased curve, with a dim floor of 25% opacity (never fully disappears). The breath between them is deliberately short so the signature remains calm without reading as a stalled loading indicator (DEC-031).
 
 **5. "A" recedes** — after the second blink, the "A" slowly scales down and appears to move backward (a controlled camera pull-back). No morph, no mask expansion, no shape transformation, no additional graphic transition.
 
-**6. "A" settles into Hero** — the "A" moves toward its final Hero position on the central screen axis (not a shrink-in-place); it must read as "opening mark → final Hero composition." It stops completely before any further content appears.
+**6. "A" settles into Hero** — the "A" moves toward its final Hero position on the central screen axis (not a shrink-in-place); it must read as "opening mark → final Hero composition." It stops completely, holds there briefly, and does not move again when the Hero content appears (DEC-031).
 
 **7. Hero information reveal** — only after the "A" settles: (1) Hero proposition appears, (2) "ACCESS · SCALE · GROW" appears beneath it — soft opacity + tiny upward settle, restrained timing, no second major animation. Final Hero hierarchy: **A** / **"The lighter way to access what your business needs."** / **ACCESS · SCALE · GROW** (copy unchanged from DEC-001 unless a later decision changes it).
 

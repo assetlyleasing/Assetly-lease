@@ -127,15 +127,15 @@ Update this file at the end of every cycle per `LOOP.md` step 6. Do not skip ahe
 
 ## Phase 8.5 — Hero loader / opening sequence
 
-- [ ] `LOADER-001` Build `HeroLoader.tsx`: Pitch full-screen opening, centered "A" + "ACCESS · SCALE · GROW", no navbar/Hero/plate visible
-- [ ] `LOADER-002` Implement slow double blink on the "A" only (tagline stays static)
-- [ ] `LOADER-003` Implement recede (scale down + backward-move, no morph/mask/shape transform)
-- [ ] `LOADER-004` Implement settle into the Hero's final "A" position, stopping fully before further content
-- [ ] `LOADER-005` Wire hand-off: settle completion triggers Hero's proposition/tagline reveal + quiet plate appearance
-- [ ] `LOADER-006` Implement `prefers-reduced-motion` fallback (skip blink/recede, short subtle fade straight to final Hero state)
-- [ ] `LOADER-007` Decide + implement reload/back-navigation replay behavior; document choice in `PROGRESS.md`
-- [ ] `LOADER-008` Playwright: full §11a test list (colors/contrast, blink count, static tagline, no full disappear, visible movement to destination, settle-before-reveal, no navbar/plate competition during opening, no layout shift, mobile scale, reload/back-nav, reduced-motion)
-- [ ] `LOADER-009` Performance check on slow-device emulation
+- [x] `LOADER-001` Build `HeroLoader.tsx`: Pitch full-screen opening, centered "A" + "ACCESS · SCALE · GROW", no navbar/Hero/plate visible
+- [x] `LOADER-002` Implement slow double blink on the "A" only (tagline stays static)
+- [x] `LOADER-003` Implement recede (scale down + backward-move, no morph/mask/shape transform)
+- [x] `LOADER-004` Implement settle into the Hero's final "A" position, stopping fully before further content
+- [x] `LOADER-005` Wire hand-off: settle completion triggers Hero's proposition/tagline reveal + quiet plate appearance
+- [x] `LOADER-006` Implement `prefers-reduced-motion` fallback (skip blink/recede, short subtle fade straight to final Hero state)
+- [x] `LOADER-007` Decide + implement reload/back-navigation replay behavior; document choice in `PROGRESS.md`
+- [x] `LOADER-008` Playwright: full §11a test list (colors/contrast, blink count, static tagline, no full disappear, visible movement to destination, settle-before-reveal, no navbar/plate competition during opening, no layout shift, mobile scale, reload/back-nav, reduced-motion)
+- [x] `LOADER-009` Performance check on slow-device emulation
 
 ## Phase 9 — Legal / basic SEO
 

@@ -346,6 +346,16 @@ Every important technical or product decision, including conflict resolutions fo
 
 ---
 
+### DEC-031 — The Hero opening is document-scoped and holds after a continuous double blink
+
+- **Date**: 2026-08-20
+- **Decision**: The opening plays on every full document load of `/`, never on `/about`, and never when client-side navigation returns to `/` within an already-loaded document. A module-scope flag records completion without storage. The two opacity dips use one continuous 1.7s eased curve with a short breath between them. Recede runs for 650ms, settle for 850ms, the landed mark holds completely still for 320ms, and the overlay clears over 420ms without starting another mark transition.
+- **Reason**: The project owner fixed the replay rule, then approved the branch preview and asked for the whole sequence to feel smoother and slightly quicker. The earlier pause read as a stoppage, and any movement after the mark sat down made the hand-off feel abrupt.
+- **Consequences**: This supersedes §11a point 4's approximate per-blink timing but retains its exact two dips, 20–30% dim floor, static tagline and calm character. The mark is one persistent DOM node through opening and Hero, and the old Phase 2 mark entrance is suppressed after the loader so the landed position remains stable. Reduced motion still skips blink, recede and settle entirely.
+- **Status**: Active
+
+---
+
 ### DEC-032 - Why Assetly and Sectors are composed to resolve inside one viewport
 
 - **Date**: 2026-08-20
@@ -430,6 +440,7 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-028 | Section blocks are sized against viewport height, not width | Active |
 | DEC-029 | Sector rotation changes a card every 1.2 seconds | Active |
 | DEC-030 | The map pin and its label share the viewBox centre | Active |
+| DEC-031 | Hero opening replay, continuous double blink and settled hold | Active |
 | DEC-032 | Why Assetly and Sectors resolve inside one viewport | Active |
 | DEC-033 | Contact map uses real OpenStreetMap geography | Active |
 | DEC-034 | Compare focus holds a locked band before transitioning | Active |
