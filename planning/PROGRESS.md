@@ -30,6 +30,12 @@ The mirrored reference crane was put into Compare Slide 01 on the first pass. It
 
 Both figures are reference geometry under transforms recorded in the file. The building keeps the reference's own floor spacing and gains a storey rather than being stretched to height.
 
+### The Hero plate now frames the proposition (DEC-040)
+
+The centred plate was scaling through the mark, headline and tagline, worst near the phone breakpoint. The owner approved a standalone comparison preview before production changed. The complete composition now holds Access at the lower-left, carries Scale beneath a protected copy zone and raises Grow at the right. The crane and building sit on one full-width datum; the redundant lower-left dimension line was removed. The plate draws from Pitch into Olive and settles at exactly 20% opacity.
+
+At 640px and below the approved production mode is `both`: Access sits below-left and an enlarged Grow sits at the far right, joined visually by one full-width datum while the Scale connector is omitted. The phone plate stays fixed after drawing. Typed `hidden`, `access`, and `growth` alternatives remain selectable through one constant; `HERO_PLATE_MOBILE_OPTIONS.md` records the switch and review steps. Short viewports remain plate-free. The `a.`, proposition and tagline retain `origin/main`'s exact shared responsive spacing, so the loader's measured destination and the approved copy hierarchy are unchanged.
+
 ### Hovering a sector card holds that card (DEC-038)
 
 Hover paused the whole grid, so on desktop — where the pointer often simply rests inside the section — the rotation the section exists to show was frequently not running. The hovered slot is now passed over when its turn comes and the tick spends itself on the next slot, so the other three keep changing on the same 1.2s cadence and the held card does not move. The sector queued for a held slot is deferred by one slot, not dropped, so the cycle still shows all six. The plate-opacity lift moved from the grid to the card, so it says "this card is held" rather than "the grid has stopped".
@@ -87,12 +93,15 @@ The mobile sheet was recomposed so a step and its primary action are on screen t
 - **DEC-037** — the reference crane belongs to the Hero plate, not to Compare Slide 01.
 - **DEC-038** — hovering a sector card holds that card, not the grid.
 - **DEC-039** — the opening blink is slower and runs on a near-sine curve.
+- **DEC-040** — the Hero plate frames the fixed copy and uses the combined Access/Grow phone composition.
 
 ## Tests Run
 
 Both lines passed their own full suites before the merge. The merged tree is being verified now; results replace this section when that run completes.
 
 Measurement notes worth keeping:
+
+- Hero plate correction: targeted lint and typecheck passed; `tests/unit/heroPlate.test.tsx` passed 2/2; `tests/e2e/hero-plate.spec.ts` passed its six targeted Chromium checks across 320–1920px; the two loader landing regressions passed 2/2. Desktop/tablet and all four phone compositions were inspected from rendered screenshots.
 
 - Playwright's `devices["Desktop Chrome"]` is **1280×720**, not 1280×800. The flip-card back faces clipped by 6–14px at 720 while passing at 800; card heights must be measured at the height the suite actually uses.
 - `scrollbar-gutter: stable` changes layout width on any platform with classic scrollbars. Anything that mixes `vw` with `%` across that boundary is suspect.

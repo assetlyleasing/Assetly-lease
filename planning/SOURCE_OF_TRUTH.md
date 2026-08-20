@@ -164,16 +164,18 @@ Final principle: the navbar is supporting chrome — minimal, premium, editorial
 - Subline: DM Serif Text, `clamp(17px,1.8vw,22px)`, 1–2 lines.
 - Any small labels: Inter Tight, uppercase, wide tracking.
 
-**Color**: surface Paper `#F6F4EC`; headline Ink `#26261B`; italic/emphasis Moss `#5C5C46`; plate Olive `#40402D` at ~16% opacity; interactive accents Bottle `#25453A`.
+**Color**: surface Paper `#F6F4EC`; headline Ink `#26261B`; italic/emphasis Moss `#5C5C46`; plate Olive `#40402D` at **20% settled opacity**; interactive accents Bottle `#25453A`.
 
 **Plate — meaning and behavior**
 
-The hero plate is a single continuous traced-line illustration representing **Access → Scale → Grow**: it should read gradually, like an architectural/engineering drawing, subtly combining an asset/equipment form, a financial-flow/leasing path, and an upward expansion gesture — never a literal infographic or icon. As drawn (DEC-037) the asset is `reference/home-2.html`'s own wheeled crane, mirrored so its boom reaches back across the plate and works over a floored building at the far left; the leasing path leaves the crane's deck and the expansion is three open frames stepping up from it. The artwork remains authored rather than designer-supplied (`OPEN DECISION` `OD-02`, §25).
+The hero plate is a single continuous traced-line illustration representing **Access → Scale → Grow**: it should read gradually, like an architectural/engineering drawing, subtly combining an asset/equipment form, a financial-flow/leasing path, and an upward expansion gesture — never a literal infographic or icon. As drawn (DEC-037, DEC-040) the asset is `reference/home-2.html`'s own wheeled crane working over a floored building at the lower-left; both sit on one full-width ground datum. The Scale path leaves the crane's deck and travels beneath the protected central copy zone, and three open Grow frames rise at the right. No stroke may collide with the mark, proposition or tagline. The artwork remains authored rather than designer-supplied (`OPEN DECISION` `OD-02`, §25).
+
+At widths above 640px the full composition is shown. At 640px and below the approved production mode is **Both**: Access sits below-left and an enlarged Grow sits at the far right, both grounded on one full-width datum; the Scale connector is omitted. The phone plate remains fixed after drawing, with no cursor parallax or ambient drift. Three code-ready alternatives — Hidden, Access-only and Growth-only — remain behind one typed setting documented in `HERO_PLATE_MOBILE_OPTIONS.md`. Viewports 520px high or less always hide the plate.
 
 Three-stage dynamic behavior:
 
-1. **Entry** — near-invisible on load, draws itself over ~2.6s (`cubic-bezier(.65,0,.35,1)`), opacity settles to ~16%.
-2. **Living Plate** — after drawing completes, extremely subtle ambient movement: selected lines drift ~2–5px, one or two nodes slowly expand/reposition, very slight cursor-parallax on desktop, cycle ~8–12s. Must read as "alive," not "animated." No re-drawing loop.
+1. **Entry** — near-invisible on load, draws itself over ~2.6s (`cubic-bezier(.65,0,.35,1)`). Its stroke begins in the darker Pitch tone, resolves to Olive during the draw, and settles at exactly 20% opacity.
+2. **Living Plate** — after drawing completes, extremely subtle ambient movement: the complete plate drifts ~2–5px and only the structural junction nodes slowly reposition; machinery wheels and fixed architecture remain still. Very slight cursor-parallax on desktop, cycle ~8–12s. Must read as "alive," not "animated." No re-drawing loop.
 3. **Scroll Transition** — as the visitor leaves the Hero, the plate fades; a portion of its geometry may visually carry into the first Compare-section plate, visually connecting the two sections.
 
 **Hero motion sequence — post-loader** (choreographed entry once the opening loader's "A" has settled into position, §11a): plate continues/starts drawing → headline lines rise through masks → subline fades upward → plate completes → after ~3s plate enters ambient movement. This is **superseded as the first-paint sequence** by §11a's opening loader (DEC-013) — the site no longer goes straight from a blank page into this choreography; the loader's "A" recede-and-settle now precedes it. Phase 2 ships the Hero built to receive this hand-off (final "A" position, deferred plate/copy reveal); the loader itself is built in Phase 8.5.
