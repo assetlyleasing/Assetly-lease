@@ -467,6 +467,16 @@ Every important technical or product decision, including conflict resolutions fo
 
 ---
 
+### DEC-043 - The Hero main line declares its own size, clears its descender, and hangs its full stop
+
+- **Date**: 2026-08-24
+- **Decision**: `.headline` in `Hero.module.css` declares `font-size: clamp(31px, min(6.4vw, 10.5svh), 76px)` - §11's own display step, with a viewport-height term added. The line-mask wrapper gains `padding-bottom: 0.26em` with an equal negative margin, and the pre-reveal travel grows from `translateY(105%)` to `130%` to stay behind the taller clip box. The line the sentence ends on takes `padding-left: 0.295em`, the measured advance of DM Serif Display's full stop.
+- **Reason**: Three faults in the most visible element on the site, all reported by the project owner. The h1 had never carried a size at all - §11 specified `clamp(31px,6.4vw,76px)` and `SerifHeading`'s `.display` step still carries it, but the Hero authors its mask lines inline and so fell through to the browser default: 1.5em of a `clamp(15px, 1.15vw, 17px)` body inside a `<section>`, about 25px where 76px was specified. The mask sat exactly on a line-height of 1.06 while the italic "g" in *lighter* drops 0.237em of ink below the baseline, so the descender was cut off. And centred text counts a full stop's whole advance, so the letters of "balance sheet." rested 0.15em left of the true centre while the mark, the first line and the tagline sat on it - which reads as the tagline sitting right of the heading, which is how it was reported.
+- **Consequences**: The headline now renders 31px at 320px wide through to 76px at 1280px and above. The `svh` term is DEC-028's rule applied to type: without it a 1024x768 or landscape-phone frame asks for 65px of headline above a 104px mark inside one `100svh` section and the stack does not resolve; measured, the content stack now fits at 320x568, 390x844, 768x1024, 1024x768, 1280x800, 1440x900, 1920x1080 and 900x450 with no clipping and no horizontal overflow. The descender clears its mask at every one of those sizes. The tagline sits 0.01px off the letter mass of "balance sheet." where it sat 11.2px right of it. Both typographic corrections are expressed in `em` against named custom properties, so they hold at every step of the clamp. DEC-018 locks the copy at two lines with the stop on the last, which is what makes `:last-of-type` the line that ends the sentence.
+- **Status**: Active
+
+---
+
 ## Decision index
 
 | ID | Topic | Status |
@@ -513,3 +523,4 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-040 | Hero plate frames the copy; combined Access/Grow is the approved phone mode | Active |
 | DEC-041 | Sectors composes against a height budget, not a cell minimum | Active |
 | DEC-042 | Focus lock is half a screen; no resting position is blank | Active |
+| DEC-043 | Hero main line declares its size, clears its descender, hangs its full stop | Active |

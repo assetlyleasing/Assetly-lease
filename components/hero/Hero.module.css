@@ -278,21 +278,71 @@
 
 /*
  * §8's line-mask reveal: each line sits in an overflow-hidden wrapper and
- * rises from translateY(105%).
+ * rises out of it.
  */
 .headline {
+  /*
+   * The §11 display step, the same clamp `SerifHeading`'s `.display` carries —
+   * borrowed rather than shared, because the mask lines are authored inline
+   * here and that primitive takes plain children. Without a size of its own
+   * this h1 fell through to the browser default, which is 1.5em of a
+   * clamp(15px, 1.15vw, 17px) body inside a <section>: about 25px.
+   *
+   * The svh term is DEC-028's rule — a section block sizes against viewport
+   * height, not width. On a short frame (1024x768, laptop landscape) the width
+   * alone would ask for 65px of headline above a 104px mark inside one 100svh
+   * section, and the stack would not resolve.
+   */
+  font-size: clamp(31px, min(6.4vw, 10.5svh), 76px);
   max-width: 20ch;
   margin: 0;
+
+  /*
+   * Measured off the rendered face, not guessed: DM Serif Display's full stop
+   * advances 0.295em, and the italic "g" drops 0.237em of ink below the
+   * baseline. Both numbers are used below, and both are the reason a value is
+   * named here rather than inlined.
+   */
+  --hero-stop-advance: 0.295em;
+  --hero-descender: 0.26em;
 }
 
+/*
+ * The clip box reaches below the baseline so a descender survives it — the
+ * "g" in "lighter" was being cut off by the mask, which sat exactly on a
+ * line-height of 1.06. The negative margin gives the space straight back, so
+ * the two lines keep their exact rhythm and the .content gap is unchanged.
+ */
 .maskLine {
   display: block;
   overflow: hidden;
+  padding-bottom: var(--hero-descender);
+  margin-bottom: calc(var(--hero-descender) * -1);
 }
 
+/*
+ * The sentence's closing full stop hangs.
+ *
+ * Centred text counts that stop's full advance, so the *letters* of "balance
+ * sheet." came to rest 0.15em left of the true centre while the mark, the
+ * first line and the tagline all sat on it — which read as the tagline being
+ * off to the right of the heading rather than as the heading being off to the
+ * left. Half the stop's advance, given back to this line, puts every element
+ * in the stack on one optical centre. DEC-018 locks the copy, so the closing
+ * stop is always on the last line.
+ */
+.maskLine:last-of-type {
+  padding-left: var(--hero-stop-advance);
+}
+
+/*
+ * 130%, not 105%: the resting line is 1.06em tall and the clip box now runs
+ * 0.26em past it, so the pre-reveal state has to travel further than it used
+ * to or the line is already visible before it rises.
+ */
 .maskLine > span {
   display: block;
-  transform: translateY(105%);
+  transform: translateY(130%);
 }
 
 .ready .maskLine > span {

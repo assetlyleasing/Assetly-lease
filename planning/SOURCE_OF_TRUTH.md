@@ -160,7 +160,7 @@ Final principle: the navbar is supporting chrome — minimal, premium, editorial
 
 **Typography**
 
-- Main line: DM Serif Display, `clamp(31px,6.4vw,76px)`, max 2 lines. One word may be italicized in **Moss `#5C5C46`**.
+- Main line: DM Serif Display, `clamp(31px, min(6.4vw, 10.5svh), 76px)`, max 2 lines. One word may be italicized in **Moss `#5C5C46`**. The height term is DEC-043: on a short frame the width alone asks for more headline than the one-viewport section can hold. The line-mask wrapper clears the italic descender, and the sentence's closing full stop hangs, so the mark, both lines and the tagline share one optical centre.
 - Subline: DM Serif Text, `clamp(17px,1.8vw,22px)`, 1–2 lines.
 - Any small labels: Inter Tight, uppercase, wide tracking.
 
