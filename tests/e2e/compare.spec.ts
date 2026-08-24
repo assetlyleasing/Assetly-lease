@@ -14,18 +14,12 @@ const CALCULATOR = '[aria-controls="compare-calculator"]';
 const PANEL = "#compare-calculator";
 const GRAPH = `${PANEL} [data-compare-graph]`;
 
+/** In DEC-045's reading order — `centreSlide` addresses these by index. */
 const SLIDES = [
-  {
-    id: "upfront-cash",
-    headline: "Preserve capital. Keep your business moving.",
-    title: "Upfront Cash",
-    values: ["Low", "10–25% margin", "100% upfront"],
-    tiers: ["low", "mid", "high"],
-  },
   {
     id: "obsolescence",
     headline: "Use the asset. Not the ownership risk.",
-    title: "Risk of Obsolescence",
+    title: "Ownership Risk",
     values: ["Assetly bears it", "You bear it", "You bear it"],
     tiers: ["low", "high", "high"],
   },
@@ -42,6 +36,13 @@ const SLIDES = [
     title: "Leverage Impact",
     values: ["Minimal", "Raises Debt/Equity", "Drains cash"],
     tiers: ["low", "high", "high"],
+  },
+  {
+    id: "upfront-cash",
+    headline: "Preserve capital. Keep your business moving.",
+    title: "Upfront Cash",
+    values: ["Low", "10–25% margin", "100% upfront"],
+    tiers: ["minimal", "mid", "high"],
   },
 ];
 
@@ -202,7 +203,7 @@ test.describe("compare — the calculator", () => {
         node;
     });
 
-    await centreSlide(page, 2);
+    await centreSlide(page, 1);
     expect(
       await page.evaluate(
         () =>
@@ -243,10 +244,10 @@ test.describe("compare — the calculator", () => {
   test("syncs backwards too, not only on the way down", async ({ page }) => {
     await page.goto("/");
     await centreSlide(page, 3);
-    await expect(page.locator(`${PANEL} h2`)).toHaveText("Leverage Impact");
+    await expect(page.locator(`${PANEL} h2`)).toHaveText("Upfront Cash");
 
     await centreSlide(page, 1);
-    await expect(page.locator(`${PANEL} h2`)).toHaveText("Risk of Obsolescence");
+    await expect(page.locator(`${PANEL} h2`)).toHaveText("Tax Treatment");
   });
 
   test("announces the mode politely, and only the mode (§20)", async ({
@@ -257,7 +258,7 @@ test.describe("compare — the calculator", () => {
 
     const live = page.locator(`${PANEL} [aria-live="polite"]`);
     await expect(live).toHaveCount(1);
-    await expect(live).toHaveText("Tax Treatment");
+    await expect(live).toHaveText("Leverage Impact");
   });
 
   test("slides away before Why Us is properly on screen", async ({ page }) => {
@@ -295,7 +296,7 @@ test.describe("compare — manual override (§13)", () => {
     }
 
     // The reading still follows the reader while the panel is closed.
-    await expect(page.locator(`${PANEL} h2`)).toHaveText("Leverage Impact");
+    await expect(page.locator(`${PANEL} h2`)).toHaveText("Upfront Cash");
 
     await tab.click();
     await expect(tab).toHaveAttribute("aria-expanded", "true");
@@ -331,7 +332,7 @@ test.describe("compare — manual override (§13)", () => {
     await page.goto("/");
     await centreSlide(page, 0);
 
-    await page.locator(`${PANEL} button`).nth(2).click();
+    await page.locator(`${PANEL} button`).nth(1).click();
 
     await expect(page.locator(`${PANEL} h2`)).toHaveText("Tax Treatment");
     await expect(
@@ -345,7 +346,7 @@ test.describe("compare — desktop drawer", () => {
     page,
   }) => {
     await page.goto("/");
-    await centreSlide(page, 1);
+    await centreSlide(page, 0);
 
     const article = page.locator("#compare-slide-obsolescence");
     const narrowed = (await article.boundingBox())!;
@@ -386,8 +387,8 @@ test.describe("compare — desktop drawer", () => {
         return { opacity: Number(style.opacity), filter: style.filter };
       }, id);
 
-    const focused = await read("obsolescence");
-    const neighbour = await read("tax-treatment");
+    const focused = await read("tax-treatment");
+    const neighbour = await read("leverage");
 
     expect(focused!.opacity).toBeGreaterThan(0.95);
     expect(focused!.filter === "none" || focused!.filter.includes("blur(0")).toBe(
@@ -529,7 +530,7 @@ test.describe("compare — reduced motion (§8)", () => {
     await centreSlide(page, 0);
 
     const dash = await page.evaluate(() => {
-      const stroke = document.querySelector("#compare-slide-upfront-cash svg path");
+      const stroke = document.querySelector("#compare-slide-obsolescence svg path");
       return stroke ? getComputedStyle(stroke).strokeDasharray : null;
     });
     expect(dash).toBe("none");

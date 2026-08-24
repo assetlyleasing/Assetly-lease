@@ -90,7 +90,18 @@ export function CalculatorPanel({
               data-lead={column.lead ? "true" : "false"}
             >
               <div className={styles.track} aria-hidden="true">
-                <span className={styles.fill} data-tier={column.tier} />
+                {/*
+                 * `data-column` is what carries each bar's tone (DEC-047).
+                 * Written from the label rather than left to nth-child so the
+                 * stylesheet names the option it is colouring — the three are
+                 * always Lease/Loan/Purchase in that order, but a positional
+                 * selector would not say why any of them is the tone it is.
+                 */}
+                <span
+                  className={styles.fill}
+                  data-column={column.label.toLowerCase()}
+                  data-tier={column.tier}
+                />
               </div>
               <dt className={styles.columnLabel}>{column.label}</dt>
               <dd className={styles.columnValue}>

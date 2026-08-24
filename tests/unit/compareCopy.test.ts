@@ -18,56 +18,58 @@ import {
  * `DECISIONS.md` entry first. Do not "fix" the test.
  */
 
-/** The four locked headlines from §13, verbatim. */
+/** The four locked headlines, in DEC-045's reading order. */
 const HEADLINES = [
-  "Preserve capital. Keep your business moving.",
   "Use the asset. Not the ownership risk.",
   "A simpler path to deduction.",
   "Keep leverage light. Keep capacity available.",
+  "Preserve capital. Keep your business moving.",
 ];
 
 /**
- * The four locked copy lines from §13, verbatim apart from the capital letter
- * each one starts with — §13 writes them as a continuation of "Copy:".
+ * The four locked copy lines, verbatim apart from the capital letter each one
+ * starts with — §13 writes them as a continuation of "Copy:". The Tax
+ * Treatment line is the owner's shorter one (DEC-046), which withdraws the
+ * depreciation block-rate and 180-day claims §13 first carried.
  */
 const COPY = [
-  "Access needed assets without a large upfront outlay; operating lease preserves working capital; loan may require 10–25% margin; outright purchase requires 100% upfront.",
   "Operating lease means Assetly bears resale/obsolescence risk; loan/purchase means the customer bears it.",
-  "Full rentals deductible without depreciation block-rate limits or the 180-day usage restriction; GST input credit continues to apply.",
+  "Full rentals allowable as deduction; GST input credit continues to apply.",
   "Preserves bank credit lines and collateral capacity, lighter impact on Debt/Equity and Debt/EBITDA vs. loan-funded acquisition.",
+  "Access needed assets without a large upfront outlay; operating lease preserves working capital; loan may require 10–25% margin; outright purchase requires 100% upfront.",
 ];
 
 /** The twelve locked calculator readings from §13, in Lease/Loan/Purchase order. */
 const COLUMNS = [
-  ["Low", "10–25% margin", "100% upfront"],
   ["Assetly bears it", "You bear it", "You bear it"],
   ["Full rental deductible", "Depreciation + interest", "Depreciation only"],
   ["Minimal", "Raises Debt/Equity", "Drains cash"],
+  ["Low", "10–25% margin", "100% upfront"],
 ];
 
 const TITLES = [
-  "Upfront Cash",
-  "Risk of Obsolescence",
+  "Ownership Risk",
   "Tax Treatment",
   "Leverage Impact",
+  "Upfront Cash",
 ];
 
 const METRICS = [
-  "Upfront requirement — lower is lighter",
-  "Customer ownership risk — lower is lighter",
+  "Risk of obsolescence — lower is lighter",
   "Deduction breadth — higher is broader",
   "Capacity pressure — lower is lighter",
+  "Upfront requirement — lower is lighter",
 ];
 
 const TIERS = [
-  ["low", "mid", "high"],
   ["low", "high", "high"],
   ["high", "mid", "low"],
   ["low", "high", "high"],
+  ["minimal", "mid", "high"],
 ];
 
 describe("Compare content (§13)", () => {
-  it("has exactly the four arguments §13 defines, in order", () => {
+  it("has exactly the four arguments §13 defines, in DEC-045's order", () => {
     expect(COMPARE_SLIDES).toHaveLength(4);
     expect(COMPARE_SLIDES.map((slide) => slide.title)).toEqual(TITLES);
     expect(COMPARE_SLIDES.map((slide) => slide.index)).toEqual([
@@ -137,7 +139,7 @@ describe("Compare content (§13)", () => {
     // §13 is explicit: "No artificial percentage here." Guarded because a
     // plausible-looking figure is exactly the kind of thing that gets added
     // later to make a comparison row feel more concrete.
-    const slide = COMPARE_SLIDES[1];
+    const slide = COMPARE_SLIDES[0];
     const text = [slide.copy, ...slide.columns.map((c) => c.value)].join(" ");
     expect(text).not.toMatch(/\d\s*%/);
   });

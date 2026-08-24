@@ -487,6 +487,50 @@ Every important technical or product decision, including conflict resolutions fo
 
 ---
 
+### DEC-045 - Compare reads Ownership Risk, Tax, Leverage, Upfront Cash - renumbered 01 to 04
+
+- **Date**: 2026-08-24
+- **Decision**: The four arguments reorder to Ownership Risk, Tax Treatment, Leverage Impact, Upfront Cash - §13's second, third, fourth and first. The indices a visitor sees are renumbered sequentially in that order, so the section still reads 01, 02, 03, 04 down the page and across the mode row. Each argument keeps its own plate, headline, copy and readings; only the order and the numbers change. The original numbering survives in documentation, where it is how the owner's notes address each slide.
+- **Reason**: Owner review, `docs/WEBSITE NOTES.docx`: "Change 01, 02, 03 & 04 to 02, 03, 04 & 01 (Use of asset, Tax, Leverage, Preserve capital)." The argument the section opens on is now the one about using an asset rather than owning it, and preserving capital closes it.
+- **Alternatives considered**: Carrying the old numbers along with the slides, so the page would read 02, 03, 04, 01. Put to the owner directly and rejected: the number a visitor sees should be the position they are at, not a record of where the argument used to sit.
+- **Consequences**: `COMPARE_SLIDES` is index-addressed by the scroll-focus loop and the mode row, so array order *is* reading order - no other mechanism needed changing. Slide ids are untouched, so every `#compare-slide-*` anchor still resolves and no link breaks. `compare.spec.ts` addresses slides by index through `centreSlide`, so its fixture and five spot assertions moved with the order; that fixture is the thing to update first if the order is ever revisited.
+- **Status**: Active
+
+---
+
+### DEC-046 - Slide 01 is titled Ownership Risk, and the tax argument drops two claims
+
+- **Date**: 2026-08-24
+- **Decision**: Two copy changes on separate slides. The obsolescence argument swaps its title and its metric: it is now titled **Ownership Risk** and its metric reads **"Risk of obsolescence - lower is lighter"**, where it was titled "Risk of Obsolescence" over a "Customer ownership risk" metric. And the Tax Treatment copy becomes **"Full rentals allowable as deduction; GST input credit continues to apply."**, withdrawing §13's depreciation block-rate limits and 180-day usage restriction. The headline "Use the asset. Not the ownership risk." stays exactly as it is - the notes asked whether it could be rewritten, two rewrites were offered, and the owner kept the original.
+- **Reason**: Owner review, `docs/WEBSITE NOTES.docx`, which sets both slides out as a before and after. The tax change is the substantive one: the block-rate and 180-day claims are specific statements about Indian tax law, and the owner has chosen not to make them on the site.
+- **Consequences**: The title is what the calculator announces through its polite live region and what the mode row reports, so the swap changes what a screen reader hears at that slide. Withdrawing the two tax claims narrows what the site asserts and cannot be undone by an edit here - reinstating them needs a further decision, which is why `content/compare/slides.ts` says so at the top. The copy-integrity tests carry both new strings verbatim.
+- **Status**: Active
+
+---
+
+### DEC-047 - The graph's three columns carry three tones, stepped in lightness
+
+- **Date**: 2026-08-24
+- **Decision**: Each column gets its own tone rather than sharing Olive: Lease **Bottle `#25453A`**, Loan **Moss `#5C5C46`**, Purchase **Khaki `#B1AD77`** with a hairline edge. The tone is written from `data-column`, taken from the column's own label. The separate `[data-lead="true"] .fill` rule is removed - Lease holds Bottle by column now, and the two rules said the same thing twice. The lead column's label and reading keep their Bottle.
+- **Reason**: Owner review: "Colours on the right pane - choose something with more of a contrast." Bottle and Olive differ by about 3% in lightness, so the three columns read as one block of dark. Asked which contrast to raise, the owner chose a stepped ramp and asked that it "subtly highlight the one we are trying to show the customer".
+- **Alternatives considered**: Moving the whole panel onto Pitch; and alternating light and dark across the three columns so no two neighbours resemble each other.
+- **Why rejected**: A Pitch panel would be a third dark surface, where §6 admits exactly two - the scrolled nav and the Footer - and that is a larger decision than a contrast complaint warrants. Alternating tones separate the columns most loudly but make the middle column read lightest whatever its value, which fights the graph rather than helping it. The stepped ramp keeps Lease deepest, which is the emphasis §13 already reserves for it, and lets the two options it is compared with recede in order.
+- **Consequences**: All three are approved §6 tokens; no colour is invented and the panel stays on Field. Khaki carries about 1.8:1 against Field, so the Purchase bar takes a hairline edge - without it the tallest bar on the panel reads as an empty track. The bars are `aria-hidden` and the reading beneath each one carries the information, so no meaning depends on telling the tones apart.
+- **Status**: Active
+
+---
+
+### DEC-048 - A fourth `minimal` tier, used by Upfront Cash's Lease reading
+
+- **Date**: 2026-08-24
+- **Decision**: `CalculatorTier` gains a `minimal` step at 16%, below `low`'s 30%. The Upfront Cash slide's Lease column uses it. The Lease bars on Ownership Risk and Leverage Impact stay at `low`. Amends DEC-023's three-tier set.
+- **Reason**: Owner review, under the Preserve capital slide: "Decrease the height of the Lease bar in the bar chart." Against "100% upfront" at 92%, a Lease bar at 30% overstates what a lease asks for at signing.
+- **Alternatives considered**: Lowering the shared `low` tier from 30% to 16% for every slide. Put to the owner and rejected - the note is about one slide, and "Assetly bears it" and "Minimal" are lighter than their alternatives without being close to nothing.
+- **Consequences**: The tier set is still qualitative and still asserts no magnitude, which is what DEC-023 and §13 require; a fourth presentation category does not make it arithmetic. Because tiers are shared across slides, a tier is now the right place to express "close to nothing at all" rather than something to be re-tuned per slide.
+- **Status**: Active
+
+---
+
 ## Decision index
 
 | ID | Topic | Status |
@@ -513,7 +557,7 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-020 | `--nav-block` is what sections clear, not `--nav-h` | Active |
 | DEC-021 | Archive the two prototype HTML references | Active |
 | DEC-022 | Compare plates use the archived prototype's drafting language | Active |
-| DEC-023 | Compare uses qualitative tier bars without prototype math | Active |
+| DEC-023 | Compare uses qualitative tier bars without prototype math | Amended by DEC-048 |
 | DEC-024 | Why Assetly exposes only the active face to screen readers | Active |
 | DEC-025 | Sector artwork and reduced motion are code-native and static | Active |
 | DEC-026 | Contact uses an illustrative code-authored Bengaluru plate | Superseded by DEC-033 |
@@ -535,3 +579,7 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-042 | Focus lock is half a screen; no resting position is blank | Active |
 | DEC-043 | Hero main line declares its size, clears its descender, hangs its full stop | Active |
 | DEC-044 | Home button carries the full "assetly leasing" lockup | Active |
+| DEC-045 | Compare reads Ownership Risk, Tax, Leverage, Upfront Cash; renumbered 01-04 | Active |
+| DEC-046 | Slide 01 titled Ownership Risk; the tax argument drops two claims | Active |
+| DEC-047 | The graph's three columns carry three tones, stepped in lightness | Active |
+| DEC-048 | A fourth `minimal` tier, used by Upfront Cash's Lease reading | Active |

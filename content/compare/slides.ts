@@ -16,11 +16,17 @@ import {
  * only liberty taken is capitalising the first letter of each copy line, since
  * §13 writes them as a continuation of the words "Copy:".
  *
- * Two of these are load-bearing claims about Indian tax and finance — the
- * 180-day usage restriction, the depreciation block rates, the GST input
- * credit — and they are reproduced exactly as approved rather than restated.
- * If any of it needs to change, that is a decision for §13 and a `DECISIONS.md`
- * entry, not an edit here.
+ * What remains here of Indian tax and finance — the GST input credit, the
+ * 10–25% loan margin — is load-bearing, and is reproduced exactly as approved
+ * rather than restated. §13 originally carried two further tax claims on the
+ * Tax Treatment slide, the depreciation block-rate limits and the 180-day
+ * usage restriction; the owner withdrew both (DEC-046). If any of this needs
+ * to change, that is a decision for §13 and a `DECISIONS.md` entry, not an
+ * edit here.
+ *
+ * The reading order is DEC-045's, not §13's original one, and the indices are
+ * sequential in that order — the numbering a visitor sees is the order they
+ * meet the arguments in.
  *
  * `tests/unit/compareCopy.test.ts` reassembles the headline segments and
  * asserts the locked wording, so a careless edit fails rather than quietly
@@ -38,8 +44,13 @@ export type HeadlineSegment = {
   emphasis?: boolean;
 };
 
-/** Qualitative presentation tiers only; never financial magnitudes. */
-export type CalculatorTier = "low" | "mid" | "high";
+/**
+ * Qualitative presentation tiers only; never financial magnitudes.
+ *
+ * `minimal` is a fourth step below `low` (DEC-047), used where a reading is
+ * not merely the lightest of the three but close to nothing at all.
+ */
+export type CalculatorTier = "minimal" | "low" | "mid" | "high";
 
 /**
  * One column of the calculator's three-way comparison. `lead` marks the Lease
@@ -72,28 +83,10 @@ export type CompareSlide = {
 
 export const COMPARE_SLIDES: readonly CompareSlide[] = [
   {
-    id: "upfront-cash",
-    index: "01",
-    title: "Upfront Cash",
-    metricLabel: "Upfront requirement — lower is lighter",
-    headline: [
-      { text: "Preserve " },
-      { text: "capital", emphasis: true },
-      { text: ". Keep your business moving." },
-    ],
-    copy: "Access needed assets without a large upfront outlay; operating lease preserves working capital; loan may require 10–25% margin; outright purchase requires 100% upfront.",
-    plate: UpfrontCashPlate,
-    columns: [
-      { label: "Lease", value: "Low", tier: "low", lead: true },
-      { label: "Loan", value: "10–25% margin", tier: "mid" },
-      { label: "Purchase", value: "100% upfront", tier: "high" },
-    ],
-  },
-  {
     id: "obsolescence",
-    index: "02",
-    title: "Risk of Obsolescence",
-    metricLabel: "Customer ownership risk — lower is lighter",
+    index: "01",
+    title: "Ownership Risk",
+    metricLabel: "Risk of obsolescence — lower is lighter",
     headline: [
       { text: "Use the " },
       { text: "asset", emphasis: true },
@@ -109,7 +102,7 @@ export const COMPARE_SLIDES: readonly CompareSlide[] = [
   },
   {
     id: "tax-treatment",
-    index: "03",
+    index: "02",
     title: "Tax Treatment",
     metricLabel: "Deduction breadth — higher is broader",
     headline: [
@@ -117,7 +110,7 @@ export const COMPARE_SLIDES: readonly CompareSlide[] = [
       { text: "simpler", emphasis: true },
       { text: " path to deduction." },
     ],
-    copy: "Full rentals deductible without depreciation block-rate limits or the 180-day usage restriction; GST input credit continues to apply.",
+    copy: "Full rentals allowable as deduction; GST input credit continues to apply.",
     plate: TaxTreatmentPlate,
     columns: [
       { label: "Lease", value: "Full rental deductible", tier: "high", lead: true },
@@ -127,7 +120,7 @@ export const COMPARE_SLIDES: readonly CompareSlide[] = [
   },
   {
     id: "leverage",
-    index: "04",
+    index: "03",
     title: "Leverage Impact",
     metricLabel: "Capacity pressure — lower is lighter",
     headline: [
@@ -141,6 +134,24 @@ export const COMPARE_SLIDES: readonly CompareSlide[] = [
       { label: "Lease", value: "Minimal", tier: "low", lead: true },
       { label: "Loan", value: "Raises Debt/Equity", tier: "high" },
       { label: "Purchase", value: "Drains cash", tier: "high" },
+    ],
+  },
+  {
+    id: "upfront-cash",
+    index: "04",
+    title: "Upfront Cash",
+    metricLabel: "Upfront requirement — lower is lighter",
+    headline: [
+      { text: "Preserve " },
+      { text: "capital", emphasis: true },
+      { text: ". Keep your business moving." },
+    ],
+    copy: "Access needed assets without a large upfront outlay; operating lease preserves working capital; loan may require 10–25% margin; outright purchase requires 100% upfront.",
+    plate: UpfrontCashPlate,
+    columns: [
+      { label: "Lease", value: "Low", tier: "minimal", lead: true },
+      { label: "Loan", value: "10–25% margin", tier: "mid" },
+      { label: "Purchase", value: "100% upfront", tier: "high" },
     ],
   },
 ] as const;

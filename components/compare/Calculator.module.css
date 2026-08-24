@@ -211,7 +211,7 @@
   font-family: var(--u);
   font-size: var(--u-size);
   line-height: 1.4;
-  letter-spacing: var(--u-track);
+  letter-spacing: var(--u-track-tight);
   text-transform: uppercase;
   color: var(--moss);
 }
@@ -256,6 +256,38 @@
   transform-origin: center bottom;
   transition: transform 800ms var(--e);
   will-change: transform;
+}
+
+/*
+ * One tone per option (DEC-047), stepped in lightness rather than scattered in
+ * hue — the palette is warm-monochrome by decision (§6) and three unrelated
+ * colours would be a louder change than the section needs. Lease keeps Bottle
+ * and so stays the deepest of the three, which is the emphasis §13 reserves
+ * for it; the two it is compared with recede in steps. All three are approved
+ * tokens.
+ */
+.fill[data-column="lease"] {
+  background: var(--bottle);
+}
+
+.fill[data-column="loan"] {
+  background: var(--moss);
+}
+
+.fill[data-column="purchase"] {
+  background: var(--khaki);
+  /* Khaki carries little contrast on Field; without an edge the tallest bar
+   * on the panel reads as an empty track rather than as a filled one. */
+  outline: 1px solid var(--line);
+  outline-offset: -1px;
+}
+
+/*
+ * A step below `low`, for a reading that is not merely the lightest of the
+ * three but close to nothing at all (DEC-048).
+ */
+.fill[data-tier="minimal"] {
+  --tier-scale: 0.16;
 }
 
 .fill[data-tier="low"] {
@@ -307,11 +339,10 @@
  * controls/emphasis", and this is the argument the section is making — it is
  * editorial weight, not a claim about magnitude, which matters because §13
  * forbids inventing one ("no artificial percentage here").
+ *
+ * The bar itself is no longer listed here: Lease holds Bottle by column now,
+ * not by lead, and the two rules said the same thing twice.
  */
-.bar[data-lead="true"] .fill {
-  background: var(--bottle);
-}
-
 .bar[data-lead="true"] .columnLabel,
 .bar[data-lead="true"] .columnValue {
   color: var(--bottle);
