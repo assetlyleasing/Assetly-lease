@@ -8,15 +8,14 @@
 
 .layout {
   display: grid;
-  grid-template-columns: minmax(0, 3fr) minmax(300px, 2fr);
+  grid-template-columns: minmax(280px, 2fr) minmax(0, 3fr);
   gap: clamp(42px, 6vw, 96px);
-  align-items: center;
+  align-items: stretch;
 }
 
 .media {
   position: relative;
   display: grid;
-  min-height: clamp(440px, 58vw, 680px);
   place-items: center;
   overflow: hidden;
   border: var(--hairline);
@@ -56,9 +55,17 @@
 
 .body {
   max-width: 38rem;
-  margin-top: var(--gap-heading-lg);
-  font-size: clamp(18px, 1.55vw, 23px);
+  margin: 0;
+  font-size: clamp(16px, 1.25vw, 19px);
   line-height: 1.58;
+}
+
+.heading + .body {
+  margin-top: var(--gap-heading-lg);
+}
+
+.body + .body {
+  margin-top: clamp(12px, 1.8vh, 18px);
 }
 
 .closing {

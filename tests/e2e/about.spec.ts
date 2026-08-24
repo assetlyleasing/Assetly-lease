@@ -1,20 +1,34 @@
 import { expect, test } from "./support/opening";
 
-const BODY =
-  "Assetly helps businesses access the assets they need through structured operating leases, with a focus on preserving working capital, reducing ownership risk, and maintaining financial flexibility. Its approach combines tailored structuring, fast turnaround, multi-sector expertise, and strong funding partners.";
+const PARAGRAPHS = [
+  "Assetly is a leasing platform built for growing businesses. We purchase office furniture and fit-outs, IT equipment, medical equipment, and plant & machinery, and lease these assets to corporate customers under fixed-term rental contracts – a simple, no-ownership model.",
+  "Instead of a large upfront purchase, customers pay a fixed rental for the assets they use – for exactly as long as they need it. This keeps costs predictable, frees up working capital, and gives businesses the flexibility to scale and upgrade as their needs change.",
+  "The result: businesses preserve capital, simplify budgeting, and stay agile as their asset needs evolve.",
+  "At Assetly Leasing, our strength lies in the depth and diversity of our leadership. Bringing together decades of combined experience in finance, business development, operations and facility management, our leaders drive the strategic vision, operational excellence, and financial discipline that power Assetly's growth as an asset leasing platform.",
+] as const;
 
 test.describe("About page", () => {
   test("renders only the approved company copy and temporary media slot", async ({ page }) => {
     await page.goto("/about");
 
     await expect(page.getByRole("heading", { level: 1, name: "About Assetly" })).toBeVisible();
-    await expect(page.getByText(BODY)).toBeVisible();
+    for (const paragraph of PARAGRAPHS) {
+      await expect(page.getByText(paragraph)).toBeVisible();
+    }
     await expect(page.getByText("Bengaluru", { exact: true })).toBeVisible();
     await expect(
       page.getByRole("region", { name: "About Assetly" }).getByRole("link", {
         name: "finance@assetly.lease",
       }),
     ).toHaveAttribute("href", "mailto:finance@assetly.lease");
+    await expect(page.getByRole("link", { name: "LinkedIn" })).toHaveAttribute(
+      "href",
+      "https://www.linkedin.com/company/assetly-leasing/",
+    );
+    await expect(page.getByRole("link", { name: "LinkedIn" })).toHaveAttribute(
+      "target",
+      "_blank",
+    );
 
     const placeholder = page.locator("[data-about-media-placeholder]");
     await expect(placeholder).toBeVisible();
@@ -58,7 +72,7 @@ test.describe("About page", () => {
     await expect(page).toHaveURL(/\/about$/);
   });
 
-  test("keeps the media near sixty percent on desktop and moves it above copy on mobile", async ({
+  test("gives the longer copy more room on desktop and moves media above it on mobile", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
@@ -67,8 +81,8 @@ test.describe("About page", () => {
     const media = page.locator("[data-about-media-placeholder]");
     const desktopLayout = (await layout.boundingBox())!;
     const desktopMedia = (await media.boundingBox())!;
-    expect(desktopMedia.width / desktopLayout.width).toBeGreaterThan(0.52);
-    expect(desktopMedia.width / desktopLayout.width).toBeLessThan(0.65);
+    expect(desktopMedia.width / desktopLayout.width).toBeGreaterThan(0.32);
+    expect(desktopMedia.width / desktopLayout.width).toBeLessThan(0.43);
 
     const navBottom = await page
       .getByRole("banner")

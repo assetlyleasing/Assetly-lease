@@ -541,6 +541,18 @@ Every important technical or product decision, including conflict resolutions fo
 
 ---
 
+### DEC-050 - About uses the owner's four-paragraph company and leadership statement
+
+- **Date**: 2026-08-24
+- **Decision**: The About page's single short body is replaced by four owner-supplied paragraphs, kept verbatim and in order: Assetly's leasing model and asset categories; fixed rentals instead of a large upfront purchase; the resulting capital and budgeting benefits; and the supplied leadership statement. `ABOUT_CONTENT.body` becomes a typed `paragraphs` array. The longer copy gets the larger side of a `2fr / 3fr` desktop grid, with the temporary media slot supporting it; mobile continues to place media above copy. Assetly's LinkedIn page joins Bengaluru and the finance address in the existing hairline-ruled closing row, using the email link's quiet underline treatment rather than a new social badge.
+- **Reason**: Owner review, `docs/WEBSITE NOTES.docx`, supplied the four paragraphs and LinkedIn URL. The prior §4 constraint was written when no leadership or company-character material had been supplied; that premise is no longer true. The old media-heavy proportion was also sized for one paragraph and left the approved copy cramped.
+- **Alternatives considered**: Summarising the four paragraphs back into the old single-body shape; keeping the media at 55–65% and reducing the type until the copy fit; adding a separate leadership section or social component.
+- **Why rejected**: Summarising would alter owner-approved copy. Shrinking four paragraphs into the old narrow column would weaken readability. A new leadership section or social surface would over-build the deliberately simple route and spend more visual emphasis than the material needs.
+- **Consequences**: §4 now explicitly permits the supplied leadership paragraph but still forbids invented profiles, history, timelines and statistics. Copy-integrity tests lock the paragraph array exactly, while the metadata retains its narrower source-grounded description. The About photograph remains unresolved under `OD-14`; DEC-050 does not change DEC-027's temporary-media boundary.
+- **Status**: Active
+
+---
+
 ## Decision index
 
 | ID | Topic | Status |
@@ -594,3 +606,4 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-047 | The graph's three columns carry three tones, stepped in lightness | Active |
 | DEC-048 | A fourth `minimal` tier, used by Upfront Cash's Lease reading | Active |
 | DEC-049 | Published contact identity is finance@assetly.lease / +91 81231 96924 | Active |
+| DEC-050 | About uses the owner's four-paragraph company and leadership statement | Active |

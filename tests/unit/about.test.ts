@@ -7,7 +7,12 @@ describe("About content", () => {
     expect(ABOUT_CONTENT).toEqual({
       eyebrow: "About",
       heading: "About Assetly",
-      body: "Assetly helps businesses access the assets they need through structured operating leases, with a focus on preserving working capital, reducing ownership risk, and maintaining financial flexibility. Its approach combines tailored structuring, fast turnaround, multi-sector expertise, and strong funding partners.",
+      paragraphs: [
+        "Assetly is a leasing platform built for growing businesses. We purchase office furniture and fit-outs, IT equipment, medical equipment, and plant & machinery, and lease these assets to corporate customers under fixed-term rental contracts – a simple, no-ownership model.",
+        "Instead of a large upfront purchase, customers pay a fixed rental for the assets they use – for exactly as long as they need it. This keeps costs predictable, frees up working capital, and gives businesses the flexibility to scale and upgrade as their needs change.",
+        "The result: businesses preserve capital, simplify budgeting, and stay agile as their asset needs evolve.",
+        "At Assetly Leasing, our strength lies in the depth and diversity of our leadership. Bringing together decades of combined experience in finance, business development, operations and facility management, our leaders drive the strategic vision, operational excellence, and financial discipline that power Assetly's growth as an asset leasing platform.",
+      ],
       city: "Bengaluru",
     });
   });
@@ -16,7 +21,7 @@ describe("About content", () => {
     expect(ABOUT_META_DESCRIPTION).toBe(
       "Learn how Assetly structures operating leases to help businesses preserve working capital and maintain financial flexibility.",
     );
-    expect(`${ABOUT_CONTENT.body} ${ABOUT_META_DESCRIPTION}`).not.toMatch(
+    expect(ABOUT_META_DESCRIPTION).not.toMatch(
       /founder|founded|timeline|employees|clients|years|crore|million/i,
     );
   });

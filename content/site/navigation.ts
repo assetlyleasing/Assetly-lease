@@ -85,6 +85,15 @@ export const CONTACT = {
 } as const;
 
 /**
+ * Assetly's presence off the site. One entry today; a constant rather than a
+ * literal in the About page because §17's Footer is the other place a social
+ * link would ever be added, and it should read the same value.
+ */
+export const SOCIAL = {
+  linkedin: "https://www.linkedin.com/company/assetly-leasing/",
+} as const;
+
+/**
  * The full postal address. §16 excludes it from the Contact section on purpose
  * — the Footer is the only place on the site it appears.
  */

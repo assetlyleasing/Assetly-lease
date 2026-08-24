@@ -5,7 +5,7 @@ import { Eyebrow } from "@/components/primitives/Eyebrow";
 import { RevealOnScroll } from "@/components/primitives/RevealOnScroll";
 import { SerifHeading } from "@/components/primitives/SerifHeading";
 import { ABOUT_CONTENT, ABOUT_META_DESCRIPTION } from "@/content/about/copy";
-import { CONTACT } from "@/content/site/navigation";
+import { CONTACT, SOCIAL } from "@/content/site/navigation";
 
 import styles from "./About.module.css";
 
@@ -38,12 +38,24 @@ export default function AboutPage() {
               <SerifHeading level={1} id="about-title" className={styles.heading}>
                 {ABOUT_CONTENT.heading}
               </SerifHeading>
-              <p className={styles.body}>{ABOUT_CONTENT.body}</p>
+              {ABOUT_CONTENT.paragraphs.map((paragraph) => (
+                <p className={styles.body} key={paragraph}>
+                  {paragraph}
+                </p>
+              ))}
 
               <p className={styles.closing}>
                 <span>{ABOUT_CONTENT.city}</span>
                 <a className={styles.email} href={`mailto:${CONTACT.email}`}>
                   {CONTACT.email}
+                </a>
+                <a
+                  className={styles.email}
+                  href={SOCIAL.linkedin}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  LinkedIn <span aria-hidden="true">↗</span>
                 </a>
               </p>
             </div>

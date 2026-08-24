@@ -41,13 +41,18 @@ No section may be inserted between these without a new approved decision. In par
 
 `/about` is a separate, simple page — not a homepage section. Structure:
 
-- One large, strong image (55–65% of the section)
+- One strong image in a supporting media column; the four-paragraph desktop composition is copy-led
+  (`2fr / 3fr` media-to-copy), and mobile places the image above the copy
 - One short DM Serif Display heading
-- One concise DM Serif Text company description (grounded in real Assetly material: structured operating leases, preserving working capital, reducing ownership risk, financial flexibility; Assetly's positioning around tailored structuring, fast turnaround, multi-sector expertise, strong funding partners)
-- Optional small location/contact line at the bottom
+- Four owner-supplied DM Serif Text paragraphs, kept verbatim and in order: the leasing model and
+  eligible asset categories; fixed rentals in place of upfront purchase; the capital/budgeting result;
+  and the supplied leadership statement
+- A small hairline-ruled closing line with Bengaluru, the finance email and Assetly's LinkedIn page
 - Same navigation and footer as the homepage
 
-No timeline, stats, founders section, or company-history storytelling unless that content is supplied later (currently not supplied — do not fabricate).
+The leadership paragraph is approved owner-supplied company material (DEC-050); it is not permission
+to add individual profiles or infer any further history. No timeline, stats, founder biographies, or
+other company-history storytelling may be added unless its content is supplied later — do not fabricate.
 
 **Temporary media state (DEC-027)**: the project owner has authorized the About layout to ship in development with a clearly labelled, non-image placeholder while the real photograph is sourced. The placeholder is hidden from the accessibility tree and must not receive invented alt text. It is not an approved substitute for the final photograph; `OD-14` remains open and must be resolved before Phase 10 exits or production deployment.
 
