@@ -217,7 +217,7 @@ test.describe("Hero opening loader", () => {
 
     await page
       .getByRole("banner")
-      .getByRole("link", { name: "assetly", exact: true })
+      .getByRole("link", { name: "assetly leasing", exact: true })
       .click();
     await expect(page).toHaveURL(/\/$/);
     await expect(page.locator(LOADER)).toHaveCount(0);

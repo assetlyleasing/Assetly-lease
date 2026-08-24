@@ -124,7 +124,7 @@ Two easing curves cover the entire site:
 
 **Desktop**
 
-- Left: Assetly logo mark + "**assetly**" (one clickable unit; click scrolls to Hero; hover = subtle opacity shift only, no decorative animation). The wordmark is set in **DM Serif Display**, matching the Footer's brand lockup — see `DECISIONS.md` DEC-017, which supersedes the earlier "Assetly Leasing" / Inter Tight treatment here. The full "assetly leasing" lockup appears in the Footer (§17).
+- Left: Assetly logo mark + "**assetly leasing**" (one clickable unit; click scrolls to Hero; hover = subtle opacity shift only, no decorative animation). The wordmark is set in **DM Serif Display**, matching the Footer's brand lockup — see `DECISIONS.md` DEC-017, which supersedes the earlier Inter Tight treatment here, and DEC-044, which restores the "leasing" suffix DEC-017 had dropped. The bar and the Footer (§17) now carry the same lockup.
 - Right: **Compare · Sectors · About · Contact**.
 - Typography: the four nav **links** use Inter Tight, uppercase, `9–11px`, letter-spacing `0.17em–0.26em`, medium/regular weight. This line does not govern the wordmark (DEC-017).
 - Fixed to top, horizontally spacious, visually lightweight, compact rather than a large conventional header. The bar is inset by its own `--nav-gutter` (`clamp(12px,1.6vw,26px)`) rather than the page gutter, so it spans nearly the full display width with a small edge gap (DEC-017); page sections continue to align to `clamp(20px,5vw,60px)`.
@@ -140,7 +140,7 @@ Two easing curves cover the entire site:
 
 **Mobile**
 
-- Left: logo + "**assetly**" (the same lockup as desktop — DEC-017 removed the desktop/mobile wordmark split). Right: hamburger icon.
+- Left: logo + "**assetly leasing**" (the same lockup as desktop — DEC-017 removed the desktop/mobile wordmark split, DEC-044 set its wording). Right: hamburger icon.
 - Hamburger: minimal 2–3 line icon, thin strokes, transforms into an **X**; transition ~`0.5–0.7s` with the site's standard easing.
 - On open: full-width top overlay/dropdown (**not** a side drawer) — dark `#21241A` surface, links (Compare, Sectors, About, Contact) stacked vertically, large touch spacing, Ivory/Khaki typography, subtle staggered fade/slide entrance.
 

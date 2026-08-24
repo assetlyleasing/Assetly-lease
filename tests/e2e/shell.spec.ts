@@ -36,8 +36,11 @@ test.describe("desktop navigation", () => {
     }
 
     // The mark is decorative; the wordmark carries the accessible name (§20).
+    // Exact, because "assetly leasing" is also a substring of the © line.
     await expect(
-      page.getByRole("banner").getByRole("link", { name: "assetly", exact: true }),
+      page
+        .getByRole("banner")
+        .getByRole("link", { name: "assetly leasing", exact: true }),
     ).toBeVisible();
   });
 

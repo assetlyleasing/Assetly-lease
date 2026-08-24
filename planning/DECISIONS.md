@@ -199,7 +199,7 @@ Every important technical or product decision, including conflict resolutions fo
 
 - **Date**: 2026-08-20
 - **Decision**: Three changes to the navigation as specified in `SOURCE_OF_TRUTH.md` §10, all approved directly by the user while reviewing the built Phase 1 shell:
-  1. The nav wordmark is **"assetly"** alone. The "Leasing" suffix is dropped from the bar. The Footer keeps the full "assetly leasing" lockup per §17.
+  1. The nav wordmark is **"assetly"** alone. The "Leasing" suffix is dropped from the bar. The Footer keeps the full "assetly leasing" lockup per §17. *(Point 1 only is superseded by DEC-044; points 2 and 3 stand.)*
   2. The wordmark is set in **DM Serif Display (`--d`)**, matching the Footer's brand treatment, rather than in the Inter Tight uppercase label voice. Every other label in the bar — the four nav links — stays in the §7 UI voice.
   3. The bar is inset by a new `--nav-gutter` (`clamp(12px, 1.6vw, 26px)`) instead of the page gutter `--gutter` (`clamp(20px,5vw,60px)`), so it spans nearly the full display width with a small edge gap.
 - **Reason**: Reviewed against the running site. The user's words: "assetly leasing (only assetly enough no leasing), the header, expand the length horizontal to use the laptop screen with little gap", and then, on seeing the Footer's brand block, "font in footer perfect, keep like that only for header assetly also."
@@ -477,6 +477,16 @@ Every important technical or product decision, including conflict resolutions fo
 
 ---
 
+### DEC-044 - The home button carries the full "assetly leasing" lockup
+
+- **Date**: 2026-08-24
+- **Decision**: `BRAND.navWordmark` becomes `"assetly leasing"`, matching `BRAND.footerWordmark`. Nothing else about the bar changes - the serif treatment, the `--nav-gutter` inset and the Inter Tight link voice all stand. Supersedes point 1 of DEC-017 only.
+- **Reason**: Owner review, `docs/WEBSITE NOTES.docx`: "Home button: logo + 'assetly leasing'". DEC-017 dropped the suffix on the reasoning that the bar should stay quiet chrome and the full name still appeared in the Footer; the owner has since decided the home button should name the company outright.
+- **Consequences**: Measured across 320-1440px, the longer wordmark costs the bar nothing: at 701px, the tightest point where the four links are still shown, 228px of clearance remains between the wordmark and the link group, and no width overflows. The two `BRAND` constants now hold the same string but stay separate, because they remain separate decisions that presently agree - the same reasoning DEC-042 records for the two focus-lock constants. Test locators for the banner brand link move to the exact name `"assetly leasing"`, which is why the Footer's assertion has always been scoped to `contentinfo`: the two lockups are no longer distinguishable by name alone.
+- **Status**: Active
+
+---
+
 ## Decision index
 
 | ID | Topic | Status |
@@ -497,7 +507,7 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-014 | Phase 0 exits with Firebase deferred; SDK wired from env vars only | Active |
 | DEC-015 | Self-host brand fonts via `next/font/local` if Google Fonts is unreachable | **Withdrawn** |
 | DEC-016 | `FOUND-008` prototype archival closed as not applicable | Superseded by DEC-021 |
-| DEC-017 | Nav wordmark = serif "assetly"; bar wider than the page gutter | Active |
+| DEC-017 | Nav wordmark = serif "assetly"; bar wider than the page gutter | Wordmark superseded by DEC-044 |
 | DEC-018 | Hero main line = "The lighter balance sheet." (supersedes DEC-001's headline) | Active |
 | DEC-019 | Compare calculator: no bars/magnitudes/value input; mode row jumps | Superseded in part by DEC-023 |
 | DEC-020 | `--nav-block` is what sections clear, not `--nav-h` | Active |
@@ -524,3 +534,4 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-041 | Sectors composes against a height budget, not a cell minimum | Active |
 | DEC-042 | Focus lock is half a screen; no resting position is blank | Active |
 | DEC-043 | Hero main line declares its size, clears its descender, hangs its full stop | Active |
+| DEC-044 | Home button carries the full "assetly leasing" lockup | Active |

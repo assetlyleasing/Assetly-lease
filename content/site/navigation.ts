@@ -60,11 +60,11 @@ export const FOOTER_GROUPS: readonly {
 
 export const BRAND = {
   /**
-   * Nav wordmark. The mark plus "assetly" alone — DEC-017 drops the "Leasing"
-   * suffix here so the bar stays quiet chrome; the Footer keeps the full
-   * lockup.
+   * Nav wordmark. The full lockup, matching the Footer's — DEC-044 restores
+   * the "leasing" suffix DEC-017 had dropped, so the home button names the
+   * company rather than abbreviating it.
    */
-  navWordmark: "assetly",
+  navWordmark: "assetly leasing",
   /** Footer wordmark is set lower-case in §17. */
   footerWordmark: "assetly leasing",
   /** §5 — sourced from the visiting card. */
