@@ -5,9 +5,13 @@
  * By section only, so every other piece of site copy is a typed constant here
  * and versioned with the code.
  *
- * Contact details are transcribed from the Assetly visiting card via
- * SOURCE_OF_TRUTH.md §16 and §17. Do not add a business fact to this file that
- * is not already in SOURCE_OF_TRUTH.md.
+ * Contact details come from SOURCE_OF_TRUTH.md §16 and §17, which DEC-049
+ * updated from the visiting card's details to the published ones. Do not add a
+ * business fact to this file that is not already in SOURCE_OF_TRUTH.md.
+ *
+ * `CONTACT.email` is the one place the enquiry address is written;
+ * `lib/email/buildEmailDraft.ts` derives its recipient from it rather than
+ * repeating the string.
  */
 
 import type { HomeSectionId } from "@/lib/scroll";
@@ -72,10 +76,10 @@ export const BRAND = {
 } as const;
 
 export const CONTACT = {
-  email: "sankar@assetly.lease",
+  email: "finance@assetly.lease",
   /** Display form; `telHref` is the dialable one. */
-  phone: "+91 96204 71985",
-  telHref: "+919620471985",
+  phone: "+91 81231 96924",
+  telHref: "+918123196924",
   /** §16 keeps the Contact section to the city only. */
   city: "Bengaluru",
 } as const;

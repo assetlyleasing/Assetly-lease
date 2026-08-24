@@ -268,11 +268,11 @@ test.describe("footer", () => {
     await expect(footer.getByRole("navigation", { name: "Company" })).toBeVisible();
 
     await expect(
-      footer.getByRole("link", { name: "sankar@assetly.lease" }),
-    ).toHaveAttribute("href", "mailto:sankar@assetly.lease");
+      footer.getByRole("link", { name: "finance@assetly.lease" }),
+    ).toHaveAttribute("href", "mailto:finance@assetly.lease");
     await expect(
-      footer.getByRole("link", { name: "+91 96204 71985" }),
-    ).toHaveAttribute("href", "tel:+919620471985");
+      footer.getByRole("link", { name: "+91 81231 96924" }),
+    ).toHaveAttribute("href", "tel:+918123196924");
 
     await expect(footer.getByText(/Raheja Chancery/)).toBeVisible();
     await expect(
@@ -383,7 +383,7 @@ test.describe("keyboard and landmarks", () => {
       expect(reached).toContain(label);
     }
     expect(reached).toContain("Why Us");
-    expect(reached).toContain("sankar@assetly.lease");
+    expect(reached).toContain("finance@assetly.lease");
   });
 
   test("focus is visible on nav links (§20)", async ({ page }) => {

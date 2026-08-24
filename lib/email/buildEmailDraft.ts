@@ -1,7 +1,12 @@
 import { enquiryLabel } from "@/content/contact/enquiryTypes";
+import { CONTACT } from "@/content/site/navigation";
 import type { ContactFormValues } from "@/lib/validation/contactForm";
 
-export const CONTACT_RECIPIENT = "sankar@assetly.lease";
+/**
+ * Derived, not repeated: this used to be a second literal of the same address,
+ * which meant the site could show one enquiry address and draft to another.
+ */
+export const CONTACT_RECIPIENT = CONTACT.email;
 
 export type EmailDraft = {
   recipient: string;

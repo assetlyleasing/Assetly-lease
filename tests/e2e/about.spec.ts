@@ -12,9 +12,9 @@ test.describe("About page", () => {
     await expect(page.getByText("Bengaluru", { exact: true })).toBeVisible();
     await expect(
       page.getByRole("region", { name: "About Assetly" }).getByRole("link", {
-        name: "sankar@assetly.lease",
+        name: "finance@assetly.lease",
       }),
-    ).toHaveAttribute("href", "mailto:sankar@assetly.lease");
+    ).toHaveAttribute("href", "mailto:finance@assetly.lease");
 
     const placeholder = page.locator("[data-about-media-placeholder]");
     await expect(placeholder).toBeVisible();

@@ -348,7 +348,7 @@ Referenced open decisions (`OD-xx`) and resolved conflicts (`DEC-xxx`) are defin
 5. Build the type step in `EnquiryFlow.tsx`: large selectable rows (01–04) + "Something else…" custom field.
 6. Build the details step in `EnquiryFlow.tsx`: Name/Company/Email/Phone(optional) always, plus the conditional fields for the selected type; underline-style inputs with focus states (line strengthens, Bottle accent, label shift, no glow/thick border).
 7. Build `lib/validation/contactForm.ts`: Zod schema per enquiry type (required vs. optional fields).
-8. Build `buildEmailDraft.ts`: template one recipient/subject/body payload, then derive identically encoded Gmail and mailto URLs targeting `sankar@assetly.lease`.
+8. Build `buildEmailDraft.ts`: template one recipient/subject/body payload, then derive identically encoded Gmail and mailto URLs targeting `finance@assetly.lease`.
 9. Wire primary "Open in Gmail →" action and secondary "Use another email app" fallback.
 10. Build mobile variant: bottom sheet (not side drawer) with visual grip and explicit Close control, Step 1 → Step 2 → action, full-width fields; no drag gesture.
 11. Implement section entrance sequence (label → heading → info stagger → map fade/draw → handle appears last).

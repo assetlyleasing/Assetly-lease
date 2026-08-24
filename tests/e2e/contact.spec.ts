@@ -40,13 +40,13 @@ test.describe("Contact — section and panels", () => {
     const section = page.locator(SECTION);
 
     await expect(page.getByRole("heading", { level: 2, name: "Let's talk." })).toBeVisible();
-    await expect(section.getByRole("link", { name: "sankar@assetly.lease" })).toHaveAttribute(
+    await expect(section.getByRole("link", { name: "finance@assetly.lease" })).toHaveAttribute(
       "href",
-      "mailto:sankar@assetly.lease",
+      "mailto:finance@assetly.lease",
     );
-    await expect(section.getByRole("link", { name: "+91 96204 71985" })).toHaveAttribute(
+    await expect(section.getByRole("link", { name: "+91 81231 96924" })).toHaveAttribute(
       "href",
-      "tel:+919620471985",
+      "tel:+918123196924",
     );
     await expect(section).toContainText("Bengaluru");
     await expect(section).not.toContainText("Unit 101");
@@ -143,7 +143,7 @@ test.describe("Contact — enquiry branches and drafts", () => {
     const mailtoUrl = (await mailto.getAttribute("href"))!;
     const mailtoParams = new URLSearchParams(mailtoUrl.split("?")[1]);
 
-    expect(gmailUrl.searchParams.get("to")).toBe("sankar@assetly.lease");
+    expect(gmailUrl.searchParams.get("to")).toBe("finance@assetly.lease");
     expect(gmailUrl.searchParams.get("su")).toBe("Operating Lease Enquiry — ABC Manufacturing");
     expect(gmailUrl.searchParams.get("body")).toContain("Asset / equipment: CNC machinery");
     expect(mailtoParams.get("subject")).toBe(gmailUrl.searchParams.get("su"));

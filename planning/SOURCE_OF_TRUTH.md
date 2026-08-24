@@ -10,7 +10,7 @@ Derived from: `plan.md` (final, 2026-08-19 17:43 revision — takes precedence o
 
 ## 1. Project scope
 
-Assetly is a B2B operating-lease structuring company. The website's job is to explain the lease-vs-loan-vs-purchase proposition, establish brand credibility, and convert visitor interest into a Gmail-drafted enquiry sent to `sankar@assetly.lease`. Two public pages, one protected internal panel. No general-purpose CMS, no user accounts on the public site, no e-commerce, no blog.
+Assetly is a B2B operating-lease structuring company. The website's job is to explain the lease-vs-loan-vs-purchase proposition, establish brand credibility, and convert visitor interest into a Gmail-drafted enquiry sent to `finance@assetly.lease`. Two public pages, one protected internal panel. No general-purpose CMS, no user accounts on the public site, no e-commerce, no blog.
 
 ## 2. Routes
 
@@ -349,7 +349,7 @@ The reading order and the indices a visitor sees are DEC-045's, which reorders t
 
 **Purpose**: show primary ways to reach Assetly, give simple Bengaluru location context, and let a visitor quickly prepare an enquiry continued through their own email client. The full postal address is intentionally **excluded** from this section — reserved for the Footer.
 
-**Contact details** (from the Assetly visiting card): Email `sankar@assetly.lease` (clickable); Phone `+91 96204 71985` (tap-to-call on supported devices); Location "Bengaluru" only (no full address here).
+**Contact details** (DEC-049, superseding the visiting card's details): Email `finance@assetly.lease` (clickable); Phone `+91 81231 96924` (tap-to-call on supported devices); Location "Bengaluru" only (no full address here).
 
 **Desktop layout**: ~40/60 split. Left: "CONTACT" label, heading "Let's talk.", Email, Phone, Location line. Right: large simplified Bengaluru map visual (warm muted tones, minimal street/detail noise, Assetly marker, subtle Olive line work, Paper/Field tones, no default-Google-Maps look, no extra info cards) with a "BENGALURU" micro-label, and a minimal contact drawer handle (**"CONTACT ›"**) attached to the map's edge — styled as a drawer handle, not a large CTA button.
 
@@ -380,7 +380,7 @@ The reading order and the indices a visitor sees are DEC-045's, which reorders t
 
 **Form design**: underline-style fields (no boxed inputs). On focus: line strengthens, subtle Bottle accent, label shifts gently, no glow, no thick borders. Generous spacing.
 
-**Final action**: primary **"Open in Gmail →"** generates a Gmail compose draft (recipient `sankar@assetly.lease`, subject `{Enquiry type} Enquiry — {Company}`, and one deterministic body built from the selected type + fields) — nothing sends automatically, the visitor reviews/edits/sends themselves. Secondary, subtle fallback: **"Use another email app"** uses the identical recipient/subject/body through `mailto:` and the visitor's default mail client. Blank optional lines are omitted and all visitor content is URL-encoded; no enquiry is submitted to Assetly infrastructure or persisted in Firebase.
+**Final action**: primary **"Open in Gmail →"** generates a Gmail compose draft (recipient `finance@assetly.lease`, subject `{Enquiry type} Enquiry — {Company}`, and one deterministic body built from the selected type + fields) — nothing sends automatically, the visitor reviews/edits/sends themselves. Secondary, subtle fallback: **"Use another email app"** uses the identical recipient/subject/body through `mailto:` and the visitor's default mail client. Blank optional lines are omitted and all visitor content is URL-encoded; no enquiry is submitted to Assetly infrastructure or persisted in Firebase.
 
 **Typography**: DM Serif Display for "Let's talk.", Bengaluru/major location text, large panel headings. DM Serif Text for email, phone, form input values, supporting info. Inter Tight for all labels (CONTACT, EMAIL, PHONE, LOCATION), enquiry indexes, form field labels, drawer controls, CTA microcopy.
 
@@ -405,7 +405,7 @@ Feels like a continuation of the nav/header system (same dark surface, typograph
   - Explore: Compare, Why Us, Sectors
   - Company: Contact, About Us
 - **Right (Official information)**:
-  - CONTACT: `sankar@assetly.lease`, `+91 96204 71985`
+  - CONTACT: `finance@assetly.lease`, `+91 81231 96924`
   - OFFICE (full address, appears **only** here): Unit 101, Raheja Chancery, 113, Brigade Road, Bengaluru, Karnataka — 560025
   - No repeated website URL.
 

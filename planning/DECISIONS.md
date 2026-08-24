@@ -531,6 +531,16 @@ Every important technical or product decision, including conflict resolutions fo
 
 ---
 
+### DEC-049 - The published contact identity is finance@assetly.lease and +91 81231 96924
+
+- **Date**: 2026-08-24
+- **Decision**: The site's email becomes `finance@assetly.lease` and its phone `+91 81231 96924`, replacing `sankar@assetly.lease` and `+91 96204 71985` in the Contact section, the Footer, the About page and every enquiry draft. `CONTACT_RECIPIENT` in `buildEmailDraft.ts` is derived from `CONTACT.email` rather than written out a second time.
+- **Reason**: Owner review, `docs/WEBSITE NOTES.docx`, which gives both under "Contact:" and repeats the address under "About:". §16 had described the old pair as coming from the Assetly visiting card; the published details are a role address and a different line.
+- **Consequences**: A role address rather than a person's is what the site can keep showing as people change, which is the point of the change. The second literal in `buildEmailDraft.ts` was a real hazard while it lasted - the site could display one enquiry address and draft to another - and deriving it means the address is now written once. §16, §17, §25 and `MASTER_PLAN.md`'s Phase 4 task 8 carry the new pair.
+- **Status**: Active
+
+---
+
 ## Decision index
 
 | ID | Topic | Status |
@@ -583,3 +593,4 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-046 | Slide 01 titled Ownership Risk; the tax argument drops two claims | Active |
 | DEC-047 | The graph's three columns carry three tones, stepped in lightness | Active |
 | DEC-048 | A fourth `minimal` tier, used by Upfront Cash's Lease reading | Active |
+| DEC-049 | Published contact identity is finance@assetly.lease / +91 81231 96924 | Active |
