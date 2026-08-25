@@ -13,6 +13,9 @@ Read, in this order:
 3. `EXECUTION_ORDER.md` — the granular task checklist and current status markers
 4. `DECISIONS.md` — why things are the way they are; don't reopen `Active` decisions without a new material constraint
 5. Latest `PROGRESS.md` — what actually happened last cycle, not just what was planned
+6. `docs/plot.md` — the structural map: layers, module responsibilities, load-bearing conventions
+
+Then query the Codebase Memory graph to locate the code before reading source — see `CLAUDE.md`.
 
 ### 2. ORIENT
 
@@ -68,6 +71,7 @@ After verification passes (or partially passes — be honest):
 - Write/update `PROGRESS.md` (overwrite it each cycle — it reflects the *current* state, not a running log; see its template) recording: what was completed, files changed, tests run and their results, unresolved problems, decisions needed, and the next recommended task.
 - Update `SOURCE_OF_TRUTH.md` **only** when an approved product/design decision actually changed (not for routine implementation details).
 - Update `DECISIONS.md` whenever a meaningful technical/product decision is made or changed — new entry, don't edit history. If an `OPEN DECISION` (§25) got resolved, remove it from that table and, if it materially affected the approved spec, add a `DECISIONS.md` entry documenting what was decided and why.
+- If the *structure* changed, update `docs/plot.md` and re-index Codebase Memory — see `CLAUDE.md`.
 
 ### 7. LOOP
 
