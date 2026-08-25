@@ -18,44 +18,50 @@ import {
  * `DECISIONS.md` entry first. Do not "fix" the test.
  */
 
-/** The four locked headlines, in DEC-045's reading order. */
+/** The four locked headlines, in DEC-052's reading order. */
 const HEADLINES = [
-  "Use the asset. Not the ownership risk.",
-  "A simpler path to deduction.",
+  "Use what you need. Leave the ownership behind.",
+  "A simpler tax treatment.",
   "Keep leverage light. Keep capacity available.",
   "Preserve capital. Keep your business moving.",
 ];
 
 /**
- * The four locked copy lines, verbatim apart from the capital letter each one
- * starts with — §13 writes them as a continuation of "Copy:". The Tax
- * Treatment line is the owner's shorter one (DEC-046), which withdraws the
- * depreciation block-rate and 180-day claims §13 first carried.
+ * The four locked copy lines. The tax line carries only the two claims DEC-046
+ * left standing — the depreciation block-rate and 180-day usage claims §13 first
+ * had are withdrawn and must not come back without a further decision.
  */
 const COPY = [
-  "Operating lease means Assetly bears resale/obsolescence risk; loan/purchase means the customer bears it.",
-  "Full rentals allowable as deduction; GST input credit continues to apply.",
-  "Preserves bank credit lines and collateral capacity, lighter impact on Debt/Equity and Debt/EBITDA vs. loan-funded acquisition.",
-  "Access needed assets without a large upfront outlay; operating lease preserves working capital; loan may require 10–25% margin; outright purchase requires 100% upfront.",
+  "With an operating lease, Assetly carries the resale and obsolescence exposure. With a loan or outright purchase, that risk remains with the customer.",
+  "Full rentals are allowable as a deduction. GST input credit continues to apply.",
+  "Preserve bank credit lines and collateral capacity while maintaining a lighter impact on Debt/Equity and Debt/EBITDA compared with loan-funded acquisition.",
+  "Access the assets you need without a large upfront outlay.",
 ];
 
-/** The twelve locked calculator readings from §13, in Lease/Loan/Purchase order. */
+/** The twelve locked calculator readings, in Lease/Loan/Purchase order. */
 const COLUMNS = [
   ["Assetly bears it", "You bear it", "You bear it"],
   ["Full rental deductible", "Depreciation + interest", "Depreciation only"],
-  ["Minimal", "Raises Debt/Equity", "Drains cash"],
+  ["Minimal impact", "Raises Debt/Equity", "Drains cash"],
   ["Low", "10–25% margin", "100% upfront"],
 ];
 
 const TITLES = [
-  "Ownership Risk",
+  "Risk of Obsolescence",
   "Tax Treatment",
   "Leverage Impact",
   "Upfront Cash",
 ];
 
+/**
+ * Sequential in reading order (DEC-053): the section reads 01, 02, 03, 04 top to
+ * bottom. The owner's notes address these slides by §13's original numbers, which
+ * no longer match — check `DECISIONS.md` before assuming a note's "01" is this one.
+ */
+const INDICES = ["01", "02", "03", "04"];
+
 const METRICS = [
-  "Risk of obsolescence — lower is lighter",
+  "Customer ownership risk — lower is lighter",
   "Deduction breadth — higher is broader",
   "Capacity pressure — lower is lighter",
   "Upfront requirement — lower is lighter",
@@ -69,15 +75,10 @@ const TIERS = [
 ];
 
 describe("Compare content (§13)", () => {
-  it("has exactly the four arguments §13 defines, in DEC-045's order", () => {
+  it("has exactly the four arguments §13 defines, in DEC-053's order", () => {
     expect(COMPARE_SLIDES).toHaveLength(4);
     expect(COMPARE_SLIDES.map((slide) => slide.title)).toEqual(TITLES);
-    expect(COMPARE_SLIDES.map((slide) => slide.index)).toEqual([
-      "01",
-      "02",
-      "03",
-      "04",
-    ]);
+    expect(COMPARE_SLIDES.map((slide) => slide.index)).toEqual(INDICES);
   });
 
   it("reassembles into exactly the locked headlines", () => {

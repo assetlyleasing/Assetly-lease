@@ -553,6 +553,42 @@ Every important technical or product decision, including conflict resolutions fo
 
 ---
 
+### DEC-051 - Compare opens on Upfront Cash; the obsolescence slide swaps title and metric
+
+- **Date**: 2026-08-25
+- **Decision**: The four arguments read Upfront Cash, Risk of Obsolescence, Tax Treatment, Leverage Impact, renumbered 01 to 04 in that order. This supersedes DEC-045's ordering. The obsolescence slide's title and metric label exchange roles: it is titled **Risk of Obsolescence**, over the metric **Customer ownership risk - lower is lighter** - where DEC-046 had it titled Ownership Risk over "Risk of obsolescence". Its headline is rewritten from "Use the asset. Not the ownership risk." to **"Use the asset. Not the risk of owning it."**, keeping `asset` as the single emphasised word. Upfront Cash's Lease bar drops from `0.16` to `0.09` of the track, deepening the contrast between it and the 10-25% margin beside it. The graph keeps DEC-047's three tones unchanged - the owner reviewed the rendered bars and accepted them as they stand.
+- **Reason**: Owner review restating `docs/WEBSITE NOTES.docx` with numbered detail per slide: "01: Preserve capital", "02: Risk of obsolescence", "03: ... Full rentals allowable as deduction". DEC-045 read the note's parenthetical "(Use of asset, Tax, Leverage, Preserve capital)" as naming the new reading order and opened the section on the obsolescence argument; the numbered lines say the opposite, and they are the more specific instruction. The capital argument is also the one that earns a visitor's attention for the other three.
+- **Alternatives considered**: Leaving DEC-045's order and treating the numbered lines as references to the owner's original numbering; keeping "Not the ownership risk." now that the slide is titled Risk of Obsolescence.
+- **Why rejected**: The numbered lines pair each index with copy that identifies the slide unambiguously, so they cannot be read as the old numbering. Keeping the old headline would have put "ownership risk" in the headline, the title and the metric label of one slide while the title no longer named it.
+- **Consequences**: `COMPARE_SLIDES` is index-addressed by the scroll-focus loop and the mode row, so array order is reading order and nothing else needed rewiring. Slide ids are untouched, so every `#compare-slide-*` anchor still resolves. `compareCopy.test.ts` locks all six ordered arrays and its "no artificial percentage" guard now addresses `COMPARE_SLIDES[1]`. `compare.spec.ts` addresses slides by index and is the thing to check first if the order is revisited again. The `minimal` tier remains used by exactly one reading, so its scale is effectively that bar's own height.
+- **Status**: Active
+
+---
+
+### DEC-052 - Compare reads 02, 03, 04, 01 - the owner's numbering, not a resequenced one
+
+- **Date**: 2026-08-25
+- **Decision**: The four arguments read Risk of Obsolescence, Tax Treatment, Leverage Impact, Upfront Cash, and keep §13's original indices unchanged - so the section reads **02, 03, 04, 01** down the page and across the mode row. This supersedes both DEC-045 (which resequenced to 01-04) and DEC-051 (which opened on Upfront Cash). The number-to-argument mapping DEC-051 established is retained: 01 is Preserve Capital / Upfront Cash, 02 Risk of Obsolescence, 03 Tax Treatment, 04 Leverage Impact. All four slides were rewritten as one sequence rather than edited line by line: reduce ownership risk, then improve the treatment of recurring rentals, then keep financial capacity lighter, and close on preserving upfront capital.
+- **Reason**: Owner review, WEBSITE NOTES: "The visible slide numbers must remain 02, 03, 04, 01 in that order", repeated as a constraint ("do not change the approved 02 - 03 - 04 - 01 order"). DEC-045 had put the resequencing question to the owner and recorded a preference for sequential numbers; that preference is now reversed on the record, so the earlier rejection no longer stands. Closing on the capital argument also lets the sequence build to the outcome rather than open on it.
+- **Alternatives considered**: Keeping DEC-045/DEC-051's sequential 01-04 and treating the notes' numbers as references to the old numbering.
+- **Why rejected**: The notes state the display requirement directly and twice, and pair each number with the copy that identifies its slide, so they cannot be read as referring to anything else.
+- **Consequences**: `index` is a display string only - the slide and the mode row render it, and nothing derives position from it - so non-sequential values needed no wiring change. Array order remains reading order for the scroll-focus loop and the mode row. Slide ids are untouched, so every `#compare-slide-*` anchor still resolves. `compareCopy.test.ts` locks the indices as an explicit `INDICES` array so a future resequencing fails loudly, and its "no artificial percentage" guard follows the obsolescence slide back to `COMPARE_SLIDES[0]`. Leverage's Lease reading becomes **Minimal impact** rather than **Minimal**, the one calculator value this change touches.
+- **Status**: Active
+
+---
+
+### DEC-053 - Compare's indices are resequenced 01 to 04 once the reading order settled
+
+- **Date**: 2026-08-25
+- **Decision**: The four arguments keep DEC-052's reading order - Risk of Obsolescence, Tax Treatment, Leverage Impact, Upfront Cash - and their indices are resequenced to run 01, 02, 03, 04 down the page and across the mode row. This supersedes the numbering half of DEC-052 only; the order, the rewritten copy, the titles, the metric labels and the reduced Upfront Cash Lease bar all stand. The mapping is now: 01 Risk of Obsolescence, 02 Tax Treatment, 03 Leverage Impact, 04 Upfront Cash.
+- **Reason**: Owner instruction, after the 02/03/04/01 sequence had been built and the calculator sync verified against it. Displaying §13's original numbers was a staging step that let the order be confirmed before the numbers moved; with the sequence settled, the number a visitor sees should be the position they are at. This restores the principle DEC-045 first set out and DEC-052 temporarily set aside.
+- **Alternatives considered**: Keeping the non-sequential 02, 03, 04, 01 permanently.
+- **Why rejected**: It only ever existed to verify the order independently of the numbering, and it left a visitor counting 02, 03, 04, 01 down a page with no way to know why.
+- **Consequences**: `index` remains a display string with nothing deriving position from it, so this was a four-value edit with no wiring change. The owner's notes still address these arguments by §13's original numbers, and those no longer match what the site shows - the divergence is recorded here and flagged in `slides.ts` and `compareCopy.test.ts` so a future note saying "01" is not assumed to mean the first slide. `compareCopy.test.ts` locks the sequence through its `INDICES` array.
+- **Status**: Active
+
+---
+
 ## Decision index
 
 | ID | Topic | Status |
@@ -601,9 +637,12 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-042 | Focus lock is half a screen; no resting position is blank | Active |
 | DEC-043 | Hero main line declares its size, clears its descender, hangs its full stop | Active |
 | DEC-044 | Home button carries the full "assetly leasing" lockup | Active |
-| DEC-045 | Compare reads Ownership Risk, Tax, Leverage, Upfront Cash; renumbered 01-04 | Active |
-| DEC-046 | Slide 01 titled Ownership Risk; the tax argument drops two claims | Active |
+| DEC-045 | Compare reads Ownership Risk, Tax, Leverage, Upfront Cash; renumbered 01-04 | Superseded by DEC-052 |
+| DEC-046 | Slide 01 titled Ownership Risk; the tax argument drops two claims | Title superseded by DEC-051 |
 | DEC-047 | The graph's three columns carry three tones, stepped in lightness | Active |
 | DEC-048 | A fourth `minimal` tier, used by Upfront Cash's Lease reading | Active |
 | DEC-049 | Published contact identity is finance@assetly.lease / +91 81231 96924 | Active |
 | DEC-050 | About uses the owner's four-paragraph company and leadership statement | Active |
+| DEC-051 | Compare opens on Upfront Cash; obsolescence slide swaps title and metric | Order superseded by DEC-052 |
+| DEC-052 | Compare reads Obsolescence, Tax, Leverage, Upfront Cash | Numbering superseded by DEC-053 |
+| DEC-053 | Compare's indices resequenced 01-04 once the reading order settled | Active |

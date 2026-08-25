@@ -14,31 +14,35 @@ const CALCULATOR = '[aria-controls="compare-calculator"]';
 const PANEL = "#compare-calculator";
 const GRAPH = `${PANEL} [data-compare-graph]`;
 
-/** In DEC-045's reading order — `centreSlide` addresses these by index. */
+/** In DEC-053's reading order — `centreSlide` addresses these by index. */
 const SLIDES = [
   {
     id: "obsolescence",
-    headline: "Use the asset. Not the ownership risk.",
-    title: "Ownership Risk",
+    index: "01",
+    headline: "Use what you need. Leave the ownership behind.",
+    title: "Risk of Obsolescence",
     values: ["Assetly bears it", "You bear it", "You bear it"],
     tiers: ["low", "high", "high"],
   },
   {
     id: "tax-treatment",
-    headline: "A simpler path to deduction.",
+    index: "02",
+    headline: "A simpler tax treatment.",
     title: "Tax Treatment",
     values: ["Full rental deductible", "Depreciation + interest", "Depreciation only"],
     tiers: ["high", "mid", "low"],
   },
   {
     id: "leverage",
+    index: "03",
     headline: "Keep leverage light. Keep capacity available.",
     title: "Leverage Impact",
-    values: ["Minimal", "Raises Debt/Equity", "Drains cash"],
+    values: ["Minimal impact", "Raises Debt/Equity", "Drains cash"],
     tiers: ["low", "high", "high"],
   },
   {
     id: "upfront-cash",
+    index: "04",
     headline: "Preserve capital. Keep your business moving.",
     title: "Upfront Cash",
     values: ["Low", "10–25% margin", "100% upfront"],
@@ -213,9 +217,9 @@ test.describe("compare — the calculator", () => {
     ).toBe(true);
 
     const fills = page.locator(`${GRAPH} [data-tier]`);
-    await expect(fills.nth(0)).toHaveAttribute("data-tier", "high");
-    await expect(fills.nth(1)).toHaveAttribute("data-tier", "mid");
-    await expect(fills.nth(2)).toHaveAttribute("data-tier", "low");
+    for (const [column, tier] of SLIDES[1].tiers.entries()) {
+      await expect(fills.nth(column)).toHaveAttribute("data-tier", tier);
+    }
   });
 
   test("renders a tall, weighted, fully visible graph", async ({ page }) => {
@@ -244,10 +248,10 @@ test.describe("compare — the calculator", () => {
   test("syncs backwards too, not only on the way down", async ({ page }) => {
     await page.goto("/");
     await centreSlide(page, 3);
-    await expect(page.locator(`${PANEL} h2`)).toHaveText("Upfront Cash");
+    await expect(page.locator(`${PANEL} h2`)).toHaveText(SLIDES[3].title);
 
     await centreSlide(page, 1);
-    await expect(page.locator(`${PANEL} h2`)).toHaveText("Tax Treatment");
+    await expect(page.locator(`${PANEL} h2`)).toHaveText(SLIDES[1].title);
   });
 
   test("announces the mode politely, and only the mode (§20)", async ({
@@ -258,7 +262,7 @@ test.describe("compare — the calculator", () => {
 
     const live = page.locator(`${PANEL} [aria-live="polite"]`);
     await expect(live).toHaveCount(1);
-    await expect(live).toHaveText("Leverage Impact");
+    await expect(live).toHaveText(SLIDES[2].title);
   });
 
   test("slides away before Why Us is properly on screen", async ({ page }) => {
@@ -296,7 +300,7 @@ test.describe("compare — manual override (§13)", () => {
     }
 
     // The reading still follows the reader while the panel is closed.
-    await expect(page.locator(`${PANEL} h2`)).toHaveText("Upfront Cash");
+    await expect(page.locator(`${PANEL} h2`)).toHaveText(SLIDES[3].title);
 
     await tab.click();
     await expect(tab).toHaveAttribute("aria-expanded", "true");
@@ -334,10 +338,10 @@ test.describe("compare — manual override (§13)", () => {
 
     await page.locator(`${PANEL} button`).nth(1).click();
 
-    await expect(page.locator(`${PANEL} h2`)).toHaveText("Tax Treatment");
+    await expect(page.locator(`${PANEL} h2`)).toHaveText(SLIDES[1].title);
     await expect(
       page.locator(`${PANEL} button[aria-pressed="true"]`),
-    ).toContainText("Tax Treatment");
+    ).toContainText(SLIDES[1].title);
   });
 });
 
@@ -387,8 +391,8 @@ test.describe("compare — desktop drawer", () => {
         return { opacity: Number(style.opacity), filter: style.filter };
       }, id);
 
-    const focused = await read("tax-treatment");
-    const neighbour = await read("leverage");
+    const focused = await read(SLIDES[1].id);
+    const neighbour = await read(SLIDES[2].id);
 
     expect(focused!.opacity).toBeGreaterThan(0.95);
     expect(focused!.filter === "none" || focused!.filter.includes("blur(0")).toBe(

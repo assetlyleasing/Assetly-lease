@@ -24,9 +24,13 @@ import {
  * to change, that is a decision for §13 and a `DECISIONS.md` entry, not an
  * edit here.
  *
- * The reading order is DEC-045's, not §13's original one, and the indices are
- * sequential in that order — the numbering a visitor sees is the order they
- * meet the arguments in.
+ * The reading order is DEC-052's: Risk of Obsolescence, Tax Treatment,
+ * Leverage Impact, then Upfront Cash. The indices are sequential in that order
+ * (DEC-053) — the number a visitor sees is the position they are at, not a
+ * record of where the argument sat in §13. The owner's notes still address
+ * these slides by §13's original numbers, so read the two against
+ * `DECISIONS.md` rather than assuming they agree. `index` is a display string
+ * only; nothing derives position from it.
  *
  * `tests/unit/compareCopy.test.ts` reassembles the headline segments and
  * asserts the locked wording, so a careless edit fails rather than quietly
@@ -85,14 +89,14 @@ export const COMPARE_SLIDES: readonly CompareSlide[] = [
   {
     id: "obsolescence",
     index: "01",
-    title: "Ownership Risk",
-    metricLabel: "Risk of obsolescence — lower is lighter",
+    title: "Risk of Obsolescence",
+    metricLabel: "Customer ownership risk — lower is lighter",
     headline: [
-      { text: "Use the " },
-      { text: "asset", emphasis: true },
-      { text: ". Not the ownership risk." },
+      { text: "Use what you " },
+      { text: "need", emphasis: true },
+      { text: ". Leave the ownership behind." },
     ],
-    copy: "Operating lease means Assetly bears resale/obsolescence risk; loan/purchase means the customer bears it.",
+    copy: "With an operating lease, Assetly carries the resale and obsolescence exposure. With a loan or outright purchase, that risk remains with the customer.",
     plate: ObsolescencePlate,
     columns: [
       { label: "Lease", value: "Assetly bears it", tier: "low", lead: true },
@@ -108,9 +112,9 @@ export const COMPARE_SLIDES: readonly CompareSlide[] = [
     headline: [
       { text: "A " },
       { text: "simpler", emphasis: true },
-      { text: " path to deduction." },
+      { text: " tax treatment." },
     ],
-    copy: "Full rentals allowable as deduction; GST input credit continues to apply.",
+    copy: "Full rentals are allowable as a deduction. GST input credit continues to apply.",
     plate: TaxTreatmentPlate,
     columns: [
       { label: "Lease", value: "Full rental deductible", tier: "high", lead: true },
@@ -128,10 +132,10 @@ export const COMPARE_SLIDES: readonly CompareSlide[] = [
       { text: "light", emphasis: true },
       { text: ". Keep capacity available." },
     ],
-    copy: "Preserves bank credit lines and collateral capacity, lighter impact on Debt/Equity and Debt/EBITDA vs. loan-funded acquisition.",
+    copy: "Preserve bank credit lines and collateral capacity while maintaining a lighter impact on Debt/Equity and Debt/EBITDA compared with loan-funded acquisition.",
     plate: LeverageImpactPlate,
     columns: [
-      { label: "Lease", value: "Minimal", tier: "low", lead: true },
+      { label: "Lease", value: "Minimal impact", tier: "low", lead: true },
       { label: "Loan", value: "Raises Debt/Equity", tier: "high" },
       { label: "Purchase", value: "Drains cash", tier: "high" },
     ],
@@ -146,7 +150,7 @@ export const COMPARE_SLIDES: readonly CompareSlide[] = [
       { text: "capital", emphasis: true },
       { text: ". Keep your business moving." },
     ],
-    copy: "Access needed assets without a large upfront outlay; operating lease preserves working capital; loan may require 10–25% margin; outright purchase requires 100% upfront.",
+    copy: "Access the assets you need without a large upfront outlay.",
     plate: UpfrontCashPlate,
     columns: [
       { label: "Lease", value: "Low", tier: "minimal", lead: true },
