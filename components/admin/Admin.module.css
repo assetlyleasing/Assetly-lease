@@ -1,0 +1,340 @@
+/*
+ * Shared admin-panel styling (OD-07: layout/visual design is open — this is
+ * deliberately small and utilitarian, per §18, not a themed product surface).
+ * One stylesheet for the whole panel since it is a single small feature.
+ */
+
+.stateScreen {
+  display: flex;
+  min-height: 60svh;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--u);
+  font-size: var(--u-size);
+  letter-spacing: var(--u-track-tight);
+  text-transform: uppercase;
+  color: var(--moss);
+}
+
+.page {
+  min-height: 100svh;
+  padding: calc(var(--nav-block) + 32px) var(--gutter) 80px;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: clamp(28px, 5vh, 48px);
+}
+
+.title {
+  font-family: var(--d);
+  font-size: clamp(24px, 2.4vw, 32px);
+}
+
+.headerMeta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--u);
+  font-size: 12px;
+  letter-spacing: var(--u-track-tight);
+  color: var(--moss);
+}
+
+.textButton {
+  border: 0;
+  background: none;
+  padding: 0;
+  font-family: var(--u);
+  font-size: var(--u-size);
+  letter-spacing: var(--u-track-tight);
+  text-transform: uppercase;
+  color: var(--bottle);
+  cursor: pointer;
+}
+
+.textButton:hover,
+.textButton:focus-visible {
+  text-decoration: underline;
+}
+
+.section {
+  padding: clamp(22px, 3vh, 32px) 0;
+  border-top: var(--hairline);
+}
+
+.section:first-of-type {
+  border-top: none;
+}
+
+.sectionHeading {
+  margin-bottom: 16px;
+  font-family: var(--u);
+  font-size: var(--u-size);
+  letter-spacing: var(--u-track-wide);
+  text-transform: uppercase;
+  color: var(--moss);
+}
+
+/* ---- Toggle ------------------------------------------------------------- */
+
+.toggleRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.toggleSwitch {
+  position: relative;
+  width: 44px;
+  height: 26px;
+  flex: none;
+  border: var(--hairline);
+  border-radius: 999px;
+  background: var(--field);
+  cursor: pointer;
+  transition: background var(--dur-toggle) var(--eio);
+}
+
+.toggleSwitch[data-on="true"] {
+  background: var(--bottle);
+}
+
+.toggleSwitch span {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--paper);
+  transition: transform var(--dur-toggle) var(--eio);
+}
+
+.toggleSwitch[data-on="true"] span {
+  transform: translateX(18px);
+}
+
+.toggleSwitch:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.toggleLabel {
+  font-family: var(--s);
+  font-size: 16px;
+}
+
+/* ---- Forms --------------------------------------------------------------- */
+
+.form {
+  display: grid;
+  gap: 18px;
+  max-width: 420px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field label {
+  font-family: var(--u);
+  font-size: var(--u-size);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: var(--u-track-wide);
+  color: var(--moss);
+}
+
+.field input[type="text"],
+.field input[type="email"],
+.field input[type="password"] {
+  width: 100%;
+  padding: 6px 0 10px;
+  border: 0;
+  border-bottom: var(--hairline);
+  border-radius: 0;
+  outline: none;
+  background: transparent;
+  font-family: var(--s);
+  font-size: 17px;
+  color: var(--ink);
+  transition: border-color var(--dur-toggle) var(--eio);
+}
+
+.field input:focus {
+  border-bottom-color: var(--bottle);
+}
+
+.field[data-invalid="true"] input {
+  border-bottom-color: #8a382f;
+}
+
+.field input[type="file"] {
+  font-family: var(--u);
+  font-size: 13px;
+}
+
+.error {
+  font-family: var(--u);
+  font-size: 12px;
+  color: #8a382f;
+}
+
+.formError {
+  font-family: var(--u);
+  font-size: 13px;
+  color: #8a382f;
+}
+
+.hint {
+  font-family: var(--u);
+  font-size: 12px;
+  color: var(--moss);
+}
+
+.primaryButton {
+  display: inline-flex;
+  min-height: var(--touch-min);
+  align-items: center;
+  justify-content: center;
+  padding: 0 22px;
+  width: fit-content;
+  border: 1px solid var(--bottle);
+  border-radius: 999px;
+  background: var(--bottle);
+  color: var(--paper);
+  font-family: var(--u);
+  font-size: var(--u-size);
+  letter-spacing: var(--u-track-tight);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    opacity var(--dur-toggle) var(--eio),
+    transform var(--dur-toggle) var(--eio);
+}
+
+.primaryButton:hover,
+.primaryButton:focus-visible {
+  opacity: 0.9;
+}
+
+.primaryButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---- Logo list ------------------------------------------------------------ */
+
+.logoList {
+  display: grid;
+  gap: 0;
+  border-top: var(--hairline);
+}
+
+.logoRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: var(--hairline);
+}
+
+.logoRow[data-active="false"] {
+  opacity: 0.5;
+}
+
+.logoThumb {
+  display: flex;
+  width: 64px;
+  height: 40px;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  background: var(--field);
+}
+
+.logoThumb img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.logoInfo {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.logoName {
+  font-family: var(--s);
+  font-size: 16px;
+}
+
+.logoAlt {
+  font-family: var(--u);
+  font-size: 12px;
+  color: var(--moss);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logoActions {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 10px;
+}
+
+.iconButton {
+  display: inline-flex;
+  width: var(--touch-min);
+  height: var(--touch-min);
+  align-items: center;
+  justify-content: center;
+  border: var(--hairline);
+  border-radius: 6px;
+  background: var(--paper);
+  font-family: var(--u);
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--ink);
+}
+
+.iconButton:hover:not(:disabled),
+.iconButton:focus-visible {
+  border-color: var(--bottle);
+  color: var(--bottle);
+}
+
+.iconButton:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.emptyState {
+  padding: 24px 0;
+  font-family: var(--u);
+  font-size: 13px;
+  color: var(--moss);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toggleSwitch,
+  .toggleSwitch span,
+  .field input,
+  .primaryButton {
+    transition: none !important;
+  }
+}

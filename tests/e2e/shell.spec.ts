@@ -334,22 +334,16 @@ test.describe("footer", () => {
       .toBe(true);
   });
 
-  test("legal labels are present but not yet linked (Phase 9)", async ({
-    page,
-  }) => {
+  test("legal links resolve to their routes (Phase 9)", async ({ page }) => {
     await page.goto("/");
 
     const footer = page.getByRole("contentinfo");
-    await expect(footer.getByText("Privacy Policy")).toBeVisible();
-    await expect(footer.getByText("Terms of Use")).toBeVisible();
-
-    // No dead anchors to routes that do not exist yet.
     await expect(
       footer.getByRole("link", { name: "Privacy Policy" }),
-    ).toHaveCount(0);
-    await expect(footer.getByRole("link", { name: "Terms of Use" })).toHaveCount(
-      0,
-    );
+    ).toHaveAttribute("href", "/privacy");
+    await expect(
+      footer.getByRole("link", { name: "Terms of Use" }),
+    ).toHaveAttribute("href", "/terms");
   });
 });
 

@@ -113,16 +113,20 @@ landed on `origin`.
 1. ✅ Done — `assetlyleasing/Assetly-lease` created on GitHub and added locally as the `fresh` remote
    (`git remote add fresh https://github.com/assetlyleasing/Assetly-lease.git`). Nothing has been
    pushed to it yet.
-2. **When this cycle's work is finalized** (Phase 9 is already on `origin`; the Hero plate diagnosis
-   confirmed good and any resulting fix in, plus whichever motion-proposal candidate is approved and
-   built), push once from the repo root:
-   ```
-   git push fresh main
-   ```
-   This is a one-time clean push, not an ongoing second remote — `origin` remains where day-to-day
-   work continues to push.
+2. ✅ Done — `fresh/main` matches `origin/main` as of the Phase 9 commit
+   (`64f6025`). `origin` remains where day-to-day work continues to push; `fresh` is a snapshot target,
+   not an ongoing second remote to push every commit to unless the owner asks otherwise.
 
 ## 3. New Vercel project
+
+✅ Done — owner completed Vercel project setup and login directly; not run through this environment.
+
+## 4. Domain connection — assetly.lease
+
+✅ Done — owner is connecting `assetly.lease` manually outside this workflow.
+
+<details>
+<summary>Original step-by-step (kept for reference)</summary>
 
 1. `vercel login` from the repo root — this opens a browser for the OAuth flow. (The Vercel CLI is
    already installed in this environment at v50.17.1, just not logged in.)
@@ -134,7 +138,7 @@ landed on `origin`.
    (and Preview, if you want preview deployments to also talk to Firebase).
 4. Trigger a deploy (push to the repo, or "Redeploy" in the dashboard) and confirm the build succeeds.
 
-## 4. Domain connection — assetly.lease
+Domain connection steps (originally step 4):
 
 1. In the Vercel project's Settings → Domains, add `assetly.lease` (and `www.assetly.lease` if you
    want the `www` variant too — Vercel can redirect one to the other).
@@ -149,12 +153,14 @@ landed on `origin`.
    to a few hours depending on the registrar's TTL) and confirm `https://assetly.lease` resolves to
    the deployed site with a valid certificate (Vercel issues this automatically once DNS verifies).
 
+</details>
+
 ---
 
 ## After this runbook
 
-Once steps 1–4 are complete: Firebase is live (unblocking Phase 3's `OD-05`, with `OD-06` recorded as
-whichever auth method you picked in step 1), the new repo holds a clean copy of the code, the new
-Vercel project is deployed, and `assetly.lease` resolves to it. None of this requires further app code
-changes — it's infrastructure state, not something `PROGRESS.md`'s phase tracking needs to reflect
-beyond noting `OD-05`/`OD-06` as resolved once you confirm they are.
+Steps 1–4 are all complete: Firebase is live (`OD-05` resolved; `OD-06` resolved as Email/Password,
+`DEC-057`), the new repo holds a clean copy of the code once step 2's push happens, the Vercel project
+is deployed, and `assetly.lease` is connected — the owner ran steps 3 and 4 directly rather than through
+this environment. None of this requires further app code changes — it's infrastructure state, not
+something `PROGRESS.md`'s phase tracking needs to reflect beyond what's noted here.

@@ -6,93 +6,210 @@ This file reflects the *current* state of the project, not a running chronologic
 
 ## Current Phase
 
-Phase 9 (Legal pages + basic SEO) is **complete and merged into `main`**. Phases 0, 1, 2, 4, 5, 6, 7, 8, 8.5, and 9 are done. Phase 3 remains blocked on `OD-05`/`OD-06`, with a path to resolving both now documented in `planning/DEPLOYMENT_RUNBOOK.md`.
+Phase 3 (Trusted By infrastructure) is **complete and exited** — the full admin→public loop was
+verified end-to-end against the live project by the owner: signed in, toggled Trusted By on, uploaded a
+logo, and confirmed it renders in the public marquee. Phases 0–3, 4, 5, 6, 7, 8, 8.5, and 9 are all
+done. This session ran on a separate, parallel track from the Hero plate animation work (explicitly out
+of scope) — no Hero/hero-plate/motion files were touched.
 
 ## Current Task
 
-None outstanding from Phase 9. The Hero plate opening-animation dev/prod report is still awaiting the owner's fresh-incognito confirmation (see Issues/Blockers) — a defensive bfcache fix landed either way, since it's a real gap independent of which cause explains the original report. The Hero motion proposal moved from written proposal to two shipped additions (node-arrival pop, traveling journey marker) plus one deferred addition (a crane-lift animation at Access) that the owner asked to hold for a later cycle.
+None outstanding from Phase 3. Next up is Phase 10 (Accessibility, performance, QA) — see Next
+Recommended Task. The owner's requested favicon is also done this cycle (`DEC-058`) — see Completed
+This Cycle.
+
+### How the last Phase 3 bug was found and fixed
+
+The owner's manual pass surfaced a real bug, not an untested edge case: `subscribeActiveTrustedLogos`'s
+query (`where("active","==",true)` combined with `orderBy("sortOrder","asc")`) needs a Firestore
+composite index that doesn't exist automatically, so every public read of it failed with
+`failed-precondition` — caught by the deliberate silent-failure handling (§12/§18/§21), which made a
+missing index look identical to "no data" with nothing surfaced anywhere. Diagnosed directly against
+the live project with a small Node script that reproduced the exact query and surfaced Firestore's own
+index-creation link; the owner created it via the Firebase console (one click, then a short build wait
+— confirmed finished by re-running the same diagnostic script, which returned the uploaded logo).
+`firestore.indexes.json` is added to the repo so future environments provision this index automatically
+via `firebase deploy --only firestore:indexes` rather than relying on someone hitting the same failure.
+See `docs/plot.md`'s load-bearing conventions for the general lesson (any `where` + `orderBy` on
+different fields needs a composite index, and this failure mode is silent by design here).
 
 ## Status
 
-This cycle covered five threads at the owner's request, run in parallel rather than sequentially:
+This cycle picked up the outstanding threads listed in the task brief, in order:
 
-1. Phase 9 build-out (below).
-2. A verification-policy change (`DEC-054`): per-task testing now defaults to type check + lint + manual dev-server preview + owner approval, not a new automated suite per task. `LOOP.md` and `MASTER_PLAN.md` were updated to reflect this as the standing default, not a one-off.
-3. A deployment runbook (`planning/DEPLOYMENT_RUNBOOK.md`) for the owner to execute themselves — new Firebase project, a new GitHub repo (one clean push once this cycle's work is on `origin`, not an ongoing second remote), a new Vercel project, and the `assetly.lease` domain connection. None of `gh`, the Vercel CLI, or the Firebase CLI could complete their OAuth logins in this environment, so this track is owner-executed rather than run directly. Firebase web SDK config and Admin SDK service account were both supplied by the owner and wired into `.env.local` (gitignored, not committed) — both `lib/firebase/client.ts` and `admin.ts` now initialise.
-4. A Hero plate dev/prod animation discrepancy report — diagnosed as far as the code allows (see Issues/Blockers); a bfcache-restore gap was fixed regardless of the still-unconfirmed root cause.
-5. Hero plate motion work (`DEC-055`, `DEC-056`) — cursor parallax removed per owner feedback that the whole plate was tracking the mouse; a node-arrival pop and a traveling journey marker (Scale → Grow) added and shipped. A further crane-lift addition at Access was built, then deliberately reverted at the owner's request to keep this push to the shipped-and-approved state only — it will be redone in a later cycle.
+1. **OD-06 resolved** — admin auth method is Email/Password (`DEC-057`), confirmed directly by the
+   owner. The single admin account already exists in the Firebase console from prior deployment setup.
+2. **Deployment runbook steps 3–4** — the owner has completed Vercel project setup and the
+   `assetly.lease` domain connection themselves, outside this environment; `DEPLOYMENT_RUNBOOK.md` is
+   updated to record that rather than leaving them open. Step 2 (push to the `fresh` remote) was also
+   already done — `fresh/main` matches `origin/main` at the Phase 9 commit.
+3. **OD-05 re-confirmed resolved** — `.env.local` holds all ten real Firebase values (verified present
+   without printing them) and is confirmed gitignored.
+4. **Phase 3 (Trusted By) built in full** — see Completed This Cycle. This was the main body of the
+   cycle's work once 1–3 unblocked it.
+5. **Firebase security rules deployed** — `firestore.rules`/`storage.rules` were finalized in code and
+   the owner pasted both into the Firebase console's Rules tabs directly (their preferred path over a
+   CLI OAuth device-code relay) and published them. Confirmed live.
+6. **Three pre-existing, unrelated broken Playwright tests found and fixed** while running the full
+   suite for regression coverage — see Completed This Cycle. None were caused by this cycle's own
+   changes; two were stale leftovers from Phase 9 wiring the legal links and the SEO title, and one
+   was already-known flakiness in the hero-loader timing test (confirmed by a clean re-run).
 
 ## Completed This Cycle
 
-### Phase 9 — Legal pages + basic SEO
+### Phase 3 — Trusted By infrastructure
 
-- `content/legal/privacy.ts`, `content/legal/terms.ts` — new. Generic, explicitly-labelled placeholder Privacy Policy / Terms of Use copy, flagging `OD-09`. No facts invented beyond what `content/site/navigation.ts` already established (entity name, Bengaluru/Karnataka office, `finance@assetly.lease`). No cookie/consent language — `OD-10` re-confirmed not required (no analytics/consent system exists).
-- `components/legal/LegalPageBody.tsx` + `Legal.module.css` — shared body (heading, placeholder notice, paragraphs) for both legal routes, in the same plain typographic register as `/about`.
-- `app/(site)/privacy/page.tsx`, `app/(site)/terms/page.tsx` — new routes, each with its own `metadata` (title, description, canonical, Open Graph).
-- `content/site/navigation.ts` — `LEGAL_LINKS` changed from plain `{label, href}` to real `RouteLink`s (`kind: "route"`); `components/footer/Footer.tsx` now renders them through the existing `SiteLinkAnchor` (reusing the footer's `.link` hover/underline styling) instead of inert `Eyebrow` text.
-- `app/(site)/page.tsx` — added `metadata` export (title, description, canonical, Open Graph) for `/`, which previously had none of its own.
-- `app/(site)/about/page.tsx` — added `alternates.canonical` and `openGraph.url`, which were missing.
-- `app/layout.tsx` — added `metadataBase: new URL("https://assetly.lease")` so every route's relative canonical/OG URL resolves correctly.
-- `app/sitemap.ts`, `app/robots.ts` — new. Sitemap covers `/` and `/about` only; robots allows public routes and disallows `/admin`, and points at the sitemap.
-- `app/admin/page.tsx` already carried `robots: { index: false, follow: false }` from Phase 0 — confirmed still correct and excluded from the sitemap; no change needed there.
+**Firebase layer**
+- `lib/firebase/auth.ts` — new. `subscribeToAdminAuth`, `signInAdmin`, `signOutAdmin`. DEC-057: one
+  authorized admin account, created directly in the Firebase console, no self-registration anywhere in
+  the code — being signed in to the configured project *is* being the admin.
+- `lib/firebase/firestore.ts` — new. Typed `siteSections/trustedBy` / `trustedLogos/{logoId}`
+  accessors exactly per §18: live `onSnapshot` subscriptions (not one-shot reads, since the point of
+  Firestore-backing this section is redeploy-free updates) that degrade to `null`/`[]` on any failure
+  rather than throwing, per §12/§18/§21's silent-failure requirement.
+- `lib/firebase/storage.ts` — new. Upload writes to `trusted-logos/{uuid}.{ext}`; delete resolves the
+  Storage object straight from the stored `imageUrl` (`ref(storage, url)` accepts a download URL), so
+  Firestore's schema stays exactly what §18 specifies — no extra storage-path field.
+- `lib/trustedBy/reorder.ts` — new. Pure `moveLogo`/`withSequentialSortOrder` helpers, kept free of
+  Firestore so `LogoManager`'s reorder logic is unit-testable without a mocked SDK.
+- `lib/validation/logoUpload.ts` — new. Zod schema for name/alt/file (SVG/PNG/WebP, ≤2MB), following
+  the same pattern as `lib/validation/contactForm.ts`.
+- `firestore.rules` / `storage.rules` — finalized from the Phase 0 deny-all skeleton to the real rules:
+  public read of `siteSections/trustedBy`; `trustedLogos` readable publicly where `active == true` or
+  by any signed-in admin (the manager panel needs to see disabled logos too); all writes require
+  `request.auth != null`. Storage additionally checks size (≤2MB) and content-type server-side, not
+  just on the client. **Deployed to the live project** via the Firebase console (see Status).
 
-### Testing-policy update (`DEC-054`)
+**Admin panel** (`/admin`, `/admin/login`)
+- `components/admin/AdminGate.tsx` — client-side auth gate wrapping every `/admin` route via
+  `app/admin/layout.tsx`. Unauthenticated → redirect to `/admin/login`; signed-in visitor landing on
+  `/admin/login` → redirect to `/admin`. Exposes the current user through `useAdminUser()`.
+  Verified end-to-end against the real Firebase project: a wrong-password sign-in attempt gets a real
+  network round trip to Firebase Auth and the correct "Incorrect email or password." error.
+- `components/admin/LoginForm.tsx`, `SignOutButton.tsx`, `SectionToggle.tsx`, `LogoUploadForm.tsx`,
+  `LogoManager.tsx`, `Admin.module.css` — new. Deliberately small and utilitarian per §18/`OD-07`, not
+  a themed product surface. Upload form auto-derives alt text from the name (editable, per §18) and
+  previews the selected file before upload; manager supports enable/disable, move up/down (writing a
+  fresh sequential `sortOrder` via one batched write), and delete-with-confirmation (Firestore doc +
+  best-effort Storage file).
+- `app/admin/layout.tsx`, `app/admin/login/page.tsx`, `app/admin/page.tsx` (rewritten) — wire the gate,
+  login screen, and panel together. `noindex` metadata preserved on both routes.
 
-`planning/LOOP.md` step 5 (VERIFY), step 3's "Test method" line, and the guardrail on skipping "Record" were reworded around the new default. `planning/MASTER_PLAN.md`'s opening paragraph now points at `LOOP.md` for what "Test" defaults to rather than implying a full automated pass every phase. A `DEC-054` entry was added to `planning/DECISIONS.md` recording the change and why, so future light-touch phases aren't mistaken for under-tested.
+**Public section**
+- `components/trusted-by/TrustedBy.tsx`, `LogoMarquee.tsx`, `TrustedBy.module.css` — new. Renders
+  `null` unless `enabled === true AND activeLogos.length > 0` (§12). Marquee duplicates the logo
+  sequence for the seamless `translateX(0)→translateX(-50%)` loop (30–34s desktop, ~37s mobile per
+  DEC-007's spirit) and additionally repeats the real collection to a minimum track length when there
+  are too few logos to fill a wide viewport — only the genuine first pass is announced to screen
+  readers, every repeat/duplicate is `aria-hidden`. Hover pauses the loop; individual logos brighten on
+  hover. `prefers-reduced-motion` collapses to a static, horizontally-scrollable strip showing only the
+  real pass (CSS-only, no JS branch).
+- `app/(site)/page.tsx` — `<TrustedBy />` inserted between `<HeroOpening />` and `<CompareSection />`
+  per §3's fixed order, always mounted (it hides itself) rather than conditionally rendered.
 
-### Deployment runbook
+### Favicon (`DEC-058`)
 
-`planning/DEPLOYMENT_RUNBOOK.md` — new. Ordered checklist: Firebase project + Firestore/Storage/Auth + web app config + admin SDK service account (resolves `OD-05`; surfaces `OD-06` as an owner decision with Email/Password recommended as the default) → new GitHub repo (created now, pushed to once this cycle's `origin` work is done) → new Vercel project with the Firebase env vars → `assetly.lease` domain connection. Confirmed via `vercel whoami` that the Vercel CLI here isn't logged in, and that `gh`/`firebase` aren't installed — all three need interactive browser logins this environment can't complete, hence the owner-executed runbook rather than driving it directly.
+`app/icon.png` (512×512) and `app/apple-icon.png` (180×180) — new, generated from
+`public/brand/assetly-mark.png` via a one-off `sharp` script (not committed as a build step — the
+mark's own alpha channel is masked onto a flat Ivory fill with `dest-in` compositing, then centred on a
+Pitch square). Matches the opening loader's Ivory-on-Pitch treatment of the same glyph. Picked up
+automatically by Next.js's file-convention metadata — confirmed both `<link rel="icon">` and
+`<link rel="apple-touch-icon">` render correctly, no code changes needed elsewhere.
 
-### Hero plate bfcache fix
+### Test suite fixes (found while validating Phase 3, not caused by it)
 
-`lib/motion/homeOpeningReplay.ts` — added a `pageshow` listener that forces `window.location.reload()` when a tab restores from the back/forward cache on `/`. A bfcache-restored tab otherwise resumes with whatever frozen `completed` state it was cached with, which could show the plate pre-drawn with no opening on a back-navigation. Scoped to `/` only. This is a real, independently-justified fix; it is not confirmed to be the cause of the original dev/prod report, which is still open pending the owner's incognito check.
-
-### Hero plate motion (`DEC-055`, `DEC-056`)
-
-- Cursor parallax removed: `lib/motion/useCursorParallax.ts` deleted; `Hero.tsx` no longer calls it; the `--hero-parallax-x/y`-driven transform on `.plateLayer` and the dead reduced-motion/mobile overrides that existed only to neutralise it are gone from `Hero.module.css`.
-- Node-arrival pop: the three existing Grow nodes now scale in from 0.4 to 1 in a short, staggered transition timed to land near the end of the plate's draw, instead of appearing in lockstep with the rest of the linework.
-- Journey marker: a new filled circle (`content/plates/hero-plate.tsx`'s `journey` region) travels via CSS `offset-path` from where the Scale curve starts (the crane's deck) through Grow's polyline to its top, fading in, completing the trip, fading out, and looping on a 9s cadence. Desktop/tablet only — hidden below 640px, where the mobile composition repositions Access/Growth separately and the shared-coordinate path would no longer line up.
-- `tests/unit/heroPlate.test.tsx` updated: `data-hero-plate-region` count is now 5 (added `journey`); node count stays 3.
-- **Deferred, not shipped**: a crane-lift animation at Access (a load traveling from a yard point up to the crane's hook, plus a fourth arrival-pop node at the hook) was built and verified, then reverted at the owner's explicit request ("push [the journey marker], we'll do the crane lifting later") so this push reflects only what's been previewed and approved. The geometry and CSS pattern are straightforward to redo from `DEC-056`'s "why rejected" note when picked back up.
+- `tests/e2e/hero.spec.ts` — the §21 "paints without waiting on any network fetch" test asserted zero
+  Firebase/Firestore requests ever fire, with a comment noting "Firestore is Phase 3" — i.e. it
+  anticipated needing an update once Phase 3 landed. Trusted By's subscription now legitimately starts
+  as soon as the homepage mounts (§12 fetches early on purpose, to avoid a later layout shift), so the
+  literal zero-requests assertion is now wrong on its own terms. Rewritten to prove the same thing
+  structurally instead: the Hero headline is already present in the raw server-rendered HTML, before
+  any client script — Firestore included — has had a chance to run at all. An intermediate
+  request-ordering version was tried and rejected: Firestore's handshake can complete faster than a
+  client-side "is the heading visible" check resolves, so ordering alone was still flaky.
+- `tests/e2e/shell.spec.ts` — "legal labels are present but not yet linked (Phase 9)" asserted the
+  Footer's Privacy/Terms text were *not* links, a pre-Phase-9 assumption that Phase 9 itself
+  (`LEGAL-002`) invalidated by wiring them as real links to `/privacy`/`/terms`, without the test being
+  updated at the time. Rewritten to assert the links now resolve to the correct routes.
+- `tests/e2e/smoke.spec.ts` — the root-route title assertion still expected `"Assetly"`, unchanged
+  since Phase 0, but Phase 9's SEO metadata work gave `/` the real title
+  `"Assetly | Access. Scale. Grow."` without this test being updated. Fixed to match.
+- `tests/e2e/hero-loader.spec.ts`'s "recedes, moves to the measured Hero destination, then reveals
+  content" failed once under load in the first full-suite run and passed cleanly on immediate re-run —
+  consistent with the known flakiness already recorded in this file before this cycle. No code change;
+  not a regression from this cycle's work.
 
 ## Decisions
 
-- **DEC-054** — per-task verification defaults to manual preview + owner approval, not an automated suite (supersedes the implicit per-phase Vitest/Playwright expectation `MASTER_PLAN.md` previously carried).
-- **DEC-055** — the Hero plate's cursor parallax is removed.
-- **DEC-056** — the Hero plate gets a node-arrival pop and a traveling journey marker.
+- **DEC-057** — admin auth method resolved: Email/Password, confirmed by the owner over the runbook's
+  own default recommendation.
+- **DEC-058** — the favicon is the raster brand mark, recoloured Ivory on a Pitch square, matching the
+  opening loader's treatment of the same glyph.
 
 ## Tests Run
 
-Per `DEC-054`'s new default: `npx tsc --noEmit` clean, `npm run lint` clean throughout this cycle's changes. `npm run build` clean for Phase 9 (all eight routes — `/`, `/about`, `/admin`, `/privacy`, `/terms`, `/sitemap.xml`, `/robots.txt`, `/_not-found` — generated as static content). A production server (`next start`) was run locally and the following were checked directly against it and confirmed correct: `/sitemap.xml` content, `/robots.txt` content and its `Disallow: /admin` + `Sitemap:` lines, `/admin`'s `<meta name="robots" content="noindex, nofollow">`, `/privacy` and `/terms` page titles, the Footer's `/privacy` and `/terms` links resolving, and canonical + Open Graph tags on `/` and `/about`. No new Playwright spec was added for Phase 9, consistent with `DEC-054` — its own complexity (static content routes, no interactive/animated logic) doesn't call for one.
+`npx tsc --noEmit` clean. `npm run lint` clean. `npm run build` clean — all ten routes generate,
+including the two new `/admin` and `/admin/login` routes. `npm run test` (Vitest): 124 tests passing
+across 14 files, including two new suites for this cycle (`tests/unit/logoUpload.test.ts`,
+`tests/unit/trustedByReorder.test.ts`).
 
-For the Hero plate motion work, which does touch interactive/animated behavior with existing dedicated coverage, `tests/unit/heroPlate.test.tsx` and both `tests/e2e/hero-plate.spec.ts` and `tests/e2e/hero-loader.spec.ts` (12 Playwright tests total) were re-run after every change in this area and pass. One run of the loader's headline-timing test failed once under machine-load variance and passed cleanly on a clean re-run immediately after — treated as flakiness, not a regression, since it's unrelated to anything the plate changes touch.
+Full Playwright suite (Chromium project): **130/130 passing**, including two new specs
+(`tests/e2e/admin.spec.ts`, `tests/e2e/trusted-by.spec.ts`) that exercise the real Firebase project —
+the wrong-password rejection test is a genuine network round trip to Firebase Auth, not a mock. This
+covers: the unauthenticated `/admin` → `/admin/login` redirect, the login form, a real auth failure,
+and the public section's silent-failure/absent-when-empty behavior. WebKit and the responsive/a11y
+sweeps were not re-run project-wide this cycle (no code in those sections' paths changed); Chromium is
+the full regression baseline and it's green.
+
+The authenticated admin loop (sign in with the real account → toggle Trusted By on → upload a logo →
+see it appear in the public marquee) was verified manually by the owner against the live project, since
+those credentials were never shared with and should not be shared with this session. That pass
+surfaced the missing composite index bug (see Current Task), which is now fixed and confirmed — the
+owner's uploaded "test" logo renders correctly, verified independently against the live project by
+re-running the diagnostic query.
 
 ## Issues / Blockers
 
-1. `OD-14` — the rights-cleared About photograph and its factual alt text are still required before Phase 10 exits.
+1. `OD-14` — the rights-cleared About photograph and its factual alt text are still required before
+   Phase 10 exits.
 2. `OD-13` — no Compare disclaimer wording supplied; none invented.
 3. `OD-02` — the Hero plate remains authored rather than designer-reviewed.
-4. `OD-01` — logo is raster, no favicon. The loader reuses the shipped glyph so it hands off without a shape swap.
-5. `OD-05` / `OD-06` — no Firebase project or admin-auth decision yet; Phase 3 stays blocked until the owner runs `planning/DEPLOYMENT_RUNBOOK.md` step 1.
-6. Bottle underline contrast on Pitch remains queued for Phase 10 QA.
-7. `npm audit` reports six moderate advisories through `firebase-admin`; re-evaluate with Phase 3.
-8. The Contact marker sits on Brigade Road's own centreline, taken from OSM. The building itself is not in OpenStreetMap, so the pin is street-accurate rather than door-accurate; confirm with the owner whether that is close enough before launch.
-9. Hero plate reported as already fully drawn on entry to the deployed site, but plays correctly locally. Code review found no build/environment branch in the draw path at all (`Plate.tsx`/`Hero.tsx`/`useHeroLoaderSequence.ts`/`homeOpeningReplay.ts`, `next.config.ts` checked — no redirects, no static export, no middleware, no service worker). Two intentional, code-confirmed mechanisms could produce exactly this symptom: `prefers-reduced-motion` forcing the fully-drawn end state instantly (`Plate.module.css:59-70`, `Hero.module.css:385-433`), or the `homeOpeningReplay` module-scope gate only playing the opening on a document's genuine first load of `/` (`lib/motion/homeOpeningReplay.ts`) — a soft nav or bfcache-restored tab shows it pre-drawn. A fix for the bfcache case shipped this cycle regardless (see above); the root cause of the original report is still **unconfirmed** — the owner has not yet reported back from a fresh-incognito check.
-10. Datum-line-width concern raised by the owner ("the base horizontal line needs to be the complete width") — investigated but not reproduced: `tests/e2e/hero-plate.spec.ts` asserts the datum line reaches both edges within 0.5px at 320/390/640px widths, and it's passing. No code change made without a specific width/device to reproduce against.
-11. Crane-lift animation at Access — built, verified, then deliberately reverted at owner request to keep this push scoped to approved work. Redo in a later cycle: a fourth `data-hero-plate-node="0"` at the crane's hook (~127,337 in the access group's local coordinates) plus a `data-hero-plate-lift` circle traveling `offset-path: path('M230 555 C 210 480, 160 400, 130 340')`, both inside the same transformed `<g>` so they follow Access wherever it's repositioned. CSS pattern mirrors the journey marker's (`plateJourney`/`plateLift` keyframes, same reduced-motion/mobile suppression approach).
+4. `OD-01` — no vector logo/wordmark lockup exists yet. A raster-derived favicon now ships (`DEC-058`)
+   using the existing brand mark, but the underlying vector-lockup question stays open — regenerate the
+   favicon from the real vector when it lands.
+5. `OD-07` — the admin panel's visual design is deliberately minimal/utilitarian per §18; a themed
+   redesign remains open if the owner wants one later, but nothing about it blocks Phase 3 functioning.
+6. `npm audit` reports moderate advisories through `firebase-admin`; unchanged this cycle, still worth
+   a look now that Firebase is live in production use rather than just wired.
+7. The Contact marker sits on Brigade Road's own centreline (OSM data), not the exact building —
+   carried over from a prior cycle, still open, still not blocking.
+8. Hero plate dev/prod discrepancy report and the deferred crane-lift animation are both explicitly
+   out of scope for this session (Hero/plate work is running in a separate, parallel track) — carried
+   over unchanged from the last cycle's `PROGRESS.md`, not touched here.
 
 ## Next Recommended Task
 
-Phase 10 (Accessibility, performance, and QA) is the next phase in `MASTER_PLAN.md`, but Phase 3 (Firestore/Trusted By) becomes available first if the owner completes `planning/DEPLOYMENT_RUNBOOK.md` steps 2-4 (Firebase itself is done — see Status) and resolves `OD-06` — check which has actually happened before choosing. The Hero plate dev/prod diagnosis (blocker 9), the datum-line report (blocker 10), and the deferred crane-lift animation (blocker 11) are all open loops from this cycle that should be closed before or alongside whichever phase comes next.
+`EXECUTION_ORDER.md` points at Phase 10 (Accessibility, performance, QA) as the next phase —
+`QA-000` (the About photograph) stays blocked on `OD-14` regardless, so QA-001 through QA-011 are the
+actually-available next work.
 
 ## Notes for Next Cycle
 
-- Every spec that loads `/` now loads the ~4.8s opening sequence with it. Specs written before Phase 8.5 must wait past it.
-- `HERO_LOADER_DURATIONS.signature` and the `loaderDoubleBlink` duration in `Hero.module.css` are the same number in two places. Changing one without the other is a bug, not a mismatch.
-- `content/plates/bengaluru-map.ts` is generated. To move the window or refresh the data, re-run an Overpass query for the bbox in its header; do not edit the numbers.
-- The flip card cannot grow to fit its copy — both faces are absolutely positioned inside a cell of fixed height — so any type change in Why Assetly needs the back faces re-measured at 1280×720 and 375×667.
-- `overflow: clip` rather than `hidden` for any box that hides something positioned outside it.
-- Anything that must cover the whole window needs `100vw`, not `inset: 0`.
-- The loader's target must continue to be measured from `[data-hero-mark-target]`; do not parse the `clamp()` token as a number.
-- Per `DEC-054`, a task now closes on owner-approved manual preview by default — reach for a new Vitest/Playwright test only when a task's own complexity (non-trivial logic, or interactive/animated behavior worth protecting from regression) actually calls for one.
+- `firestore.rules`/`storage.rules` are deployed via the Firebase console's Rules tabs, not the
+  Firebase CLI — this environment has no persisted CLI login. If the rules need to change again, the
+  fastest path confirmed working this cycle is: update the `.rules` files in the repo, then have the
+  owner paste the new contents into the console and publish, the same way as this cycle.
+- The owner runs Vercel project setup and the `assetly.lease` domain connection themselves, outside
+  Claude Code sessions — don't restart `vercel login` or ask about the registrar without checking
+  first; `DEPLOYMENT_RUNBOOK.md` now reflects both as done.
+- `TrustedBy`'s Firestore subscriptions start as soon as the homepage mounts, deliberately (§12: fetch
+  early to avoid a later layout shift). This is why `tests/e2e/hero.spec.ts`'s §21 test now checks the
+  Hero heading structurally (present in the raw SSR HTML) rather than counting network requests —
+  keep that in mind if a future section adds another early client-side fetch near Hero.
+- Every spec that loads `/` still plays the ~4.8s Phase 8.5 opening sequence first; `tests/e2e/support/opening.ts` handles that for every spec that imports `test`/`expect` from it, `admin.spec.ts` and
+  `trusted-by.spec.ts` included even though the admin routes themselves never mount the loader.
+- Per `DEC-054`, a task closes on owner-approved manual preview by default. This cycle leaned harder on
+  Playwright than that default suggests because Phase 3 is genuinely new interactive/stateful logic
+  (auth, CRUD, security rules) — worth protecting from silent regression — and because it let this
+  session verify real behavior (a genuine Firebase Auth round trip) that it otherwise couldn't have
+  claimed to have checked at all.

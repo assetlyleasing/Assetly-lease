@@ -2,13 +2,23 @@ rules_version = '2';
 
 // Assetly — Cloud Storage security rules.
 //
-// SKELETON ONLY. Deny-by-default until Phase 3 (TRUST-004) writes the real
-// rules: public read of the Trusted By logo objects, writes restricted to
-// authenticated admin UIDs, with the upload constraints validated in
-// lib/validation/logoUpload.ts (SVG/PNG/WebP, <= 2MB).
+// Finalized in Phase 3 (TRUST-004). Public read of the Trusted By logo
+// objects; writes restricted to a signed-in admin (DEC-057 — one account, no
+// allowlist beyond "is this project's Firebase Auth user signed in").
+//
+// Upload constraints (SVG/PNG/WebP, <= 2MB) are enforced here as a second
+// layer — lib/validation/logoUpload.ts is the primary check on the client,
+// but security rules must not rely on the client alone.
 
 service firebase.storage {
   match /b/{bucket}/o {
+    match /trusted-logos/{fileName} {
+      allow read: if true;
+      allow write: if request.auth != null
+        && request.resource.size <= 2 * 1024 * 1024
+        && request.resource.contentType.matches("image/(svg\\+xml|png|webp)");
+    }
+
     match /{allPaths=**} {
       allow read, write: if false;
     }

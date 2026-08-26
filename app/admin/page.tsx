@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
 
+import styles from "@/components/admin/Admin.module.css";
+import { LogoManager } from "@/components/admin/LogoManager";
+import { SectionToggle } from "@/components/admin/SectionToggle";
+import { SignOutButton } from "@/components/admin/SignOutButton";
+
 export const metadata: Metadata = {
   title: "Admin | Assetly",
   // §22: the admin surface must never be indexed, and is excluded from the
@@ -7,15 +12,29 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-/*
- * Trusted By logo management. Phase 0 placeholder — the authentication gate and
- * the management UI are built in Phase 3. This route is intentionally inert and
- * reads nothing from Firebase yet.
+/**
+ * Trusted By logo management (§18, Phase 3). Scope is deliberately narrow —
+ * this section only, no general-purpose CMS (DEC-011).
  */
 export default function AdminPage() {
   return (
-    <main>
-      <h1>Admin</h1>
-    </main>
+    <div className={styles.page}>
+      <header className={styles.header}>
+        <h1 className={styles.title}>Trusted By</h1>
+        <div className={styles.headerMeta}>
+          <SignOutButton />
+        </div>
+      </header>
+
+      <section className={styles.section}>
+        <h2 className={styles.sectionHeading}>Section</h2>
+        <SectionToggle />
+      </section>
+
+      <section className={styles.section}>
+        <h2 className={styles.sectionHeading}>Logos</h2>
+        <LogoManager />
+      </section>
+    </div>
   );
 }

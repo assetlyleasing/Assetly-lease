@@ -625,6 +625,46 @@ Every important technical or product decision, including conflict resolutions fo
 
 ---
 
+### DEC-057 — Admin auth method resolved: Email/Password
+
+- **Date**: 2026-08-26
+- **Decision**: `/admin` sign-in uses Firebase Authentication's Email/Password provider, not Google SSO. The authorized admin account was already created directly in the Firebase console during `DEPLOYMENT_RUNBOOK.md` step 1.4, ahead of Phase 3 build-out.
+- **Reason**: Owner confirmed the runbook's own default recommendation — simplest to operate for a single-admin panel, and no separate OAuth provider to configure.
+- **Alternatives considered**: Google Sign-In, `DEPLOYMENT_RUNBOOK.md`'s stated alternative.
+- **Why rejected**: Not rejected on technical grounds — the owner had no reason to prefer managing a Google OAuth consent screen over one password for a single internal user.
+- **Consequences**: `OD-06` is resolved and removed from `SOURCE_OF_TRUTH.md` §25. `TRUST-001` is closed. `MASTER_PLAN.md` Phase 3 / `lib/firebase/auth.ts` implement Email/Password sign-in only; no OAuth provider config is needed. The authorized-account list is the single admin user already created in the Firebase console — Phase 3 does not build account self-registration.
+- **Status**: Active
+
+---
+
+### DEC-058 — Favicon is the raster brand mark, Ivory on Pitch, matching the loader
+
+- **Date**: 2026-08-27
+- **Decision**: `app/icon.png` (512×512) and `app/apple-icon.png` (180×180) are generated from
+  `public/brand/assetly-mark.png` — the same source `components/brand/LogoMark.tsx` already uses as a
+  CSS mask. The mark is recoloured flat Ivory `#E7E3D4` (via alpha-masked `dest-in` compositing, not a
+  luminance-based tint, so the result is a crisp flat colour rather than the source's washed-out
+  original fill) and centred on a Pitch `#21241A` square at ~62% of the canvas, then exported through
+  Next.js's `app/icon.png`/`app/apple-icon.png` file-convention (no manual `<link>` tags, no extra
+  metadata code).
+- **Reason**: Owner asked for a favicon as a small parallel task. No vector lockup exists yet (`OD-01`
+  is still open on that specifically), so a vector favicon isn't possible; the raster mark is the only
+  approved brand asset available. Ivory-on-Pitch was chosen because it's the exact treatment
+  §11a/DEC-013's opening loader already uses for this same glyph — the favicon reads as "the same mark,
+  the same brand moment" rather than inventing a new colour pairing.
+- **Alternatives considered**: Olive-on-Paper (the mark's other approved treatment, used in the Nav);
+  a transparent-background icon with no fill square.
+- **Why rejected**: Olive-on-Paper reads poorly in a browser's dark-themed tab strip, which Ivory-on-
+  Pitch was designed to survive (§10/§17's whole reason for the Pitch surface). A transparent icon
+  loses the intentional Pitch square that gives the glyph contrast at 16–32px, where most favicons are
+  actually seen.
+- **Consequences**: `OD-01`'s vector-lockup question stays open — when a real vector mark lands, this
+  favicon should be regenerated from it rather than kept as a permanent raster derivative. No code
+  changes needed elsewhere; Next.js's file convention handles the `<link>` tags automatically.
+- **Status**: Active
+
+---
+
 ## Decision index
 
 | ID | Topic | Status |
@@ -685,3 +725,5 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-054 | Per-task verification defaults to manual preview + owner approval | Active |
 | DEC-055 | The Hero plate's cursor parallax is removed | Active |
 | DEC-056 | The Hero plate gets a node-arrival pop and a traveling journey marker | Active |
+| DEC-057 | Admin auth method resolved: Email/Password | Active |
+| DEC-058 | Favicon is the raster brand mark, Ivory on Pitch | Active |

@@ -45,18 +45,18 @@ Update this file at the end of every cycle per `LOOP.md` step 6. Do not skip ahe
 
 ## Phase 3 — Trusted By infrastructure
 
-- [ ] `TRUST-001` Resolve `OD-06` (admin auth method + authorized accounts)
-- [ ] `TRUST-002` Implement Firebase Auth sign-in/out for `/admin`, redirect gate
-- [ ] `TRUST-003` Define Firestore schema (`siteSections/trustedBy`, `trustedLogos/{logoId}`) exactly per §18
-- [ ] `TRUST-004` Write/finalize `firestore.rules` + `storage.rules` (admin-write, public-read active-only)
-- [ ] `TRUST-005` Build `LogoUploadForm.tsx` + Zod validation (`lib/validation/logoUpload.ts`)
-- [ ] `TRUST-006` Build `LogoManager.tsx` (enable/disable, reorder, delete)
-- [ ] `TRUST-007` Build `SectionToggle.tsx` (ON/OFF)
-- [ ] `TRUST-008` Build public `TrustedBy.tsx` (enabled-AND-nonempty gating, §12)
-- [ ] `TRUST-009` Build `LogoMarquee.tsx` (dual speed DEC-007, hover-pause, seamless duplication)
-- [ ] `TRUST-010` Implement reduced-motion static fallback
-- [ ] `TRUST-011` Implement silent-failure behavior (Firestore/Storage errors hide section)
-- [ ] `TRUST-012` Playwright: full admin↔public loop, failure injection, reduced-motion, a11y pass
+- [x] `TRUST-001` Resolve `OD-06` (admin auth method + authorized accounts) — Email/Password (DEC-057); admin user already created in the Firebase console
+- [x] `TRUST-002` Implement Firebase Auth sign-in/out for `/admin`, redirect gate — `lib/firebase/auth.ts`, `components/admin/AdminGate.tsx`; verified end-to-end against the real Firebase project (wrong-password round trip passes in Playwright)
+- [x] `TRUST-003` Define Firestore schema (`siteSections/trustedBy`, `trustedLogos/{logoId}`) exactly per §18 — `lib/firebase/firestore.ts`
+- [x] `TRUST-004` Write/finalize `firestore.rules` + `storage.rules` (admin-write, public-read active-only) — written and deployed to the live Firebase project via the console Rules tabs
+- [x] `TRUST-005` Build `LogoUploadForm.tsx` + Zod validation (`lib/validation/logoUpload.ts`)
+- [x] `TRUST-006` Build `LogoManager.tsx` (enable/disable, reorder, delete)
+- [x] `TRUST-007` Build `SectionToggle.tsx` (ON/OFF)
+- [x] `TRUST-008` Build public `TrustedBy.tsx` (enabled-AND-nonempty gating, §12)
+- [x] `TRUST-009` Build `LogoMarquee.tsx` (dual speed DEC-007, hover-pause, seamless duplication)
+- [x] `TRUST-010` Implement reduced-motion static fallback
+- [x] `TRUST-011` Implement silent-failure behavior (Firestore/Storage errors hide section) — verified: homepage renders cleanly with no toggle doc yet in Firestore
+- [x] `TRUST-012` Playwright: full admin↔public loop, failure injection, reduced-motion, a11y pass — auth gate, login form, and empty/disabled-state failure behavior covered by `tests/e2e/admin.spec.ts`/`tests/e2e/trusted-by.spec.ts` (full suite 130/130 green); the authenticated upload→marquee loop was verified manually by the owner against the live project (sign in → toggle on → upload → appears in the public marquee), which surfaced and led to fixing a missing Firestore composite index — see `PROGRESS.md`
 
 ## Phase 4 — Compare experience
 

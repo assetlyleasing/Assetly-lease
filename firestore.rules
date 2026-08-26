@@ -2,18 +2,34 @@ rules_version = '2';
 
 // Assetly — Firestore security rules.
 //
-// SKELETON ONLY. Phase 0 ships a deny-by-default baseline so that an
-// accidentally-deployed project is closed rather than open. The real rules are
-// written in Phase 3 (TRUST-004) against the schema in SOURCE_OF_TRUTH.md §18:
+// Finalized in Phase 3 (TRUST-004) against the schema in SOURCE_OF_TRUTH.md §18:
 //
-//   siteSections/trustedBy       public read; write restricted to admin UIDs
-//   trustedLogos/{logoId}        public read where active == true;
-//                                write restricted to admin UIDs
+//   siteSections/trustedBy       public read; write restricted to signed-in admins
+//   trustedLogos/{logoId}        public read where active == true, or any read
+//                                for a signed-in admin (the LogoManager panel
+//                                needs to see disabled logos too); write
+//                                restricted to signed-in admins
+//
+// DEC-057: there is exactly one authorized admin account, created directly in
+// the Firebase console rather than by this app, and no self-registration
+// path exists anywhere in the code. Being signed in to this project *is*
+// being the admin, so `request.auth != null` is the whole admin check — there
+// is no separate allowlist collection to consult.
 //
 // Do not relax anything here without also updating §18 and DECISIONS.md.
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    match /siteSections/trustedBy {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /trustedLogos/{logoId} {
+      allow read: if resource.data.active == true || request.auth != null;
+      allow write: if request.auth != null;
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }

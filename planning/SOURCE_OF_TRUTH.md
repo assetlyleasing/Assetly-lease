@@ -428,7 +428,7 @@ Feels like a continuation of the nav/header system (same dark surface, typograph
 
 **Scope**: Firebase is used only for what genuinely needs remote control without a redeploy — currently, the Trusted By section. No general-purpose CMS.
 
-**Firebase Authentication**: protects `/admin`. Only authorized Assetly admins can sign in. Exact auth method (email/password vs. Google SSO) and the list of authorized admin accounts: `OPEN DECISION` (§25).
+**Firebase Authentication**: protects `/admin`. Only authorized Assetly admins can sign in, via Email/Password (DEC-057). The authorized account is the single admin user created directly in the Firebase console during deployment setup — Phase 3 does not build self-registration.
 
 **Firebase Storage** — logo files, e.g.:
 ```
@@ -540,8 +540,6 @@ Only **Privacy Policy** and **Terms of Use** are reserved (Footer links) for now
 |---|---|---|
 | OD-01 | Vector Assetly logo/wordmark lockup (SVG) not yet in the repo | Nav, Footer, Hero (Phase 1–2) |
 | OD-02 | Hero plate SVG artwork ("Access → Scale → Grow" line drawing) — direction defined, asset not produced | Phase 2 exit |
-| OD-05 | Firebase project config: project ID, environment variables, staging vs. production project split, custom domain | Phase 0 exit, Phase 11 |
-| OD-06 | Admin authentication method (email/password vs. Google SSO) and the list of authorized admin accounts | Phase 3 |
 | OD-07 | Admin panel (`/admin`) visual layout/styling beyond the functional capability list in §18 | Phase 3 |
 | OD-09 | Real Privacy Policy / Terms of Use legal wording (currently generic placeholder only) | Phase 9 |
 | OD-10 | Whether/when a Cookie Policy becomes required (depends on future analytics/consent decisions — none planned currently) | Phase 9 |

@@ -1,0 +1,98 @@
+/*
+ * Trusted By strip, SOURCE_OF_TRUTH.md §12.
+ */
+
+.section {
+  padding: clamp(24px, 4vh, 44px) 0;
+  background: var(--paper);
+  border-top: var(--hairline);
+  border-bottom: var(--hairline);
+}
+
+.header {
+  margin-bottom: 18px;
+}
+
+.marqueeReveal {
+  width: 100%;
+}
+
+.marqueeViewport {
+  width: 100%;
+  overflow: hidden;
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  animation: trustedByScroll 32s linear infinite;
+}
+
+.trackPass {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--marquee-gap);
+  padding-right: var(--marquee-gap);
+}
+
+.logo {
+  height: clamp(28px, 3vw, 40px);
+  width: auto;
+  object-fit: contain;
+  opacity: 0.55;
+  filter: grayscale(0.2);
+  transition:
+    opacity var(--dur-toggle) var(--eio),
+    filter var(--dur-toggle) var(--eio);
+}
+
+.logo:hover {
+  opacity: 1;
+  filter: none;
+}
+
+.marqueeViewport:hover .track {
+  animation-play-state: paused;
+}
+
+@keyframes trustedByScroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 640px) {
+  .logo {
+    height: clamp(22px, 6vw, 30px);
+  }
+
+  .trackPass {
+    gap: clamp(28px, 8vw, 48px);
+    padding-right: clamp(28px, 8vw, 48px);
+  }
+
+  .track {
+    animation-duration: 37s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marqueeViewport {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .track {
+    animation: none;
+  }
+
+  /* Only the first pass is real content — the second exists solely to make the
+     loop seamless, and reduced motion has no loop to be seamless for. */
+  .trackPass:nth-child(2) {
+    display: none;
+  }
+}

@@ -175,20 +175,20 @@ test.describe("hero", () => {
   });
 
   test("paints without waiting on any network fetch (§21)", async ({ page }) => {
-    // Nothing in the Hero may depend on a request; Firestore is Phase 3 and
-    // §21 makes Hero paint the top performance priority.
-    const requests: string[] = [];
-    page.on("request", (request) => {
-      const url = request.url();
-      if (/firestore|googleapis\.com\/v1|firebase/.test(url)) {
-        requests.push(url);
-      }
-    });
+    // §21: the Hero must never depend on a request. Phase 3 gave Trusted By a
+    // real Firestore subscription that starts as soon as the homepage mounts
+    // client-side (§12 deliberately fetches early, to avoid a later layout
+    // shift), and it can complete its handshake within a couple of seconds —
+    // too fast for a client-side "is the heading visible yet" race to reliably
+    // isolate the Hero from it. Proven structurally instead: the Hero headline
+    // is already present in the raw, server-rendered HTML, before any client
+    // script — Firestore's included — has had a chance to run at all.
+    const response = await page.goto("/");
+    const html = await response!.text();
 
-    await page.goto("/");
-    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-
-    expect(requests).toEqual([]);
+    expect(html).toContain("<h1");
+    expect(html).toContain("lighter");
+    expect(html).toContain("balance sheet.");
   });
 });
 
