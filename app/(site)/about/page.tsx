@@ -12,10 +12,12 @@ import styles from "./About.module.css";
 export const metadata: Metadata = {
   title: "About Assetly | Assetly",
   description: ABOUT_META_DESCRIPTION,
+  alternates: { canonical: "/about" },
   openGraph: {
     title: "About Assetly | Assetly",
     description: ABOUT_META_DESCRIPTION,
     type: "website",
+    url: "/about",
   },
 };
 

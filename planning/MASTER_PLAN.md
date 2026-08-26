@@ -1,6 +1,6 @@
 # MASTER PLAN — Assetly Website
 
-Ordered, dependency-gated implementation phases. Each phase's design specifics are governed by `SOURCE_OF_TRUTH.md` — this document sequences the work, lists concrete files/schema, and defines exit criteria. Do not start a phase whose prerequisites haven't passed. Testing is mandatory per phase per the root testing mandate: **Implement → Test → Fix → Retest → Record** (record in `PROGRESS.md`).
+Ordered, dependency-gated implementation phases. Each phase's design specifics are governed by `SOURCE_OF_TRUTH.md` — this document sequences the work, lists concrete files/schema, and defines exit criteria. Do not start a phase whose prerequisites haven't passed. Verification is mandatory per phase per the root mandate: **Implement → Test → Fix → Retest → Record** (record in `PROGRESS.md`) — see `LOOP.md` step 5 for what "Test" defaults to (DEC-054: type check + lint + manual dev-server preview + owner approval, with each phase's "Tests" list below as a menu to reach for on complex/interactive work, not a per-phase checklist).
 
 Referenced open decisions (`OD-xx`) and resolved conflicts (`DEC-xxx`) are defined in `SOURCE_OF_TRUTH.md` §25 and `DECISIONS.md` respectively.
 

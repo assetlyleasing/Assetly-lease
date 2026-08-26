@@ -10,7 +10,6 @@ import {
   HeroPlateArtwork,
 } from "@/content/plates/hero-plate";
 import { HERO } from "@/content/site/hero";
-import { useCursorParallax } from "@/lib/motion/useCursorParallax";
 import type { HeroLoaderPhase } from "@/lib/motion/useHeroLoaderSequence";
 import { useScrollTick } from "@/lib/motion/useScrollTick";
 
@@ -32,15 +31,10 @@ export function Hero({
   openingPhase: HeroLoaderPhase;
 }) {
   const sectionRef = useRef<HTMLElement | null>(null);
-  const plateLayerRef = useRef<HTMLDivElement | null>(null);
   const markAnchorRef = useRef<HTMLSpanElement | null>(null);
   const markRef = useRef<HTMLSpanElement | null>(null);
   const nextPlateFade = useRef(1);
   const openingActive = openingPhase !== "done";
-
-  // Held back until the plate has drawn, so parallax joins Stage 2 rather than
-  // nudging the artwork while it is still drawing itself (§11).
-  useCursorParallax(plateLayerRef, { enabled: start });
 
   useLayoutEffect(() => {
     if (!openingActive) return;
@@ -105,7 +99,6 @@ export function Hero({
       data-opening-complete={openingPhase === "done"}
     >
       <div
-        ref={plateLayerRef}
         className={styles.plateLayer}
         data-mobile-plate-mode={HERO_MOBILE_PLATE_MODE}
       >

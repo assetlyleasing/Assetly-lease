@@ -142,13 +142,13 @@ Update this file at the end of every cycle per `LOOP.md` step 6. Do not skip ahe
 
 ## Phase 9 — Legal / basic SEO
 
-- [ ] `LEGAL-001` Write generic Privacy Policy + Terms of Use placeholder copy — flags `OD-09`
-- [ ] `LEGAL-002` Build `/privacy` and `/terms` routes, wire Footer links
-- [ ] `SEO-001` Add per-route metadata (title/description) for `/` and `/about`
-- [ ] `SEO-002` Add canonical tags + Open Graph tags
-- [ ] `SEO-003` Build `app/sitemap.ts` + `app/robots.ts`
-- [ ] `SEO-004` Add `noindex` to `/admin`, confirm excluded from sitemap
-- [ ] `SEO-005` Re-check `OD-10` (Cookie Policy) still not required
+- [x] `LEGAL-001` Write generic Privacy Policy + Terms of Use placeholder copy — flags `OD-09`
+- [x] `LEGAL-002` Build `/privacy` and `/terms` routes, wire Footer links
+- [x] `SEO-001` Add per-route metadata (title/description) for `/` and `/about`
+- [x] `SEO-002` Add canonical tags + Open Graph tags
+- [x] `SEO-003` Build `app/sitemap.ts` + `app/robots.ts`
+- [x] `SEO-004` Add `noindex` to `/admin`, confirm excluded from sitemap
+- [x] `SEO-005` Re-check `OD-10` (Cookie Policy) still not required
 
 ## Phase 10 — Accessibility, performance, QA
 

@@ -13,6 +13,23 @@ import { useSyncExternalStore } from "react";
 const initialDocumentPath =
   typeof window === "undefined" ? null : window.location.pathname;
 
+/*
+ * A bfcache-restored tab resumes exactly as it was frozen — `completed` would
+ * stay whatever it was when the tab was cached, so returning to `/` via the
+ * back/forward button could show the plate already fully drawn with no
+ * opening at all. A reload on restore is a genuine full document load, which
+ * is exactly the condition this module already exists to require, so it
+ * re-runs `initialDocumentPath`'s capture from scratch rather than resuming
+ * stale state. Scoped to `/` — no other route cares about this replay flag.
+ */
+if (typeof window !== "undefined") {
+  window.addEventListener("pageshow", (event) => {
+    if (event.persisted && window.location.pathname === "/") {
+      window.location.reload();
+    }
+  });
+}
+
 let completed = false;
 
 const subscribe = () => () => undefined;

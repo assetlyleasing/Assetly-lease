@@ -103,12 +103,8 @@ export const OFFICE_ADDRESS = [
   "Bengaluru, Karnataka — 560025",
 ] as const;
 
-/**
- * Legal links, §17. Rendered as plain text until Phase 9 builds the routes —
- * shipping anchors to pages that 404 would be worse than shipping labels.
- * Phase 9 (`LEGAL-002`) turns these into real links.
- */
-export const LEGAL_LINKS = [
-  { label: "Privacy Policy", href: "/privacy" },
-  { label: "Terms of Use", href: "/terms" },
+/** Legal links, §17 — Phase 9 (`LEGAL-002`) built the routes these point to. */
+export const LEGAL_LINKS: readonly RouteLink[] = [
+  { kind: "route", label: "Privacy Policy", href: "/privacy" },
+  { kind: "route", label: "Terms of Use", href: "/terms" },
 ] as const;

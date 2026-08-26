@@ -18,11 +18,11 @@ describe("Hero plate composition", () => {
   it("keeps the complete Access, Scale, Grow and datum geometry addressable", () => {
     const markup = renderToStaticMarkup(<HeroPlateArtwork />);
 
-    for (const region of ["access", "scale", "growth", "datum"]) {
+    for (const region of ["access", "scale", "growth", "datum", "journey"]) {
       expect(markup).toContain(`data-hero-plate-region="${region}"`);
     }
 
-    expect(markup.match(/data-hero-plate-region=/g)).toHaveLength(4);
+    expect(markup.match(/data-hero-plate-region=/g)).toHaveLength(5);
     expect(markup.match(/data-hero-plate-node=/g)).toHaveLength(3);
     expect(markup).toContain('<line x1="0" y1="600" x2="1200" y2="600"');
     expect(markup).not.toContain('y1="615"');

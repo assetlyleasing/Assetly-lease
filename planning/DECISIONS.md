@@ -589,6 +589,42 @@ Every important technical or product decision, including conflict resolutions fo
 
 ---
 
+### DEC-054 - Per-task verification defaults to manual preview + owner approval, not an automated suite
+
+- **Date**: 2026-08-26
+- **Decision**: The `Implement → Test → Fix → Retest → Record` mandate's "Test" step now defaults to type check + lint, a manual dev-server walkthrough of the changed behavior, and the owner's explicit approval - not a new Vitest/Playwright suite for every task or phase. Each phase's "Tests" list in `MASTER_PLAN.md` is a menu to reach for, not a checklist that must all run: write an automated test when the task's own complexity earns it - non-trivial logic (a calculator, a sequencing state machine) or interactive/animated behavior worth protecting from silent regression, the way the existing hero-loader and Compare suites already are. `LOOP.md` step 5 and its "Test method" line in step 3 were updated to match; the "Record" discipline itself is unchanged - a verified-by-preview change still gets written into `PROGRESS.md`.
+- **Reason**: Owner instruction - this cycle's testing overhead (a full Playwright/Vitest pass per feature) was heavier than the project needs going forward; owner wants light manual verification with explicit approval as the standing default, reserving automated coverage for where it actually earns its cost.
+- **Alternatives considered**: Keeping the full per-phase automated-test requirement; loosening it only for this cycle and reverting after.
+- **Why rejected**: The owner asked for this as the new default, not a one-off exception - reverting after one cycle would just reintroduce the overhead being removed.
+- **Consequences**: Existing suites (`tests/e2e/`, `tests/unit/`) are not being removed or reduced by this decision - they keep protecting what they already cover. New tasks are not required to add to them by default; an agent adds a test only when the task's complexity calls for it, using judgment rather than a per-phase mandate. `PROGRESS.md` entries going forward should read "manual preview, owner-approved" in place of a Playwright/Vitest run line where that's what actually happened, so this isn't mistaken for under-testing later.
+- **Status**: Active
+
+---
+
+### DEC-055 - The Hero plate's cursor parallax is removed
+
+- **Date**: 2026-08-26
+- **Decision**: `useCursorParallax` and its use in `Hero.tsx`/`Hero.module.css` are removed. The Hero plate no longer translates toward the pointer. Its other Stage 2 "living plate" motion (the slower ambient `plateDrift`/`nodeBreathe` on the artwork itself) is untouched.
+- **Reason**: Owner review, in-conversation feedback describing the whole plate visibly moving with the mouse and asking for it to be removed.
+- **Alternatives considered**: Reducing the parallax `strength` instead of removing it entirely.
+- **Why rejected**: The owner's feedback was to remove the behavior, not soften it.
+- **Consequences**: `lib/motion/useCursorParallax.ts` is deleted (no other caller existed). `plateLayerRef` in `Hero.tsx` and the `--hero-parallax-x/y`-driven transform/transition on `.plateLayer`, along with the reduced-motion and mobile overrides that existed only to neutralise it, are removed as dead code alongside it.
+- **Status**: Active
+
+### DEC-056 - The Hero plate gets a node-arrival pop and a traveling journey marker
+
+- **Date**: 2026-08-26
+- **Decision**: Two additions to the Hero plate's draw-in, both CSS-only and both fully neutralised under `prefers-reduced-motion` and hidden below the 640px mobile breakpoint (the mobile composition repositions Access/Growth as separate pieces, so a marker following the shared desktop-coordinate path would no longer land correctly there):
+  1. The three existing Grow nodes (`[data-hero-plate-node]`) pop from `scale(0.4)` to `scale(1)` in a short, staggered transition timed to land near the end of the linework's own draw, rather than appearing in lockstep with everything else.
+  2. A new filled circle (`[data-hero-plate-journey]`, `content/plates/hero-plate.tsx`'s new `journey` region) travels along `offset-path`, starting where the Scale curve already starts (the crane's deck) and continuing through Grow's own polyline points to its top — the literal union of geometry already drawn, not new artwork. It fades in, completes the trip, fades out, and loops on a 9s cadence.
+- **Reason**: Owner review of the existing "minimal and good" Hero plate motion, asking for something more dynamic than the settled ambient drift — a marker actually traveling the Access → Scale → Grow story the plate already draws.
+- **Alternatives considered**: A version of the journey that also traveled through the Access/crane artwork as one continuous path (a further owner request); a version driven by JS/`requestAnimationFrame` instead of CSS `offset-path`.
+- **Why rejected**: The Access/crane geometry isn't a single traceable path the way Scale+Growth are, and extending the journey through it needs its own design pass — deferred, not dropped, so it isn't rolled into this decision. `requestAnimationFrame` was rejected per §21's stated preference for CSS transitions/animations over rAF wherever exact scroll-tracking isn't required, which it isn't here.
+- **Consequences**: `tests/unit/heroPlate.test.tsx` updated to expect 5 `data-hero-plate-region` values (added `journey`) instead of 4; node count assertion (3) is unchanged. `tests/e2e/hero-plate.spec.ts`'s mobile region-list assertion continues to pass unmodified because the whole `journey` region is `display: none` under both the mobile breakpoint and reduced motion, so it never appears in that list.
+- **Status**: Active
+
+---
+
 ## Decision index
 
 | ID | Topic | Status |
@@ -646,3 +682,6 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-051 | Compare opens on Upfront Cash; obsolescence slide swaps title and metric | Order superseded by DEC-052 |
 | DEC-052 | Compare reads Obsolescence, Tax, Leverage, Upfront Cash | Numbering superseded by DEC-053 |
 | DEC-053 | Compare's indices resequenced 01-04 once the reading order settled | Active |
+| DEC-054 | Per-task verification defaults to manual preview + owner approval | Active |
+| DEC-055 | The Hero plate's cursor parallax is removed | Active |
+| DEC-056 | The Hero plate gets a node-arrival pop and a traveling journey marker | Active |

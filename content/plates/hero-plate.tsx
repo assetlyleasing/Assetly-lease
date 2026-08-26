@@ -87,6 +87,24 @@ export function HeroPlateArtwork() {
       <g data-hero-plate-region="datum">
         <line x1="0" y1="600" x2="1200" y2="600" />
       </g>
+
+      {/*
+       * The journey: one marker leaves the crane's deck (where the Scale path
+       * already starts, per the comment above), rises with Scale, then
+       * continues straight up Grow's own polyline — the exact union of both
+       * paths already drawn above, not new geometry. Desktop/tablet only; see
+       * Hero.module.css's 640px block for why.
+       */}
+      <g data-hero-plate-region="journey">
+        <circle
+          data-hero-plate-journey="true"
+          r="7"
+          style={{
+            offsetPath:
+              "path('M450 512 C 515 545, 610 568, 720 568 C 758 568, 790 518, 820 474 L940 360 L1060 240 L1150 165')",
+          }}
+        />
+      </g>
     </>
   );
 }

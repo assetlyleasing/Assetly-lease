@@ -36,7 +36,7 @@ Before writing any code, state explicitly:
 - **Task ID** (from `EXECUTION_ORDER.md`, e.g. `COMPARE-005`)
 - **Files expected to change** (from the matching phase's "Components/files" list in `MASTER_PLAN.md` — deviations are fine but should be intentional, not accidental scope creep)
 - **Acceptance criteria** (from the phase's exit criteria / the task's role in it)
-- **Test method** (which of Vitest/Playwright/responsive/accessibility/performance/failure testing applies, per the phase's "Tests" list)
+- **Test method** — default is type check + lint + manual dev-server preview + owner approval (DEC-054); name which of Vitest/Playwright/responsive/accessibility/performance/failure testing you're additionally reaching for, if the task's complexity warrants it
 
 Do not redesign unrelated sections while doing this. If something in `SOURCE_OF_TRUTH.md` seems wrong or outdated, do not silently change it — flag it as a proposed decision, get it confirmed (with the user, or noted clearly as a proposal in `PROGRESS.md`), and only then update `SOURCE_OF_TRUTH.md` + add a `DECISIONS.md` entry.
 
@@ -52,16 +52,20 @@ Implement only the current task or tightly-coupled prerequisite work it genuinel
 
 ### 5. VERIFY
 
-Run whatever the task's phase specifies under "Tests" in `MASTER_PLAN.md`. At minimum, for any code change:
+The default, as of DEC-054, is light-touch: for any code change, run type check + lint, then walk
+through the changed behavior on the dev server yourself and get the owner's explicit approval before
+marking anything `[x]`. That owner approval — not a green test run — is what closes a task.
 
-- Type check + lint
-- Relevant Vitest unit tests
-- Relevant Playwright flow(s) if the task touches interactive/user-facing behavior
-- Responsive check if the task touches layout
-- Accessibility check (keyboard + reduced-motion at minimum) if the task touches anything animated or interactive
-- Firebase failure-state check if the task touches Firestore/Storage/Auth
+Reach for a Vitest unit test or a Playwright flow when the task's own complexity calls for it: logic
+with real edge cases (a calculator, a sequencing state machine), or interactive/animated behavior worth
+protecting from silent regression (the existing hero-loader and Compare suites are the model for when
+this is worth the cost). It is not a per-task or per-phase requirement any more — a phase's "Tests"
+list in `MASTER_PLAN.md` is now a menu of what's *available*, not a checklist that must all run.
 
-**A task is not complete because it compiles.** It's complete when its acceptance criteria (from step 3) actually pass. If a test fails, fix and retest before marking anything `[x]` — per the project's `Implement → Test → Fix → Retest → Record` mandate.
+**A task is not complete because it compiles.** It's complete when its acceptance criteria (from step 3)
+actually pass and the owner has seen and approved the result. If something fails, fix and reverify
+before marking anything `[x]` — per the project's `Implement → Test → Fix → Retest → Record` mandate,
+where "Test" now defaults to manual preview rather than an automated suite.
 
 ### 6. UPDATE
 
@@ -91,4 +95,4 @@ Start the next cycle by returning to step 1 and re-reading the documents — do 
 - Never reopen an `Active` decision in `DECISIONS.md` without a new, material constraint — if you think one exists, state the constraint explicitly before proposing a change.
 - Never invent business facts (statistics, partner names, legal wording, pricing) to fill a gap — use `OPEN DECISION` in `SOURCE_OF_TRUTH.md` §25 instead and flag it in `PROGRESS.md`.
 - Never mark a later phase's tasks as unblocked while an earlier phase's exit criteria are unmet, unless `MASTER_PLAN.md` explicitly notes the phases can run in parallel (currently only Phase 3 vs. Phase 2 are noted as parallel-safe).
-- Never skip the "Record" step of `Implement → Test → Fix → Retest → Record` — an untested or unrecorded change is not progress the next agent can trust.
+- Never skip the "Record" step of `Implement → Test → Fix → Retest → Record` — an unverified or unrecorded change is not progress the next agent can trust. "Verified" defaults to manual preview + owner approval (DEC-054), not an automated suite — but it still has to actually happen and get recorded.

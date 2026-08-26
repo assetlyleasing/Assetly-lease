@@ -25,7 +25,8 @@ units, Playwright for flows.
 Four layers, confirmed against the dependency graph — dependencies point downward only:
 
 ```
-app/            routes and shells      app/(site)/{page,layout,about}, app/admin, app/layout
+app/            routes and shells      app/(site)/{page,layout,about,privacy,terms}, app/admin,
+                                        app/layout, app/sitemap.ts, app/robots.ts
 components/     section components     hero compare why-us sectors contact nav footer brand
 components/primitives  +  components/plate     ← core, high fan-in, no outbound deps
 lib/            hooks and pure logic                                ← core, high fan-in
@@ -34,6 +35,12 @@ content/        copy and artwork data (no behaviour)
 
 **`components/primitives/`** (fan-in 23) — `Container`, `Eyebrow`, `SerifHeading`, `RevealOnScroll`,
 `SiteLinkAnchor`. Every section composes these; changing one touches the whole site.
+
+**`components/legal/`** — `LegalPageBody`, shared by `/privacy` and `/terms` (Phase 9). Same plain
+typographic register as `/about`; each route supplies its own `LegalContent` from `content/legal/*`
+and its own `metadata` export. `app/layout.tsx` sets `metadataBase` so every route's relative
+canonical/OG URL resolves; `app/sitemap.ts`/`app/robots.ts` cover `/` and `/about` only, `/admin`
+stays `noindex` and excluded.
 
 **`lib/motion/`** (fan-in 16) — the motion system, and the densest cluster in the repo. Scroll
 (`useScrollTick`, `useScrollFocus`, `scrollFocus`), drawers (`useDrawerOpenness`, `drawerOpenness`),
@@ -118,7 +125,7 @@ Constraints that are invisible in the code but break things when violated. Full 
 
 ## State
 
-Phases 0–2, 4–8 and 8.5 complete on `main`, together with a refinement pass over the shipped
+Phases 0–2, 4–8, 8.5 and 9 complete on `main`, together with a refinement pass over the shipped
 homepage (DEC-032–DEC-039). `phase/hero-opening-loader` is **merged**; `HeroLoader`, `HeroOpening`,
 `useHeroLoaderSequence` and `homeOpeningReplay` are on `main`, and every spec that loads `/` now
 loads the ~4.8s opening with it.
@@ -128,8 +135,10 @@ Two conventions the opening imposes: `HERO_LOADER_DURATIONS.signature` and the
 must be changed together; and the loader's Hero destination is measured from
 `[data-hero-mark-target]` rather than parsed from its `clamp()` token.
 
-Phase 3 (Firebase) is blocked on `OD-05`/`OD-06`. Open items `OD-01`, `OD-02`, `OD-13`, `OD-14` gate
-Phase 10 / deployment.
+Phase 3 (Firebase) is blocked on `OD-05`/`OD-06`; `planning/DEPLOYMENT_RUNBOOK.md` is the
+owner-executed path to resolving both. Open items `OD-01`, `OD-02`, `OD-13`, `OD-14` gate Phase 10 /
+deployment. Per `DEC-054`, per-task verification now defaults to manual dev-server preview + owner
+approval rather than a required Vitest/Playwright pass per task — see `LOOP.md` step 5.
 
 `planning/PROGRESS.md` is the live record — it is rewritten each cycle and wins over this summary.
 

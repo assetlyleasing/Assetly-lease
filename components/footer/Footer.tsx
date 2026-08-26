@@ -97,16 +97,13 @@ export function Footer() {
             © {new Date().getFullYear()} Assetly Leasing
           </Eyebrow>
 
-          {/*
-           * §17 reserves Privacy Policy and Terms of Use. They are labels until
-           * Phase 9 builds the routes — an anchor to a page that 404s is worse
-           * than no anchor. LEGAL-002 turns these into links.
-           */}
           <div className={styles.legalLinks}>
             {LEGAL_LINKS.map((item) => (
-              <Eyebrow key={item.label} onDark className="rv-u rv-d1">
-                {item.label}
-              </Eyebrow>
+              <SiteLinkAnchor
+                key={item.label}
+                link={item}
+                className={`${styles.link} rv-u rv-d1`}
+              />
             ))}
           </div>
         </RevealOnScroll>

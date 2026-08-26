@@ -33,18 +33,6 @@
   /* Behind the copy, and never intercepting a pointer. */
   z-index: 0;
   pointer-events: none;
-  /*
-   * §11 Stage 2's cursor parallax. The offsets are written from a rAF-throttled
-   * pointermove; the transition smooths them so the plate trails the cursor
-   * instead of tracking it rigidly.
-   */
-  transform: translate3d(
-    var(--hero-parallax-x, 0px),
-    var(--hero-parallax-y, 0px),
-    0
-  );
-  transition: transform 1.6s var(--eio);
-  will-change: transform;
 }
 
 .plateFrame {
@@ -117,21 +105,80 @@
   animation: plateDrift 11s var(--eio) 3s infinite alternate;
 }
 
+.plate [data-hero-plate-node] {
+  /*
+   * Undrawn state for the arrival pop below. Invisible anyway while the plate
+   * itself sits at opacity 0 pre-draw, so this never flashes before the draw
+   * starts — see the reduced-motion override, which skips it entirely.
+   */
+  scale: 0.4;
+}
+
 .ready .plate [data-hero-plate-node] {
   /* Without this the translate resolves against the SVG viewport, not the node. */
   transform-box: fill-box;
+  scale: 1;
+  /* Pops in once the linework has nearly finished drawing, not with it. */
+  transition: scale 380ms var(--eio);
+  transition-delay: calc(var(--dur-draw) * 0.78);
   animation: nodeBreathe 9s var(--eio) 3.2s infinite alternate;
 }
 
-/* Staggered so the nodes never move in unison. */
+/*
+ * Staggered so the nodes never move in unison once settled, and so each pops
+ * into place a beat after the last on arrival — Access, then Scale, then Grow.
+ */
 .ready .plate [data-hero-plate-node="2"] {
+  transition-delay: calc(var(--dur-draw) * 0.86);
   animation-duration: 12s;
   animation-delay: 3.8s;
 }
 
 .ready .plate [data-hero-plate-node="3"] {
+  transition-delay: calc(var(--dur-draw) * 0.94);
   animation-duration: 10.5s;
   animation-delay: 4.4s;
+}
+
+/*
+ * The journey marker: one dot leaves the crane's deck, rises with Scale, then
+ * continues up Grow. Holds invisible at each end so the loop reads as a
+ * repeating trip rather than a snap back to the start.
+ */
+@keyframes plateJourney {
+  0%,
+  6% {
+    offset-distance: 0%;
+    opacity: 0;
+  }
+
+  14% {
+    opacity: 1;
+  }
+
+  82% {
+    offset-distance: 100%;
+    opacity: 1;
+  }
+
+  92%,
+  100% {
+    offset-distance: 100%;
+    opacity: 0;
+  }
+}
+
+.plate [data-hero-plate-journey] {
+  fill: currentColor;
+  stroke: none;
+  stroke-dasharray: none;
+  offset-distance: 0%;
+  offset-rotate: 0deg;
+  opacity: 0;
+}
+
+.ready .plate [data-hero-plate-journey] {
+  animation: plateJourney 9s var(--eio) calc(var(--dur-draw) * 0.9) infinite;
 }
 
 /* ---- Content stack ------------------------------------------------------ */
@@ -400,9 +447,9 @@
   }
 
   /*
-   * No ambient drift and no parallax. §11's "living plate" is precisely the
-   * kind of continuous, unrequested movement the preference exists to stop,
-   * and §8 makes neutralising it mandatory rather than optional.
+   * No ambient drift. §11's "living plate" is precisely the kind of
+   * continuous, unrequested movement the preference exists to stop, and §8
+   * makes neutralising it mandatory rather than optional.
    */
   .ready .plate,
   .ready .plate [data-hero-plate-node],
@@ -411,13 +458,21 @@
     translate: none;
   }
 
-  .plateFrame {
-    color: var(--olive);
+  /* The arrival pop is exactly the kind of motion §8 asks to skip; nodes are
+   * simply full-size immediately, matching the plate's own instant reveal. */
+  .plate [data-hero-plate-node] {
+    scale: 1;
+    transition: none;
   }
 
-  .plateLayer {
-    transform: none;
-    transition: none;
+  /* The journey marker is a continuous loop with nothing to say once static,
+   * so it is simply not shown rather than frozen mid-trip. */
+  .plate [data-hero-plate-region="journey"] {
+    display: none;
+  }
+
+  .plateFrame {
+    color: var(--olive);
   }
 
   .openingMark {
@@ -445,15 +500,20 @@
  * HERO_MOBILE_PLATE_MODE in hero-plate.tsx to activate one. `hidden` ships.
  */
 @media (max-width: 640px) {
-  .plateLayer {
-    transform: none;
-    transition: none;
-  }
-
   .ready .plate,
   .ready .plate [data-hero-plate-node] {
     animation: none;
     translate: none;
+  }
+
+  /*
+   * The journey's offset-path is authored in the shared desktop coordinate
+   * space; the mobile compositions below independently reposition Access and
+   * Growth as separate pieces, so one continuous path across both no longer
+   * lines up with anything. Simplest correct answer is to not show it here.
+   */
+  .plate [data-hero-plate-region="journey"] {
+    display: none;
   }
 
   .plateLayer[data-mobile-plate-mode="hidden"] {

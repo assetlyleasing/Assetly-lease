@@ -31,6 +31,8 @@ const interTight = Inter_Tight({
 });
 
 export const metadata: Metadata = {
+  // §22: canonical/Open Graph URLs on individual routes resolve against this.
+  metadataBase: new URL("https://assetly.lease"),
   title: "Assetly",
   description: "Structured operating leases for growing businesses.",
 };
