@@ -120,6 +120,8 @@ landed on `origin`.
 ## 3. New Vercel project
 
 ✅ Done — owner completed Vercel project setup and login directly; not run through this environment.
+The environment variables named in this step were added later, in step 5 — which is where the one
+genuine trap in this runbook lives.
 
 ## 4. Domain connection — assetly.lease
 
@@ -155,12 +157,47 @@ Domain connection steps (originally step 4):
 
 </details>
 
+## 5. Production environment variables, and the redeploy that must follow
+
+✅ Done — the six `NEXT_PUBLIC_FIREBASE_*` values are set on the Vercel project for Production and
+Preview, `assetly.lease` is listed under Firebase Authentication → Settings → Authorized domains, and
+admin sign-in is confirmed working on the live site. This is the point at which `/admin` became
+genuinely usable in production rather than only against a local dev server.
+
+**The trap, recorded because it cost a debugging cycle.** `NEXT_PUBLIC_*` values are compiled into the
+JavaScript bundle at *build* time; they are not read at runtime. Adding them in Vercel's settings
+therefore changes nothing about an already-built deployment — the live site keeps serving a bundle
+with an empty config until it is rebuilt. Any future change to a `NEXT_PUBLIC_*` variable needs a
+redeploy (Deployments → latest → `⋯` → Redeploy, "Use existing Build Cache" unchecked) before it has
+any effect.
+
+The symptom is specific enough to diagnose from the message alone: `/admin/login` shows
+**"Sign-in is not available right now."** That string is emitted from exactly one place —
+`lib/firebase/auth.ts`, when `isFirebaseConfigured()` is false because a `NEXT_PUBLIC_FIREBASE_*`
+value is absent from the bundle. It is never a wrong password (that reads "Incorrect email or
+password.") and never an unauthorized domain (that falls through to "Sign-in failed. Try again."), so
+it points straight at configuration rather than credentials.
+
+To tell whether a given deployment has the config, without needing to sign in: fetch
+`/admin/login`, pull the `/_next/static/**.js` chunk URLs out of the HTML, and grep them for
+`firebaseapp.com`. Present means the config is baked in; absent means a rebuild is still pending.
+
+The four server-side `FIREBASE_ADMIN_*` values are deliberately **not** set on Vercel. Nothing in the
+shipped app reads them — `lib/firebase/admin.ts` has no consumers anywhere in `app/`, `components/`
+or `lib/` — so this is not a gap today, but it becomes one the moment any server-side code touches
+Firebase.
+
 ---
 
 ## After this runbook
 
-Steps 1–4 are all complete: Firebase is live (`OD-05` resolved; `OD-06` resolved as Email/Password,
-`DEC-057`), the new repo holds a clean copy of the code once step 2's push happens, the Vercel project
-is deployed, and `assetly.lease` is connected — the owner ran steps 3 and 4 directly rather than through
-this environment. None of this requires further app code changes — it's infrastructure state, not
-something `PROGRESS.md`'s phase tracking needs to reflect beyond what's noted here.
+Steps 1–5 are all complete: Firebase is live (`OD-05` resolved; `OD-06` resolved as Email/Password,
+`DEC-057`), both remotes carry the code, the Vercel project is deployed, `assetly.lease` is connected,
+and the production admin panel has been signed into successfully — the owner ran steps 3, 4 and 5
+directly rather than through this environment. None of this requires further app code changes — it's
+infrastructure state, not something `PROGRESS.md`'s phase tracking needs to reflect beyond what's
+noted here.
+
+The deployment is now fully exercised end to end: public site, Trusted By reading live Firestore, and
+authenticated admin writes. The remaining infrastructure item is the unset `FIREBASE_ADMIN_*` group
+described in step 5, which no shipped code depends on yet.
