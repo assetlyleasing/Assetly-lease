@@ -8,16 +8,16 @@
  * too short for the composition simply grows the section — there is no free
  * space to distribute and nothing centres out of reach.
  *
- * The top pad clears the fixed nav (`--nav-block`, DEC-020) so that a section
- * filling the screen puts its eyebrow below the bar rather than under it.
+ * Native anchor positioning clears the fixed nav through `scroll-margin-top`.
+ * The section therefore keeps only its composition gap inside the box; adding
+ * `--nav-block` here as well would reserve the same bar twice on a hash visit.
  */
 .section {
   display: flex;
-  min-height: 100svh;
+  min-height: calc(100svh - var(--nav-block));
   flex-direction: column;
   justify-content: center;
-  padding-block: calc(var(--nav-block) + clamp(6px, 1.6vh, 18px))
-    clamp(28px, 5vh, 56px);
+  padding-block: clamp(6px, 1.6vh, 18px) clamp(28px, 5vh, 56px);
   background: var(--paper);
 }
 

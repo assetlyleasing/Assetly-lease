@@ -707,6 +707,41 @@ Every important technical or product decision, including conflict resolutions fo
 
 ---
 
+### DEC-060 - The opening uses the true window axis and anchor targets fit below the nav
+
+- **Date**: 2026-08-28
+- **Decision**: The Hero loader overlay spans `100vw`, and its mark and tagline centre on `50vw` so
+  all three resolve against the same window coordinate system despite the document's reserved
+  scrollbar gutter. While the loader exists, the root canvas also takes the Pitch background because
+  Chromium paints its reserved scrollbar gutter above fixed descendants. The opening mark size,
+  tagline gap and opening-only optical offset are shared tokens; the tagline gap is 19% of the mark
+  size and its tracking is constant. The raster mark's
+  measured ink-mass correction applies only before settle, while matching left padding compensates
+  for the tagline's trailing tracking advance. The settle, hold and reveal transforms remain
+  mathematically centred on the measured Hero target. Why Us and Sectors use
+  `calc(100svh - var(--nav-block))` as their minimum height, and Contact reduces only its mobile
+  vertical padding and map minimum so a hash-targeted section fits in the space below the fixed nav.
+  Why Us and Sectors also keep only their small composition gap as internal top padding: the native
+  `scroll-margin-top` already reserves `--nav-block`, so including it again inside the section would
+  count the same bar twice.
+- **Reason**: Box alignment concealed three opening defects that all read leftward: the fixed overlay
+  stopped at the scrollbar gutter, the raster's visual weight sits left of its canvas centre, and the
+  tagline's max-content box includes one trailing tracking advance. Its mark and tagline also used
+  unrelated responsive curves, producing a changing gap and a discontinuity at 480px. Separately,
+  native hash navigation correctly reserved the fixed-nav offset but the targeted one-screen sections
+  still claimed a full viewport, placing their bottoms below the fold.
+- **Alternatives considered**: Correcting `LogoMark` globally was rejected because it would move the
+  nav, footer and final Hero mark and reopen DEC-040's frozen landing. Changing the loader's runtime
+  target measurement was rejected because its viewport-coordinate measurement already lands exactly.
+  Removing the anchor offset was rejected because it would put section headings beneath the nav.
+- **Consequences**: The opening covers the real window and its visible mark/tagline centres share the
+  true axis at every width. The pre-settle mark nudge unwinds inside the existing settle transition,
+  preserving the Hero landing assertion. Anchor targets use the actually visible height below the nav;
+  Why Us back-face overflow and the four-card Sectors composition remain explicit regression guards.
+- **Status**: Active
+
+---
+
 ## Decision index
 
 | ID | Topic | Status |
@@ -770,3 +805,4 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-057 | Admin auth method resolved: Email/Password | Active |
 | DEC-058 | Favicon is the raster brand mark, Ivory on Pitch | Active |
 | DEC-059 | `OD-14` resolved: real About leadership photograph, `object-fit: contain` | Active |
+| DEC-060 | Opening true-axis lockup and nav-aware anchor section heights | Active |

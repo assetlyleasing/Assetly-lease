@@ -41,6 +41,16 @@ html {
   scrollbar-gutter: stable;
 }
 
+/*
+ * A fixed `100vw` loader reaches the true window edge, but Chromium paints the
+ * root scrollbar gutter from the canvas above fixed descendants. Match that
+ * gutter to the opening surface only while the loader exists, then let the
+ * normal Paper body background propagate again after hand-off.
+ */
+html:has([data-hero-loader="true"]) {
+  background: var(--pitch);
+}
+
 body {
   min-height: 100svh;
   background: var(--paper);

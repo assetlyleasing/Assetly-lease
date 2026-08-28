@@ -193,6 +193,8 @@ Three-stage dynamic behavior:
 
 **1. Opening screen** — full-screen, centered composition on **Pitch `#21241A`** (the same dark surface as scrolled nav/footer, not Bottle Green). Shows only: the "**A**" brand mark, and "**ACCESS · SCALE · GROW**" beneath it. Nothing else — no navbar, no Hero proposition, no plate, no secondary graphic.
 
+The mark and tagline form one measured lockup: the tagline's vertical position is derived from the mark's shared responsive size plus a constant 19% gap, never from an independent viewport offset. Opening-only optical corrections centre the mark's ink mass and the tagline's visible glyphs on the true window axis; they unwind during the existing settle transition so the final Hero anchor remains unchanged (DEC-060).
+
 **2. Typography** — the "A" and Hero proposition use the site's primary display typeface (`--d`, DM Serif Display); "ACCESS · SCALE · GROW" uses the established supporting UI type treatment (`--u`, Inter Tight, uppercase, wide tracking) — same as it appears elsewhere as the Hero subline/tagline. No loader-specific font is introduced.
 
 **3. Loader colors** — background Pitch `#21241A`; "A"/brand mark Ivory `#E7E3D4`; tagline Khaki `#B1AD77`. This is the same dark-surface token trio used by nav/footer (§6, §10, §17). Bottle Green `#25453A` is never used as the opening background — it stays reserved for interactive/active-state emphasis elsewhere.

@@ -65,6 +65,63 @@ test.describe("Hero opening loader", () => {
       .toBe("hidden");
   });
 
+  test("covers the true window and optically centres the opening lockup", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    await waitForPhase(page, "signature");
+
+    const geometry = await page.evaluate(async () => {
+      await document.fonts.ready;
+
+      const overlay = document.querySelector<HTMLElement>(
+        "[data-hero-loader='true']",
+      );
+      const mark = document.querySelector<HTMLElement>(
+        "[data-hero-mark-target='true'] > span",
+      );
+      const tagline = overlay?.querySelector<HTMLElement>("p");
+      if (!overlay || !mark || !tagline) throw new Error("opening is missing");
+
+      const overlayBox = overlay.getBoundingClientRect();
+      const markBox = mark.getBoundingClientRect();
+      const taglineBox = tagline.getBoundingClientRect();
+      const taglineStyle = getComputedStyle(tagline);
+      const tracking = Number.parseFloat(taglineStyle.letterSpacing);
+      const paddingLeft = Number.parseFloat(taglineStyle.paddingLeft);
+
+      return {
+        viewportWidth: window.innerWidth,
+        rootBackground: getComputedStyle(document.documentElement)
+          .backgroundColor,
+        overlayLeft: overlayBox.left,
+        overlayRight: overlayBox.right,
+        overlayWidth: overlayBox.width,
+        // The supplied raster's measured ink-mass centre sits 4.69% of its
+        // height left of its canvas centre.
+        markInkCenter:
+          markBox.left + markBox.width / 2 - markBox.height * 0.0469,
+        // Remove the final tracking advance from the text content, then include
+        // the compensating left padding when locating the visible glyphs.
+        taglineGlyphCenter:
+          taglineBox.left +
+          paddingLeft +
+          (taglineBox.width - paddingLeft - tracking) / 2,
+      };
+    });
+
+    expect(geometry.overlayLeft).toBeCloseTo(0, 5);
+    expect(geometry.overlayRight).toBeCloseTo(geometry.viewportWidth, 5);
+    expect(geometry.overlayWidth).toBeCloseTo(geometry.viewportWidth, 5);
+    expect(geometry.rootBackground).toBe("rgb(33, 36, 26)");
+    expect(
+      Math.abs(geometry.markInkCenter - geometry.viewportWidth / 2),
+    ).toBeLessThanOrEqual(1);
+    expect(
+      Math.abs(geometry.taglineGlyphCenter - geometry.viewportWidth / 2),
+    ).toBeLessThanOrEqual(1);
+  });
+
   test("blinks exactly twice without moving the tagline or fully hiding the mark", async ({
     page,
   }) => {

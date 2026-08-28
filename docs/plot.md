@@ -122,7 +122,10 @@ Constraints that are invisible in the code but break things when violated. Full 
 - **The document reserves its scrollbar gutter** (DEC-036), so a fixed box laid out in the initial
   containing block stops short of the window edge. Anything meant to cover the whole window uses
   `100vw`, and never mix `vw` with `%` across that boundary — the Compare column and its drawer both
-  read one `--compare-drawer-width` for exactly that reason.
+  read one `--compare-drawer-width` for exactly that reason. The Hero loader is the second instance of
+  this trap: its overlay, mark axis and tagline axis all use `vw`, and the mark/tagline share the
+  `--opening-mark-size` source so their gap cannot drift across breakpoints. Its root canvas is Pitch
+  while the loader exists because Chromium paints the reserved gutter above fixed children (DEC-060).
 - **Compare's focus effect rests across a band, not at a point** (DEC-034). A slide is sharp for 0.26
   viewport heights either side of centre (0.34 on mobile) before any blur begins.
 - **Compare tiers are qualitative.** The shared set is `minimal | low | mid | high`; `minimal` is the

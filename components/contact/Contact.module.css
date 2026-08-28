@@ -514,6 +514,10 @@
 }
 
 @media (max-width: 700px) {
+  .section {
+    padding-block: clamp(40px, 6vh, 72px);
+  }
+
   .layout {
     grid-template-columns: 1fr;
     gap: 36px;
@@ -537,7 +541,7 @@
   }
 
   .mapShell {
-    min-height: clamp(320px, 88vw, 420px);
+    min-height: clamp(240px, 62vw, 320px);
     overflow: visible;
   }
 

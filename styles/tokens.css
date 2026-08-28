@@ -97,6 +97,15 @@
   --gap-heading-lg: clamp(26px, 4.4vh, 44px); /* heading-to-body gap, large jumps */
   --marquee-gap: clamp(40px, 6vw, 90px); /* Trusted By logo spacing (§12) */
 
+  /*
+   * The opening mark and tagline are one lockup, so their scale and spacing
+   * come from one source. The optical correction is scoped to the opening;
+   * the shared LogoMark geometry and the measured Hero landing stay unchanged.
+   */
+  --opening-mark-size: clamp(94px, 14vw, 168px);
+  --opening-tagline-gap: calc(var(--opening-mark-size) * 0.19);
+  --opening-mark-optical: calc(var(--opening-mark-size) * 0.0469);
+
   --hairline: 1px solid var(--line); /* every border in the ledger-line grid system */
 
   /* Minimum effective touch target (§20). */

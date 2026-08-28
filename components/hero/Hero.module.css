@@ -412,13 +412,13 @@
 .openingMark {
   position: fixed;
   top: 50%;
-  left: 50%;
+  left: 50vw;
   z-index: 201;
   width: auto;
-  font-size: clamp(94px, 14vw, 168px);
+  font-size: var(--opening-mark-size);
   color: var(--ivory);
   opacity: 1;
-  transform: translate(-50%, -50%);
+  transform: translate(calc(-50% + var(--opening-mark-optical)), -50%);
   will-change: top, left, font-size, transform, color, opacity;
 }
 
@@ -440,7 +440,8 @@
 
 .openingMark.recede {
   opacity: 1;
-  transform: translate(-50%, -50%) scale(0.72);
+  transform: translate(calc(-50% + var(--opening-mark-optical)), -50%)
+    scale(0.72);
   transition: transform 0.65s var(--eio);
 }
 

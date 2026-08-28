@@ -7,20 +7,20 @@
  */
 .section {
   display: flex;
-  min-height: 100svh;
+  min-height: calc(100svh - var(--nav-block));
   flex-direction: column;
   /*
-   * A defined composition area rather than a centred block. The top clears the
-   * fixed nav and adds one deliberate gap; the bottom is one deliberate gap;
-   * everything between belongs to the heading and the grid, in that order.
+   * A defined composition area rather than a centred block. Native anchor
+   * positioning clears the fixed nav; the top and bottom each keep one
+   * deliberate composition gap. Reserving `--nav-block` here as well would
+   * count the same fixed bar twice after hash navigation.
    *
    * There is no `justify-content: center` on the desktop composition because
    * there is nothing left over to centre — the grid below claims the remaining
    * height itself. Centring is what left a dead band under the second row on
    * short laptop ratios while the section still measured exactly one screen.
    */
-  padding-block: calc(var(--nav-block) + clamp(8px, 1.8vh, 22px))
-    clamp(20px, 3.2vh, 44px);
+  padding-block: clamp(8px, 1.8vh, 22px) clamp(20px, 3.2vh, 44px);
   background: var(--paper);
 }
 
@@ -187,8 +187,7 @@
    * child now grows to fill it, so the section has nothing left to distribute.
    */
   .section {
-    padding-block: calc(var(--nav-block) + clamp(6px, 1.6vh, 18px))
-      clamp(28px, 5vh, 56px);
+    padding-block: clamp(6px, 1.6vh, 18px) clamp(28px, 5vh, 56px);
   }
 
   .stack {
