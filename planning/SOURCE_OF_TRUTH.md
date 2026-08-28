@@ -54,7 +54,7 @@ The leadership paragraph is approved owner-supplied company material (DEC-050); 
 to add individual profiles or infer any further history. No timeline, stats, founder biographies, or
 other company-history storytelling may be added unless its content is supplied later — do not fabricate.
 
-**Temporary media state (DEC-027)**: the project owner has authorized the About layout to ship in development with a clearly labelled, non-image placeholder while the real photograph is sourced. The placeholder is hidden from the accessibility tree and must not receive invented alt text. It is not an approved substitute for the final photograph; `OD-14` remains open and must be resolved before Phase 10 exits or production deployment.
+**Media state**: the About page placeholder authorized under DEC-027 has been replaced with the owner-supplied leadership photograph (`public/about/leadership-team.webp`, 1600×899, `next/image`, factual alt text). `OD-14` is resolved (DEC-059).
 
 ## 5. Brand identity
 
@@ -546,4 +546,3 @@ Only **Privacy Policy** and **Terms of Use** are reserved (Footer links) for now
 | OD-11 | Trusted By actual partner/client logo assets and names (populated via admin after launch, not a build blocker) | Post-launch content |
 | OD-12 | Production/staging domain name(s) | Phase 11 |
 | OD-13 | Whether the Compare section needs a disclaimer line beneath the calculator. §13's approved copy states tax and finance outcomes as fact ("Full rentals deductible", "180-day usage restriction", "GST input credit continues to apply") and the prototype DESIGN_SYSTEM describes carried an "illustrative disclaimer" element, but no wording has been supplied and none may be invented (§24) | Phase 4 polish / Phase 9 legal |
-| OD-14 | Real, usage-approved About image (landscape WebP/JPEG/AVIF, at least 1600px wide) plus a factual alt description. No stock, generated, logo-based, or abstract substitute is authorized | Phase 10 exit, deployment |

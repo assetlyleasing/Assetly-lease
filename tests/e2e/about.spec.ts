@@ -8,7 +8,7 @@ const PARAGRAPHS = [
 ] as const;
 
 test.describe("About page", () => {
-  test("renders only the approved company copy and temporary media slot", async ({ page }) => {
+  test("renders the approved company copy and the leadership photograph", async ({ page }) => {
     await page.goto("/about");
 
     await expect(page.getByRole("heading", { level: 1, name: "About Assetly" })).toBeVisible();
@@ -30,10 +30,16 @@ test.describe("About page", () => {
       "_blank",
     );
 
-    const placeholder = page.locator("[data-about-media-placeholder]");
-    await expect(placeholder).toBeVisible();
-    await expect(placeholder).toHaveAttribute("aria-hidden", "true");
-    await expect(page.locator("main img")).toHaveCount(0);
+    const media = page.locator("main img");
+    await expect(media).toHaveCount(1);
+    await expect(media).toBeVisible();
+    await expect(media).toHaveAttribute(
+      "alt",
+      "Four members of the Assetly leadership team standing together in business attire against a plain grey backdrop.",
+    );
+    const srcset = await media.getAttribute("srcset");
+    const widths = [...(srcset ?? "").matchAll(/\s(\d+)w/g)].map((match) => Number(match[1]));
+    expect(Math.max(...widths)).toBeGreaterThanOrEqual(1600);
     await expect(page.locator("main")).not.toContainText(/founder|timeline|statistics/i);
   });
 
@@ -72,28 +78,30 @@ test.describe("About page", () => {
     await expect(page).toHaveURL(/\/about$/);
   });
 
-  test("gives the longer copy more room on desktop and moves media above it on mobile", async ({
+  test("places the photograph beside the copy on desktop, and above it on mobile", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto("/about");
-    const layout = page.locator("main section > div > div");
-    const media = page.locator("[data-about-media-placeholder]");
-    const desktopLayout = (await layout.boundingBox())!;
+    const heading = (await page.getByRole("heading", { level: 1 }).boundingBox())!;
+    const media = page.locator("[data-about-media]");
     const desktopMedia = (await media.boundingBox())!;
-    expect(desktopMedia.width / desktopLayout.width).toBeGreaterThan(0.32);
-    expect(desktopMedia.width / desktopLayout.width).toBeLessThan(0.43);
+    const firstParagraph = (await page.getByText(PARAGRAPHS[0]).boundingBox())!;
+    // Side by side on desktop: copy on the left, photo to its right.
+    expect(desktopMedia.x).toBeGreaterThanOrEqual(heading.x + heading.width);
+    expect(desktopMedia.x).toBeGreaterThanOrEqual(firstParagraph.x + firstParagraph.width);
 
     const navBottom = await page
       .getByRole("banner")
       .evaluate((node) => node.getBoundingClientRect().bottom);
-    expect(desktopMedia.y).toBeGreaterThanOrEqual(navBottom);
+    expect(heading.y).toBeGreaterThanOrEqual(navBottom);
 
     await page.setViewportSize({ width: 390, height: 844 });
     await page.reload();
+    const mobileHeading = (await page.getByRole("heading", { level: 1 }).boundingBox())!;
     const mobileMedia = (await media.boundingBox())!;
-    const heading = (await page.getByRole("heading", { level: 1 }).boundingBox())!;
-    expect(mobileMedia.y + mobileMedia.height).toBeLessThan(heading.y);
+    // Stacked on mobile: photo above the heading and copy.
+    expect(mobileMedia.y + mobileMedia.height).toBeLessThanOrEqual(mobileHeading.y);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
   });
 

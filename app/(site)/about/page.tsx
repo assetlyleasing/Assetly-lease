@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 
 import { Container } from "@/components/primitives/Container";
 import { Eyebrow } from "@/components/primitives/Eyebrow";
@@ -27,15 +28,7 @@ export default function AboutPage() {
       <section className={styles.section} aria-labelledby="about-title">
         <Container>
           <RevealOnScroll className={styles.layout}>
-            <div
-              className={`${styles.media} rv-u`}
-              data-about-media-placeholder
-              aria-hidden="true"
-            >
-              <span className={styles.placeholderLabel}>Image forthcoming</span>
-            </div>
-
-            <div className={`${styles.copy} rv-u rv-d1`}>
+            <div className={`${styles.copy} rv-u`}>
               <Eyebrow>{ABOUT_CONTENT.eyebrow}</Eyebrow>
               <SerifHeading level={1} id="about-title" className={styles.heading}>
                 {ABOUT_CONTENT.heading}
@@ -60,6 +53,18 @@ export default function AboutPage() {
                   LinkedIn <span aria-hidden="true">↗</span>
                 </a>
               </p>
+            </div>
+
+            <div className={`${styles.media} rv-u rv-d1`} data-about-media>
+              <Image
+                src="/about/leadership-team.webp"
+                alt="Four members of the Assetly leadership team standing together in business attire against a plain grey backdrop."
+                width={1600}
+                height={899}
+                sizes="(max-width: 760px) 100vw, 46vw"
+                className={styles.mediaImage}
+                priority={false}
+              />
             </div>
           </RevealOnScroll>
         </Container>

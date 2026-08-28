@@ -119,11 +119,11 @@ Update this file at the end of every cycle per `LOOP.md` step 6. Do not skip ahe
 
 ## Phase 8 — About page
 
-- [!] `ABOUT-000` Resolve `OD-14`: real usage-approved image and factual alt description deferred to `QA-000` by owner instruction (DEC-027); no longer blocks the Phase 8 layout/content commit
+- [x] `ABOUT-000` Resolve `OD-14`: real usage-approved image and factual alt description supplied by owner and shipped (DEC-059) — see `QA-000`
 - [x] `ABOUT-001` Build `content/about/copy.ts` with the exact source-grounded copy
 - [x] `ABOUT-002` Build `/about`: owner-approved temporary media slot + heading + body + Bengaluru/email line (DEC-027)
 - [x] `ABOUT-003` Confirm Nav/Footer reuse and correct link resolution to/from `/about`
-- [x] `ABOUT-004` Playwright: approved copy, metadata, placeholder semantics, responsive composition, navigation, reduced motion
+- [x] `ABOUT-004` Playwright: approved copy, metadata, real image (alt text + intrinsic width), responsive composition, navigation, reduced motion
 
 ## Phase 8.5 — Hero loader / opening sequence
 
@@ -149,10 +149,11 @@ Update this file at the end of every cycle per `LOOP.md` step 6. Do not skip ahe
 - [x] `SEO-003` Build `app/sitemap.ts` + `app/robots.ts`
 - [x] `SEO-004` Add `noindex` to `/admin`, confirm excluded from sitemap
 - [x] `SEO-005` Re-check `OD-10` (Cookie Policy) still not required
+- [x] `SEO-006` Add Google Search Console verification meta tag (`verification.google` in `app/layout.tsx`)
 
 ## Phase 10 — Accessibility, performance, QA
 
-- [!] `QA-000` Replace the About media placeholder with the real usage-approved `next/image` asset and factual alt text — **blocked on `OD-14`; blocks Phase 10 exit and deployment**
+- [x] `QA-000` Replace the About media placeholder with the real usage-approved `next/image` asset and factual alt text (DEC-059) — `OD-14` resolved
 - [ ] `QA-001` Full-site keyboard pass (`/`, `/about`, `/admin`)
 - [ ] `QA-002` Focus management audit (all drawers/overlays/sheets)
 - [ ] `QA-003` Screen reader pass (NVDA or VoiceOver) across all sections

@@ -35,6 +35,9 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://assetly.lease"),
   title: "Assetly",
   description: "Structured operating leases for growing businesses.",
+  verification: {
+    google: "eqSSz8tlxoheOpZkVP4QCXg8M_4i_72rh0nE_CmHppg",
+  },
 };
 
 export default function RootLayout({

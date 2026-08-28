@@ -665,6 +665,48 @@ Every important technical or product decision, including conflict resolutions fo
 
 ---
 
+### DEC-059 — `OD-14` resolved: real About leadership photograph, side-by-side with a single matted frame
+
+- **Date**: 2026-08-28
+- **Decision**: The About media placeholder (DEC-027) is replaced with an owner-supplied photograph of
+  four Assetly leadership team members, standing together in business attire against a plain grey
+  studio backdrop. The source (1600×899 JPEG) is re-encoded to `public/about/leadership-team.webp`
+  (WebP, quality 84, lightly sharpened, ~66% smaller than the source with no visible quality loss). The
+  alt text is a plain factual description of what is visible — no names, titles, or roles, since none
+  were supplied and none may be invented (§24): "Four members of the Assetly leadership team standing
+  together in business attire against a plain grey backdrop." Final layout, after owner review: a
+  two-column grid (copy on the left, photo on the right on desktop; photo above the copy on mobile,
+  `order: -1`), `align-items: center` rather than `stretch` so the photo's box sizes to its own
+  `aspect-ratio: 1600/899` instead of being forced to the row's full height. The photo sits inside a
+  single `--field`-coloured mat (`padding: var(--card-pad)` on `.media`) with one hairline border on the
+  outer edge only — no second inset border.
+- **Reason**: Two earlier iterations were tried and rejected in owner review within the same cycle.
+  (1) The original grid kept `.media` stretched to the full section height at a ~40% column width, so
+  `object-fit: cover` cropped two of the four people out of frame entirely; switching to `contain` fixed
+  the crop but left a large empty letterboxed gap the owner flagged as "space wastage," and a nested
+  `::before` inset border on top of the outer border read as an unwanted second frame. (2) A full-width
+  vertical stack (title, then a full-bleed banner photo, then copy) fixed the cropping and the frame
+  issue but was itself rejected — the owner asked for the original side-by-side structure back, mirrored
+  (copy left, photo right), with real width control rather than a fixed-viewport banner. The final
+  version fixes the root cause common to both failed attempts — the box was being sized by the *grid
+  row*, not by the *photo* — by using `align-items: center` and an explicit `aspect-ratio` instead of
+  `stretch`, and keeps exactly one mat/border layer per the owner's explicit "single border, no inside
+  frame" instruction.
+- **Alternatives considered**: `object-fit: contain` in a stretched box (rejected: dead space);
+  `object-fit: cover` in a stretched box (rejected: crops people out); a full-width stacked banner
+  (rejected: owner wanted side-by-side back); a double-bordered matted frame (rejected: owner explicitly
+  asked for a single border).
+- **Why rejected**: See Reason — each alternative was tried, screenshotted, and rejected by the owner in
+  this same review cycle before the final layout was confirmed.
+- **Consequences**: `OD-14` is resolved; `QA-000` no longer blocks Phase 10 exit. `tests/e2e/about.spec.ts`
+  asserts the real `<img>` (alt text, `srcset` carries a ≥1600w candidate) and the side-by-side/stacked
+  ordering, instead of the placeholder's `aria-hidden` semantics. If a higher-resolution or re-cropped
+  photo arrives later, only `public/about/leadership-team.webp` and the alt text (if the subjects
+  change) need to change — the layout is aspect-ratio-driven, not tied to this specific image's pixels.
+- **Status**: Active
+
+---
+
 ## Decision index
 
 | ID | Topic | Status |
@@ -727,3 +769,4 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-056 | The Hero plate gets a node-arrival pop and a traveling journey marker | Active |
 | DEC-057 | Admin auth method resolved: Email/Password | Active |
 | DEC-058 | Favicon is the raster brand mark, Ivory on Pitch | Active |
+| DEC-059 | `OD-14` resolved: real About leadership photograph, `object-fit: contain` | Active |
