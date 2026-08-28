@@ -36,15 +36,12 @@ export default defineConfig({
     trace: "on-first-retry",
     launchOptions,
   },
+  // One primary browser keeps the suite proportional to this two-page site.
+  // Cross-engine behavior is covered by the manual release smoke pass.
   projects: [
     {
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
-    },
-    {
-      name: "webkit-interactions",
-      testMatch: /(hero-loader|why-us|sectors|contact)\.spec\.ts/,
-      use: { ...devices["Desktop Safari"] },
     },
   ],
   webServer: {

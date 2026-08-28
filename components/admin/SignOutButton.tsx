@@ -10,7 +10,7 @@ export function SignOutButton() {
 
   return (
     <>
-      {user?.email ? <span>{user.email}</span> : null}
+      {user?.email ? <span className={styles.accountEmail}>{user.email}</span> : null}
       <button
         type="button"
         className={styles.textButton}

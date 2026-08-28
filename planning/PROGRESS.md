@@ -1,126 +1,76 @@
 # PROGRESS
 
-This file reflects the *current* state of the project, not a running chronological log. Overwrite it each cycle per `LOOP.md` step 6.
+This file reflects the current state of the project, not a chronological log.
 
 ---
 
 ## Current Phase
 
-Phases 0–3, 4–9 are all complete and exited. Phase 10 (Accessibility, performance, QA) has begun:
-`QA-000` (the About photograph, blocked on `OD-14`) is done this cycle. `QA-001` onward (keyboard,
-focus, screen reader, touch target, Lighthouse passes) have not started yet.
+Phases 0–9 are complete. The owner-approved admin redesign is complete and `OD-07` is resolved.
+Phase 10 remains in progress: `QA-000` and the newly proportioned `QA-010` browser journey gate are
+complete; the remaining formal accessibility/performance audits and Lighthouse recording are still
+open. Phase 11 deployment verification follows Phase 10.
 
 ## Current Task
 
-None outstanding from this cycle. Awaiting owner confirmation on the About photo's `object-fit: contain`
-treatment (see Notes for Next Cycle) before treating `QA-000` as fully closed per DEC-054's
-owner-approval gate. Next up is `QA-001`.
-
-## Status
-
-This cycle picked up two small, independent items the owner supplied directly:
-
-1. **`OD-14` resolved** — the owner supplied a real leadership-team photograph and an instruction to
-   upload it "with optimization and clarity." Re-encoded, wired into `/about` via `next/image`, and
-   given factual (non-invented) alt text. See Completed This Cycle and `DEC-059`.
-2. **Google Search Console verification** — the owner supplied the verification meta tag from the
-   Search Console "HTML tag" ownership-verification flow. Added to `app/layout.tsx`'s `Metadata.verification.google`
-   field (Next's file-convention API), confirmed it renders as `<meta name="google-site-verification" ...>`
-   in the served HTML.
+Commit and push the branded admin redesign and lean regression suite to both GitHub remotes, then
+continue the remaining Phase 10 checklist.
 
 ## Completed This Cycle
 
-### `OD-14` / `QA-000` — About page photograph (`DEC-059`)
+### Branded admin workspace (`DEC-062`)
 
-- Source: owner-supplied JPEG (1600×899, landscape, four leadership team members in business attire
-  against a plain grey studio backdrop) — meets `OD-14`'s ≥1600px-wide landscape requirement at native
-  resolution, no upscaling needed.
-- Re-encoded via `sharp` to `public/about/leadership-team.webp` (quality 84, light sharpening for
-  clarity, ~66% smaller than the source JPEG — 158KB → 54KB — with no visible quality loss at the
-  rendered sizes `next/image`'s `sizes="(max-width: 760px) 100vw, 40vw"` requests).
-- `app/(site)/about/page.tsx` — placeholder div (`data-about-media-placeholder`, `aria-hidden`, "Image
-  forthcoming" label) replaced with a `next/image` `fill` element. Alt text describes only what's
-  visible ("Four members of the Assetly leadership team standing together in business attire against a
-  plain grey backdrop.") — no names, titles, or roles, since none were supplied (§24: never invent).
-- `app/(site)/about/About.module.css` — `.placeholderLabel` removed; new `.mediaImage` uses
-  `object-fit: contain` (not `cover`) with `padding: var(--card-pad)`, so the image letterboxes inside
-  the same hairline-bordered inset the placeholder used, rather than being cropped. `.media`'s box is
-  tall and narrow (stretches to full section height at ~40% column width); `cover` was tried first and
-  cropped two of the four people out of frame entirely on this photo. See `DEC-059` for the full
-  reasoning.
-- `tests/e2e/about.spec.ts` — placeholder assertions (`aria-hidden`, "no `<img>` in main") replaced with
-  real-image assertions: exactly one `<img>` in `main`, the factual alt text, and a `srcset` candidate
-  ≥1600w. The layout-proportion test's locator moved from `[data-about-media-placeholder]` to the new
-  stable `[data-about-media]` attribute on the wrapper div.
+- Redesigned `/admin/login` as a responsive split brand/authentication composition using only the
+  approved Assetly palette, typography and ledger-line vocabulary.
+- Redesigned authenticated `/admin` with a Pitch account bar, editorial Trusted By introduction,
+  numbered publishing/content panels, explicit published/hidden states, a structured upload form and
+  a professional partner library/empty state.
+- Preserved the deliberately narrow Trusted By feature boundary and all existing Firebase Auth,
+  Firestore and Storage behavior; no API or schema changes.
+- Added form error associations, logical keyboard order, visible focus assertions, mobile overflow
+  checks and 44px control checks.
+- Previewed login and dashboard at 1440×900, 1024×768 and 390×844. The authenticated dashboard was
+  rendered through a temporary local-only preview route that was removed immediately afterward.
 
-### Google Search Console verification (`SEO-006`)
+### Proportionate browser regression (`DEC-063`)
 
-- `app/layout.tsx` — added `metadata.verification.google` with the token from the Search Console "HTML
-  tag" ownership flow. Next.js's Metadata API renders this as
-  `<meta name="google-site-verification" content="...">` in `<head>`; confirmed directly against the
-  dev server's served HTML. No manual `<meta>` tag needed, no separate verification file.
+- Reduced Playwright from 176 executions to 69 (61% smaller), per owner direction.
+- Removed repeated nearby viewport cases, animation micro-timing specifications, overlapping visual
+  assertions and the duplicate WebKit matrix.
+- Retained one Chromium critical path per feature plus route/auth smoke, keyboard/focus, three
+  representative widths, mobile containment, reduced motion, Contact draft generation and Firebase's
+  public empty state.
+- Kept all 124 Vitest cases for detailed state, validation and calculation logic.
 
 ## Decisions
 
-- **DEC-059** — `OD-14` resolved: the real About leadership photograph ships, rendered with
-  `object-fit: contain` rather than `cover` so all four people stay visible, at the cost of letterboxing.
+- `DEC-062` — admin is a branded private workspace, not a generic dashboard.
+- `DEC-063` — browser E2E coverage stays proportional to the two-page product.
 
 ## Tests Run
 
-`npx tsc --noEmit` clean. `npx eslint` clean on all changed files. `npx vitest run`: 124/124 passing
-(unaffected by this cycle's changes — no unit-level logic changed). `npx playwright test
-tests/e2e/about.spec.ts --workers=1`: 5/5 passing, including the new real-image assertions. Full
-Playwright regression suite was kicked off in the background to catch any incidental regression outside
-`/about`; results were not yet reviewed at the point this file was written this cycle — check the next
-cycle's run or the task notification before treating the whole suite as confirmed green.
-
-Manual verification: dev server started, `/about` screenshotted at 1440×900 and 390×844. Desktop and
-mobile both show all four people in frame, correctly letterboxed, no cropping. Homepage `<head>`
-inspected directly (`curl`) to confirm the Search Console meta tag renders with the exact token supplied.
-
-Owner approval (DEC-054's actual closing gate) has not yet been given for the About photo's visual
-treatment specifically — screenshots were produced but not yet reviewed by the owner in this
-conversation. Flagged in Current Task above.
+- `npx tsc --noEmit` — clean.
+- `npx eslint .` — clean before the final test-suite reduction; final changed-file lint is the push
+  gate for this cycle.
+- `npx vitest run --reporter=dot` — 124/124 passed.
+- `npx playwright test --reporter=line` — 66 unaffected cases passed; three assertions in newly
+  condensed tests were corrected (one stale selector, expected text casing and a matcher name).
+- `npx playwright test tests/e2e/compare.spec.ts tests/e2e/hero-loader.spec.ts --workers=1` — 7/7
+  passed after those corrections. Together, every one of the final 69 cases has passed.
+- Focused admin regression — 5/5 passed.
 
 ## Issues / Blockers
 
-1. `OD-13` — no Compare disclaimer wording supplied; none invented.
+1. `OD-13` — Compare disclaimer wording has not been supplied; none has been invented.
 2. `OD-02` — the Hero plate remains authored rather than designer-reviewed.
-3. `OD-01` — no vector logo/wordmark lockup exists yet. A raster-derived favicon ships (`DEC-058`) using
-   the existing brand mark; regenerate it from the real vector when it lands.
-4. `OD-07` — the admin panel's visual design is deliberately minimal/utilitarian per §18; a themed
-   redesign remains open if the owner wants one later, but nothing about it blocks functioning.
-5. `npm audit` reports moderate advisories through `firebase-admin`; still unaddressed, worth a look now
-   that Firebase is live in production use.
-6. The Contact marker sits on Brigade Road's own centreline (OSM data), not the exact building — still
-   open, still not blocking.
-7. Hero plate dev/prod discrepancy report and the deferred crane-lift animation are explicitly out of
-   scope for this session (Hero/plate work runs in a separate, parallel track).
-8. `git push origin main` fails with a 403 (the machine's cached git credential is authenticated as a
-   GitHub account, `assetlyleasing`, that lacks write access to `sujeth-dev/Assetly.git`). Pushes to the
-   `fresh` remote succeed. The owner has been asked to resolve the credential/account mismatch on their
-   end; not re-attempted automatically each cycle to avoid repeatedly hitting the same 403 or risking
-   further credential exposure.
+3. `OD-01` — no vector logo/wordmark lockup exists; the approved raster-derived favicon remains.
+4. `npm audit` still reports moderate advisories through `firebase-admin`; the Admin SDK is currently
+   unused by the application and its private credential is not required in Vercel.
+5. The Contact marker follows Brigade Road's centreline rather than an exact building coordinate.
+6. Phase 10's remaining manual/accessibility/performance/Lighthouse tasks and Phase 11's deployment
+   smoke checks remain open.
 
 ## Next Recommended Task
 
-Get the owner's sign-off on the About photo treatment (screenshots taken this cycle), then continue
-Phase 10 with `QA-001` (full-site keyboard pass across `/`, `/about`, `/admin`).
-
-## Notes for Next Cycle
-
-- The About photo currently uses `object-fit: contain`, which letterboxes a landscape photo inside a
-  tall narrow slot rather than cropping it. This is a visual judgment call made without owner review in
-  this cycle (the alternative, `cover`, cut two of four people out of frame) — confirm the owner is happy
-  with the letterboxed look, or that a different-shaped photo/crop is coming, before considering `OD-14`
-  fully closed in spirit and not just in the checklist.
-- `public/about/leadership-team.webp` is the only art file for this section. If a re-crop or a new photo
-  arrives, only that file and the alt text (if the subjects change) need to change — everything else
-  (layout, sizes, CSS) is agnostic to the specific image.
-- The full Playwright suite was started in the background at the end of this cycle to check for
-  regressions outside `/about`; confirm its result before starting new work if it hasn't been checked
-  yet.
-- `git push origin main`'s credential mismatch (see Issues/Blockers #8) is unresolved — keep pushing to
-  both remotes as normal after each completed phase; don't attempt further credential debugging
-  (`git credential fill` and similar print secrets to the conversation — already flagged to the owner
-  once, don't repeat it).
+Finish the remaining proportionate Phase 10 checks, record Lighthouse, then run Phase 11 staging and
+production smoke verification. Do not expand the E2E matrix back into exhaustive visual specifications.

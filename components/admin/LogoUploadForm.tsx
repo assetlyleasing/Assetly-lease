@@ -75,48 +75,82 @@ export function LogoUploadForm({ nextSortOrder }: { nextSortOrder: number }) {
   }
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit} noValidate>
-      <div className={styles.field} data-invalid={Boolean(errors.name)}>
-        <label htmlFor="logo-name">Name</label>
-        <input
-          id="logo-name"
-          type="text"
-          value={name}
-          onChange={(event) => handleNameChange(event.target.value)}
-        />
-        {errors.name ? <span className={styles.error}>{errors.name}</span> : null}
+    <form className={styles.uploadForm} onSubmit={handleSubmit} noValidate>
+      <header className={styles.uploadHeader}>
+        <div>
+          <p className={styles.uploadEyebrow}>New partner</p>
+          <h3>Add a logo</h3>
+        </div>
+        <p>SVG, PNG, or WebP · Maximum 2MB</p>
+      </header>
+
+      <div className={styles.formGrid}>
+        <div className={styles.field} data-invalid={Boolean(errors.name)}>
+          <label htmlFor="logo-name">Organization name</label>
+          <input
+            id="logo-name"
+            type="text"
+            placeholder="e.g. Acme Capital"
+            value={name}
+            aria-describedby={errors.name ? "logo-name-error" : undefined}
+            onChange={(event) => handleNameChange(event.target.value)}
+          />
+          {errors.name ? (
+            <span id="logo-name-error" className={styles.error}>
+              {errors.name}
+            </span>
+          ) : null}
+        </div>
+
+        <div className={styles.field} data-invalid={Boolean(errors.alt)}>
+          <label htmlFor="logo-alt">Alternative text</label>
+          <input
+            id="logo-alt"
+            type="text"
+            placeholder="Acme Capital logo"
+            value={alt}
+            aria-describedby={errors.alt ? "logo-alt-error" : "logo-alt-hint"}
+            onChange={(event) => {
+              setAltTouched(true);
+              setAlt(event.target.value);
+            }}
+          />
+          {errors.alt ? (
+            <span id="logo-alt-error" className={styles.error}>
+              {errors.alt}
+            </span>
+          ) : (
+            <span id="logo-alt-hint" className={styles.hint}>
+              Generated from the name; edit if needed.
+            </span>
+          )}
+        </div>
       </div>
 
-      <div className={styles.field} data-invalid={Boolean(errors.alt)}>
-        <label htmlFor="logo-alt">Alt text</label>
-        <input
-          id="logo-alt"
-          type="text"
-          value={alt}
-          onChange={(event) => {
-            setAltTouched(true);
-            setAlt(event.target.value);
-          }}
-        />
-        {errors.alt ? <span className={styles.error}>{errors.alt}</span> : null}
-      </div>
-
-      <div className={styles.field} data-invalid={Boolean(errors.file)}>
-        <label htmlFor="logo-file">Logo file (SVG, PNG, or WebP, up to 2MB)</label>
+      <div className={`${styles.field} ${styles.fileField}`} data-invalid={Boolean(errors.file)}>
+        <label htmlFor="logo-file">Logo file</label>
         <input
           id="logo-file"
           ref={fileInputRef}
           type="file"
           accept="image/svg+xml,image/png,image/webp"
+          aria-describedby={errors.file ? "logo-file-error" : undefined}
           onChange={(event) => setFile(event.target.files?.[0] ?? null)}
         />
-        {errors.file ? <span className={styles.error}>{errors.file}</span> : null}
+        {errors.file ? (
+          <span id="logo-file-error" className={styles.error}>
+            {errors.file}
+          </span>
+        ) : null}
       </div>
 
       {previewUrl ? (
-        <div className={styles.logoThumb}>
-          {/* eslint-disable-next-line @next/next/no-img-element -- ephemeral local preview, not a served asset */}
-          <img src={previewUrl} alt="Selected logo preview" />
+        <div className={styles.previewRow}>
+          <div className={styles.logoThumb}>
+            {/* eslint-disable-next-line @next/next/no-img-element -- ephemeral local preview, not a served asset */}
+            <img src={previewUrl} alt="Selected logo preview" />
+          </div>
+          <span>Preview ready</span>
         </div>
       ) : null}
 
@@ -126,9 +160,12 @@ export function LogoUploadForm({ nextSortOrder }: { nextSortOrder: number }) {
         </p>
       ) : null}
 
-      <button type="submit" className={styles.primaryButton} disabled={submitting}>
-        {submitting ? "Uploading…" : "Upload logo"}
-      </button>
+      <div className={styles.uploadFooter}>
+        <p>The new logo is added to the end of the current display order.</p>
+        <button type="submit" className={styles.primaryButton} disabled={submitting}>
+          {submitting ? "Uploading…" : "Upload logo"}
+        </button>
+      </div>
     </form>
   );
 }

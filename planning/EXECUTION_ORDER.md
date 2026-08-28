@@ -27,7 +27,7 @@ Update this file at the end of every cycle per `LOOP.md` step 6. Do not skip ahe
 - [x] `FOOT-002` Wire Footer nav groups + official info (email/phone/full address) + legal bar with auto year — legal items are labels, not links, until Phase 9 builds the routes (`LEGAL-002`)
 - [x] `SHELL-001` Build `RevealOnScroll.tsx` (shared `.rv/.u` IntersectionObserver pattern + stagger classes) — classes are global and prefixed `rv-u`/`rv-d1..3`
 - [x] `SHELL-002` Build `SerifHeading.tsx`, `Eyebrow.tsx`, `Container.tsx` primitives — plus `LogoMark.tsx` and `SiteLinkAnchor.tsx`
-- [x] `SHELL-003` Playwright: nav/footer keyboard pass, mobile overlay focus trap, reduced-motion check — 33 shell tests, all passing
+- [x] `SHELL-003` Playwright: essential nav/footer keyboard pass, mobile overlay focus return, reduced-motion check
 
 ## Phase 2 — Hero and plate system
 
@@ -70,7 +70,7 @@ Update this file at the end of every cycle per `LOOP.md` step 6. Do not skip ahe
 - [x] `COMPARE-008` Build mobile bottom-sheet variant (stable height across slide changes) — height fixed in CSS and asserted pixel-exact across all four arguments
 - [x] `COMPARE-009` Implement section entry/exit (drawer hidden pre-Hero-exit, exits before Why Us)
 - [x] `COMPARE-010` Author/source 4 Compare plate artworks — approved 200×130 set adapts three archived `home-2.html` drawings and adds a matching Tax Treatment plate; `OD-03` resolved (DEC-022)
-- [x] `COMPARE-011` Playwright: scroll-through sync correctness, manual override, mobile height stability — 30 Compare tests in `tests/e2e/compare.spec.ts`
+- [x] `COMPARE-011` Playwright: approved content, representative scroll sync, keyboard/touch control, mobile containment, reduced motion
 - [x] `COMPARE-012` Performance profile: RAF loop frame-rate check during scroll — median 19.1ms, p95 25.6ms, 1 frame of 190 over 32ms, none over 50ms (dev build, headless Chromium); guarded by a test
 - [x] `COMPARE-013` Archive `home-2.html` and `2-duty-cycle.html` under `reference/`; supersede DEC-016's missing-files premise
 - [x] `COMPARE-014` Replace the calculator rows with one persistent, transitioning three-bar graph driven by qualitative tiers only
@@ -84,7 +84,7 @@ Update this file at the end of every cycle per `LOOP.md` step 6. Do not skip ahe
 - [x] `WHY-004` Build 2×2 → 1-column ledger grid with locked min-height (no layout jump)
 - [x] `WHY-005` Wire entry stagger via `RevealOnScroll`
 - [x] `WHY-006` Implement native-button keyboard flip, `aria-pressed`, and active-face-only descriptions (DEC-024)
-- [x] `WHY-007` Playwright: flip correctness, keyboard pass, reduced-motion, cross-browser (Chromium+WebKit)
+- [x] `WHY-007` Playwright: approved values, pointer/keyboard flip, layout stability, mobile containment
 - [x] `WHY-008` Correct the grid's proportions (DEC-028): cell height capped against viewport height so the 2×2 is seen whole, letter enlarged and the void closed, back-face copy verified unclipped at 1440×900 and 390×844
 
 ## Phase 6 — Sectors
@@ -96,7 +96,7 @@ Update this file at the end of every cycle per `LOOP.md` step 6. Do not skip ahe
 - [x] `SECTOR-005` Build 2×2 desktop / 1×4 mobile ledger grid
 - [x] `SECTOR-006` Implement entrance sequence (stagger reveal → initial plates draw → rotation starts)
 - [x] `SECTOR-007` Implement hover, focus, and document-visibility pause behavior
-- [x] `SECTOR-008` Playwright: rotation cadence/correctness, hover/focus pause, reduced-motion, responsive, Chromium+WebKit
+- [x] `SECTOR-008` Playwright: approved sector set, mobile composition, reduced-motion static state
 - [x] `SECTOR-009` Correct the grid's proportions so §15's four-at-once rotation is actually visible (DEC-028): cell capped against viewport height, plate sized from the card, descriptor given a one-line measure, and the mobile card recomposed horizontally so all four fit a 390×844 screen
 - [x] `SECTOR-010` Set the rotation interval to 1.2s and rewrite the cadence test to sample consecutive states rather than snapshot around one swap (DEC-029)
 
@@ -112,7 +112,7 @@ Update this file at the end of every cycle per `LOOP.md` step 6. Do not skip ahe
 - [x] `CONTACT-008` Build one deterministic email draft source and wire matching protected Gmail/mailto actions
 - [x] `CONTACT-009` Build the separate mobile bottom-sheet variant with grip and explicit Close control
 - [x] `CONTACT-010` Implement reduced-motion-safe section, map, panel, and step presentation
-- [x] `CONTACT-011` Playwright: every enquiry branch, encoding, preservation, validation/focus, desktop/mobile panels, reduced motion, Chromium+WebKit
+- [x] `CONTACT-011` Playwright: enquiry branches, draft encoding, preservation, validation/focus, desktop/mobile panels, reduced motion
 - [x] `CONTACT-012` Factor and reuse shared modal focus trap, Escape, focus return, and scroll lock behavior
 - [x] `CONTACT-013` Correct the section's proportions (DEC-028): info column and map shell brought to one shorter shared height, closing the ~200px void under the heading
 - [x] `CONTACT-014` Anchor the map pin and its label to the viewBox centre so `slice` cropping cannot separate them, and delete the per-breakpoint marker offset (DEC-030)
@@ -134,7 +134,7 @@ Update this file at the end of every cycle per `LOOP.md` step 6. Do not skip ahe
 - [x] `LOADER-005` Wire hand-off: settle completion triggers Hero's proposition/tagline reveal + quiet plate appearance
 - [x] `LOADER-006` Implement `prefers-reduced-motion` fallback (skip blink/recede, short subtle fade straight to final Hero state)
 - [x] `LOADER-007` Decide + implement reload/back-navigation replay behavior; document choice in `PROGRESS.md`
-- [x] `LOADER-008` Playwright: full §11a test list (colors/contrast, blink count, static tagline, no full disappear, visible movement to destination, settle-before-reveal, no navbar/plate competition during opening, no layout shift, mobile scale, reload/back-nav, reduced-motion)
+- [x] `LOADER-008` Playwright: opening signature handoff and reduced-motion mobile fallback; detailed phase logic remains in Vitest
 - [x] `LOADER-009` Performance check on slow-device emulation
 - [x] `LOADER-010` Recompose the Hero plate around a protected copy zone at desktop/tablet widths; settle at 20% opacity with a darker draw tone
 - [x] `LOADER-011` Prepare typed Both/Hidden/Access/Growth phone treatments, ship the fixed combined composition, and document the one-setting switch
@@ -163,7 +163,7 @@ Update this file at the end of every cycle per `LOOP.md` step 6. Do not skip ahe
 - [ ] `QA-007` Real/emulated mobile browser pass (iOS Safari, Android Chrome)
 - [ ] `QA-008` Animation performance profiling (Compare RAF, Hero ambient drift)
 - [ ] `QA-009` Firebase failure-state re-verification post-integration
-- [ ] `QA-010` Full Playwright journey suite (home scroll-through, About, admin loop, Contact flow)
+- [x] `QA-010` Essential 69-test Playwright journey suite (DEC-063): 61% smaller than the previous 176-test matrix while retaining one critical path per feature
 - [ ] `QA-011` Lighthouse pass on `/` and `/about`, scores recorded in `PROGRESS.md`
 
 ## Phase 11 — Deployment

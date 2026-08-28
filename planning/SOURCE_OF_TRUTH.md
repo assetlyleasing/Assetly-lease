@@ -472,7 +472,14 @@ trustedLogos/{logoId}
 
 **Toggle behavior**: switching OFF updates Firestore and the homepage removes the section entirely; switching ON renders it once valid active logos exist. No redeploy required for either.
 
-**Admin panel visual design**: functional requirements only are specified above; the actual UI layout/styling of `/admin` is `OPEN DECISION` (§25) — keep it deliberately small and utilitarian, consistent with "no general-purpose CMS."
+**Admin panel visual design**: `/admin/login` and `/admin` are one restrained private workspace, not
+a generic SaaS dashboard (DEC-062). The sign-in route pairs a Pitch brand statement with a focused
+Paper authentication panel. The authenticated route uses a compact Pitch account bar, an editorial
+Trusted By heading, numbered publishing/content panels, and ledger-line controls built entirely from
+the public site's existing Paper/Field/Pitch/Ivory/Khaki/Bottle palette and approved type families.
+The interface must remain responsive and keyboard-operable, expose clear published/hidden states, and
+retain the deliberately narrow Trusted By capability list above — the branded treatment does not
+expand it into a general-purpose CMS.
 
 ## 19. Technical stack
 
@@ -483,7 +490,10 @@ trustedLogos/{logoId}
 - Inline SVG plate components
 - Native CSS animation + Motion for React (component animation) + targeted `requestAnimationFrame` (continuous scroll-linked interactions only)
 - Zod (validation, where useful — e.g. the Contact form and admin inputs)
-- Vitest (logic/unit) + Playwright (user flows/interactions)
+- Vitest for logic/unit coverage + a proportionate Playwright Chromium suite for critical user
+  flows/interactions (DEC-063). Browser E2E coverage is intentionally limited to one representative
+  path per feature, with cross-engine behavior checked during the release smoke pass rather than
+  duplicating the full suite.
 - Gmail compose generation + `mailto:` fallback for Contact
 - GitHub (source control)
 - Custom static/SVG Bengaluru map initially (no third-party map embed)
@@ -542,7 +552,6 @@ Only **Privacy Policy** and **Terms of Use** are reserved (Footer links) for now
 |---|---|---|
 | OD-01 | Vector Assetly logo/wordmark lockup (SVG) not yet in the repo | Nav, Footer, Hero (Phase 1–2) |
 | OD-02 | Hero plate SVG artwork ("Access → Scale → Grow" line drawing) — direction defined, asset not produced | Phase 2 exit |
-| OD-07 | Admin panel (`/admin`) visual layout/styling beyond the functional capability list in §18 | Phase 3 |
 | OD-09 | Real Privacy Policy / Terms of Use legal wording (currently generic placeholder only) | Phase 9 |
 | OD-10 | Whether/when a Cookie Policy becomes required (depends on future analytics/consent decisions — none planned currently) | Phase 9 |
 | OD-11 | Trusted By actual partner/client logo assets and names (populated via admin after launch, not a build blocker) | Post-launch content |

@@ -13,6 +13,7 @@ import type { User } from "firebase/auth";
 import { subscribeToAdminAuth } from "@/lib/firebase/auth";
 
 import styles from "./Admin.module.css";
+import { LogoMark } from "../brand/LogoMark";
 
 const LOGIN_PATH = "/admin/login";
 
@@ -59,7 +60,11 @@ export function AdminGate({ children }: { children: ReactNode }) {
   if (status === "checking") {
     return (
       <div className={styles.stateScreen}>
-        <p>Checking sign-in…</p>
+        <div className={styles.stateBrand}>
+          <LogoMark className={styles.stateMark} />
+          <span>assetly leasing</span>
+        </div>
+        <p>Checking secure access…</p>
       </div>
     );
   }

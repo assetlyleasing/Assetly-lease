@@ -24,6 +24,47 @@ test.describe("Admin auth gate", () => {
     await expect(page.getByRole("button", { name: "Sign in" })).toBeVisible();
   });
 
+  test("the branded login keeps a logical keyboard order and visible focus", async ({ page }) => {
+    await page.goto("/admin/login");
+
+    const brandLink = page.getByRole("link", { name: "Assetly homepage" });
+    await brandLink.focus();
+    await expect(brandLink).toBeFocused();
+    await page.keyboard.press("Tab");
+    await expect(page.getByLabel("Email")).toBeFocused();
+    await page.keyboard.press("Tab");
+    await expect(page.getByLabel("Password")).toBeFocused();
+    await page.keyboard.press("Tab");
+    await expect(page.getByRole("button", { name: "Sign in securely" })).toBeFocused();
+
+    const outline = await page.getByRole("button", { name: "Sign in securely" }).evaluate(
+      (element) => getComputedStyle(element).outlineStyle,
+    );
+    expect(outline).not.toBe("none");
+  });
+
+  test("the login recomposes without overflow and preserves touch targets on mobile", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/admin/login");
+
+    await expect(page.getByText("Private workspace")).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Admin sign-in");
+    expect(
+      await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
+    ).toBe(true);
+
+    for (const control of [
+      page.getByLabel("Email"),
+      page.getByLabel("Password"),
+      page.getByRole("button", { name: "Sign in securely" }),
+    ]) {
+      const box = await control.boundingBox();
+      expect(box?.height ?? 0).toBeGreaterThanOrEqual(44);
+    }
+  });
+
   test("an incorrect password is rejected with a clear error and no navigation", async ({
     page,
   }) => {

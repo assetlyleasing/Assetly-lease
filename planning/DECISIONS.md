@@ -770,6 +770,51 @@ Every important technical or product decision, including conflict resolutions fo
 
 ---
 
+### DEC-062 - The admin is a branded private workspace, not a generic dashboard
+
+- **Date**: 2026-08-28
+- **Decision**: Resolve `OD-07` with a responsive redesign of `/admin/login` and `/admin` that uses
+  Assetly's existing editorial typography, ledger lines and approved Paper/Field/Pitch/Ivory/Khaki/
+  Bottle palette. Sign-in pairs a dark brand statement with a focused authentication panel. The
+  authenticated surface uses a compact dark account bar, an editorial Trusted By introduction, a
+  numbered publishing card and a larger partner-library panel with explicit live/hidden states.
+- **Reason**: The owner requested that the working but deliberately utilitarian admin reach the same
+  modern, branded and professional level as the public site before Phase 10 validates it.
+- **Alternatives considered**: Keep the Phase 3 utility layout; adopt a conventional sidebar-heavy
+  SaaS dashboard; broaden the surface into a general content-management system.
+- **Why rejected**: The temporary layout did not carry the finished brand. A generic dashboard would
+  feel disconnected from Assetly, while a broader CMS would violate DEC-011 and add capabilities the
+  business has not requested.
+- **Consequences**: Firebase Auth, Firestore and Storage behavior is unchanged. The panel still manages
+  only Trusted By visibility, logo upload, alternative text, order, active state and deletion. All
+  controls retain meaningful labels and at least 44px effective targets, mobile recomposes into one
+  column, and reduced motion removes the small interface transitions.
+- **Status**: Active
+
+---
+
+### DEC-063 - Browser E2E coverage stays proportional to the two-page product
+
+- **Date**: 2026-08-28
+- **Decision**: Reduce the Playwright matrix from 176 executions to 69 (61% smaller). Keep one
+  Chromium critical path per feature plus route/auth smoke, keyboard and focus behavior, three
+  representative responsive widths, mobile containment, reduced motion, Contact draft generation and
+  the public Firebase empty state. Keep detailed state, validation and calculation permutations in the
+  124-test Vitest suite. Cross-engine behavior moves to the manual release smoke pass.
+- **Reason**: The owner judged the accumulated browser suite disproportionate for a two-public-page
+  site and asked for only basic, necessary testing before push.
+- **Alternatives considered**: Continue running all 176 cases; retain every test but mark most skipped;
+  remove browser automation entirely.
+- **Why rejected**: The first wastes release time on repeated widths, animation micro-timings and
+  duplicated engines. Skips preserve clutter without reducing maintenance. Removing Playwright would
+  lose the high-value interaction, focus, responsive and generated-link checks.
+- **Consequences**: The lean suite remains a release gate, but is no longer an exhaustive visual
+  specification. Feature logic belongs in Vitest; owner preview and the production smoke pass cover
+  visual judgment and cross-engine confidence.
+- **Status**: Active
+
+---
+
 ## Decision index
 
 | ID | Topic | Status |
@@ -835,3 +880,5 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-059 | `OD-14` resolved: real About leadership photograph, `object-fit: contain` | Active |
 | DEC-060 | Opening true-axis lockup and nav-aware anchor section heights | Active |
 | DEC-061 | Deliberate Hero mechanisms complement the plate's ambient drift | Active |
+| DEC-062 | Admin is a branded private workspace, not a generic dashboard | Active |
+| DEC-063 | Browser E2E coverage stays proportional to the two-page product | Active |

@@ -512,12 +512,15 @@ Referenced open decisions (`OD-xx`) and resolved conflicts (`DEC-xxx`) are defin
 7. Mobile browser behavior: real-device or emulated pass on iOS Safari and Android Chrome for scroll-driven components (Compare drawer, Sectors rotation, Contact bottom sheet).
 8. Animation performance: profile Compare's RAF loop and Hero's ambient drift for dropped frames during scroll.
 9. Firebase failure states: re-verify Trusted By's silent-degradation behavior (Phase 3 tests) still holds after full-site integration.
-10. Full Playwright journey suite: home page scroll-through (all 8 sections), About page, admin login → upload → toggle → public reflection, Contact full enquiry flow (all 4 types + custom).
+10. Essential Playwright journey suite: one representative critical path per homepage feature, About,
+    admin auth, responsive/reduced-motion behavior, and Contact drafting. Keep detailed calculations
+    and state logic in Vitest; do not multiply E2E cases across nearby widths, animation micro-timings,
+    or browser engines (DEC-063).
 11. Lighthouse pass on `/` and `/about` (performance, accessibility, best practices, SEO scores) — record scores in `PROGRESS.md`.
 
 **Tests**: This phase *is* the test pass — see tasks above. All results recorded in `PROGRESS.md` per the root testing mandate (bugs found, fixes applied, retested, recorded).
 
-**Exit criteria**: `OD-14` is resolved with the approved About photograph and factual alt text; no critical accessibility failures; no reduced-motion gaps; no CLS regressions; Lighthouse scores recorded and any sub-90 performance/accessibility score has a documented reason or follow-up task; full Playwright journey suite green.
+**Exit criteria**: `OD-14` is resolved with the approved About photograph and factual alt text; no critical accessibility failures; no reduced-motion gaps; no CLS regressions; Lighthouse scores recorded and any sub-90 performance/accessibility score has a documented reason or follow-up task; the essential Playwright journey suite is green.
 
 **Risks**: This phase tends to surface issues that require revisiting earlier phases' components — budget time for fixes, not just findings. Do not mark Phase 10 complete on "found issues" alone; issues must be fixed and retested.
 

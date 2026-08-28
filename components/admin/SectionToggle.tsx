@@ -26,12 +26,21 @@ export function SectionToggle() {
   }
 
   return (
-    <div className={styles.toggleRow}>
+    <div className={styles.toggleCard} data-on={enabled}>
+      <div className={styles.toggleCopy}>
+        <span className={styles.toggleStatus}>
+          {enabled ? "Published" : "Not published"}
+        </span>
+        <span id="trusted-by-toggle-description" className={styles.toggleLabel}>
+          Trusted By is {enabled ? "visible when active logos exist" : "hidden from the homepage"}
+        </span>
+      </div>
       <button
         type="button"
         role="switch"
         aria-checked={enabled}
         aria-label="Trusted By section"
+        aria-describedby="trusted-by-toggle-description"
         className={styles.toggleSwitch}
         data-on={enabled}
         disabled={saving}
@@ -39,9 +48,6 @@ export function SectionToggle() {
       >
         <span />
       </button>
-      <span className={styles.toggleLabel}>
-        Trusted By is {enabled ? "on" : "off"}
-      </span>
     </div>
   );
 }

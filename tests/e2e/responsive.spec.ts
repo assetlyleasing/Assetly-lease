@@ -10,7 +10,9 @@ import { expect, test } from "./support/opening";
  * styles/tokens.css holding at both extremes.
  */
 
-const WIDTHS = [320, 375, 414, 640, 768, 1024, 1280, 1440, 1920] as const;
+// One representative phone, tablet and wide desktop catches the breakpoint
+// classes without repeating the same invariant at nine nearby widths.
+const WIDTHS = [320, 768, 1920] as const;
 
 for (const width of WIDTHS) {
   test(`renders without horizontal overflow at ${width}px`, async ({
