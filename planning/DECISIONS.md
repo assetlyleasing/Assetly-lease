@@ -742,6 +742,34 @@ Every important technical or product decision, including conflict resolutions fo
 
 ---
 
+### DEC-061 - Deliberate Hero mechanisms complement the plate's ambient drift
+
+- **Date**: 2026-08-28
+- **Decision**: Section 11's Living Plate language distinguishes small ambient movement from deliberate
+  mechanical motion. Ambient plate/node drift remains within its existing 2–5px vocabulary. Four
+  authored mechanisms may move after the line draw: the journey marker follows the real Scale/Grow
+  route (9s), the building lift works its shaft and doors (15.8s), the inner crane-chassis hub rotates
+  on its own axis (7.9s), and the crane boom, real hook and two exact hook-triangle payload clones run
+  one staged placement/pickup cycle (22.7s). The crane resolves only at full extension, retraction or
+  its 11.5-unit placement dip; arrival, hold, payload transfer and departure remain visibly sequential.
+- **Reason**: Owner review asked for the plate to feel active through logical equipment operation, while
+  rejecting ghost effects, abstract stand-ins for real machinery and simultaneous motion beats that
+  obscure cause and effect.
+- **Alternatives considered**: Keeping every machine static under §11's earlier wording; representing
+  payloads with a new abstract shape; synchronising the mechanisms on one shared loop; fading payloads
+  into empty space.
+- **Why rejected**: Static machinery no longer reflects the approved journey, lift and hub work. New
+  symbols or spatial fades would not describe a real mechanism, and a shared cadence or overlapping
+  beats would make the plate read as a generic animation instead of a believable technical scene.
+- **Consequences**: The four loop periods are deliberately non-harmonic and begin after the plate draw.
+  At 640px and below and under `prefers-reduced-motion`, all four are explicitly neutralised: the boom
+  rests fully extended, lift and hub retain their authored static states, and motion-only journey and
+  payload marks are hidden. The boom, hook and payload data attributes are internal CSS hooks; public
+  APIs and the existing region/node counts do not change. Cursor parallax remains removed by DEC-055.
+- **Status**: Active
+
+---
+
 ## Decision index
 
 | ID | Topic | Status |
@@ -806,3 +834,4 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-058 | Favicon is the raster brand mark, Ivory on Pitch | Active |
 | DEC-059 | `OD-14` resolved: real About leadership photograph, `object-fit: contain` | Active |
 | DEC-060 | Opening true-axis lockup and nav-aware anchor section heights | Active |
+| DEC-061 | Deliberate Hero mechanisms complement the plate's ambient drift | Active |

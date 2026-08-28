@@ -331,6 +331,224 @@
   animation: siteSpin 7.9s linear calc(var(--dur-draw) * 0.9) infinite;
 }
 
+/*
+ * The crane's 22.7s work cycle. It is deliberately non-harmonic with the
+ * 7.9s hub, 9s journey, 11s drift and 15.8s lift. Every change resolves to a
+ * real mechanical state: full extension, 55% retraction, or the 11.5-unit dip
+ * that puts the existing hook triangle's lowest point exactly on the roof.
+ *
+ * The long holds are intentional. Extension, arrival, placement, transfer and
+ * departure are separate beats, with at least half a second between them; no
+ * two actions have to be read at once.
+ */
+@keyframes craneBoom {
+  0%,
+  4.4% {
+    d: path("M371.2 402.3L120.4 305.4");
+  }
+
+  12.3%,
+  15% {
+    d: path("M371.2 402.3L233 349");
+  }
+
+  22.9%,
+  25.6% {
+    d: path("M371.2 402.3L120.4 305.4");
+  }
+
+  28.6%,
+  31.3% {
+    d: path("M371.2 402.3L120.4 316.9");
+  }
+
+  34.4% {
+    d: path("M371.2 402.3L120.4 305.4");
+  }
+
+  42.3%,
+  44.9% {
+    d: path("M371.2 402.3L233 349");
+  }
+
+  52.9%,
+  55.5% {
+    d: path("M371.2 402.3L120.4 305.4");
+  }
+
+  58.6%,
+  66.5% {
+    d: path("M371.2 402.3L120.4 316.9");
+  }
+
+  69.6% {
+    d: path("M371.2 402.3L120.4 305.4");
+  }
+
+  77.5%,
+  80.2% {
+    d: path("M371.2 402.3L233 349");
+  }
+
+  88.1%,
+  100% {
+    d: path("M371.2 402.3L120.4 305.4");
+  }
+}
+
+/* The real hook follows the three boom endpoints above on the same clock. */
+@keyframes craneHook {
+  0%,
+  4.4% {
+    translate: 0 0;
+  }
+
+  12.3%,
+  15% {
+    translate: 112.6px 43.6px;
+  }
+
+  22.9%,
+  25.6% {
+    translate: 0 0;
+  }
+
+  28.6%,
+  31.3% {
+    translate: 0 11.5px;
+  }
+
+  34.4% {
+    translate: 0 0;
+  }
+
+  42.3%,
+  44.9% {
+    translate: 112.6px 43.6px;
+  }
+
+  52.9%,
+  55.5% {
+    translate: 0 0;
+  }
+
+  58.6%,
+  66.5% {
+    translate: 0 11.5px;
+  }
+
+  69.6% {
+    translate: 0 0;
+  }
+
+  77.5%,
+  80.2% {
+    translate: 112.6px 43.6px;
+  }
+
+  88.1%,
+  100% {
+    translate: 0 0;
+  }
+}
+
+/*
+ * Payload one is attached at the retracted hook, rides to full extension, and
+ * stays on the roof when the real hook rises away. It leaves only when the
+ * hook returns to that exact site for the later pickup hand-off.
+ */
+@keyframes cranePayloadOutbound {
+  0%,
+  12.3% {
+    translate: 112.6px 43.6px;
+    scale: 0;
+  }
+
+  15% {
+    translate: 112.6px 43.6px;
+    scale: 1;
+  }
+
+  22.9%,
+  25.6% {
+    translate: 0 0;
+    scale: 1;
+  }
+
+  28.6%,
+  58.6% {
+    translate: 0 11.5px;
+    scale: 1;
+  }
+
+  61.2%,
+  100% {
+    translate: 0 11.5px;
+    scale: 0;
+  }
+}
+
+/*
+ * Payload two scales from the real hook at the site only after the first has
+ * cleared, waits there, then rises and travels back with the retracting boom.
+ */
+@keyframes cranePayloadInbound {
+  0%,
+  61.2% {
+    translate: 0 11.5px;
+    scale: 0;
+  }
+
+  63.9%,
+  66.5% {
+    translate: 0 11.5px;
+    scale: 1;
+  }
+
+  69.6% {
+    translate: 0 0;
+    scale: 1;
+  }
+
+  77.5% {
+    translate: 112.6px 43.6px;
+    scale: 1;
+  }
+
+  80.2%,
+  100% {
+    translate: 112.6px 43.6px;
+    scale: 0;
+  }
+}
+
+.plate :is([data-hero-plate-hook], [data-hero-plate-payload]) {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.plate [data-hero-plate-payload] {
+  scale: 0;
+}
+
+.ready .plate [data-hero-plate-boom] {
+  animation: craneBoom 22.7s var(--eio) calc(var(--dur-draw) * 0.9) infinite;
+}
+
+.ready .plate [data-hero-plate-hook] {
+  animation: craneHook 22.7s var(--eio) calc(var(--dur-draw) * 0.9) infinite;
+}
+
+.ready .plate [data-hero-plate-payload="outbound"] {
+  animation: cranePayloadOutbound 22.7s var(--eio)
+    calc(var(--dur-draw) * 0.9) infinite;
+}
+
+.ready .plate [data-hero-plate-payload="inbound"] {
+  animation: cranePayloadInbound 22.7s var(--eio)
+    calc(var(--dur-draw) * 0.9) infinite;
+}
+
 /* ---- Content stack ------------------------------------------------------ */
 
 .content {
@@ -639,6 +857,19 @@
     rotate: none;
   }
 
+  /* The crane rests fully extended and carries no payload. */
+  .ready .plate [data-hero-plate-boom],
+  .ready .plate [data-hero-plate-hook] {
+    animation: none;
+    translate: none;
+  }
+
+  .ready .plate [data-hero-plate-payload] {
+    animation: none;
+    translate: none;
+    scale: 0;
+  }
+
   .plateFrame {
     color: var(--olive);
   }
@@ -679,6 +910,18 @@
   .ready .plate [data-hero-plate-site] {
     animation: none;
     rotate: none;
+  }
+
+  .ready .plate [data-hero-plate-boom],
+  .ready .plate [data-hero-plate-hook] {
+    animation: none;
+    translate: none;
+  }
+
+  .ready .plate [data-hero-plate-payload] {
+    animation: none;
+    translate: none;
+    scale: 0;
   }
 
   /*

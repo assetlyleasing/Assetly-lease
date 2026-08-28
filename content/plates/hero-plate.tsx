@@ -84,8 +84,32 @@ export function HeroPlateArtwork() {
 
           <path d="M546 560V457.4H447.2V560" />
           <path d="M546 457.4L477.6 402.3H371.2V457.4" />
-          <path d="M371.2 402.3L120.4 305.4" />
-          <path d="M120.4 305.4L102.4 345.3L138.5 360.5Z" />
+          {/*
+           * The boom and its existing triangular hook are separate animation
+           * hooks so the boom can telescope by changing its endpoint while the
+           * hook follows that endpoint in the same local coordinate space.
+           *
+           * The two payload paths below are exact duplicates of the existing
+           * triangle. They take turns at the real hook position: one is carried
+           * out and left on the roof, then the other is collected and carried
+           * back. Nothing is invented or materialises away from the mechanism.
+           */}
+          <path
+            data-hero-plate-boom="true"
+            d="M371.2 402.3L120.4 305.4"
+          />
+          <path
+            data-hero-plate-hook="true"
+            d="M120.4 305.4L102.4 345.3L138.5 360.5Z"
+          />
+          <path
+            data-hero-plate-payload="outbound"
+            d="M120.4 305.4L102.4 345.3L138.5 360.5Z"
+          />
+          <path
+            data-hero-plate-payload="inbound"
+            d="M120.4 305.4L102.4 345.3L138.5 360.5Z"
+          />
           <path d="M477.6 402.3V360.5H302.8M302.8 360.5V402.3" />
           <path d="M422.5 360.5V324.4H194.5V360.5" />
 
