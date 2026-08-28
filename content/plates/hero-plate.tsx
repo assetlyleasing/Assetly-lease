@@ -52,7 +52,35 @@ export function HeroPlateArtwork() {
       <g data-hero-plate-region="access">
         <g transform="translate(-20 118.4) scale(.86)">
           <path d="M70 560V372H205V560" />
-          <path d="M70 394.4H205M70 435.8H205M70 477.2H205M70 518.6H205" />
+          {/*
+           * The slabs stop at the lift shaft below rather than running the full
+           * width. A shaft is a void through every floor, so in section the
+           * floor plates end at it — this is what makes the shaft read as a
+           * shaft instead of a stray line drawn over the storeys.
+           */}
+          <path d="M70 394.4H175M70 435.8H175M70 477.2H175M70 518.6H175" />
+
+          {/*
+           * The lift. Its core sits against the tower's right wall, so the
+           * building's own wall is the shaft's outer face and one line defines
+           * the bay. Placed right because the crane's hook works over the left
+           * of the roof — the two mechanisms never share a column.
+           *
+           * The shaft runs past the top landing to the roof: that band is the
+           * overrun every lift needs above its highest stop. The car is drawn
+           * parked at the ground, which is both its rest state and the state
+           * reduced motion is left in.
+           *
+           * The two door leaves are drawn shut — coincident on the car's centre
+           * line, so closed reads as a single seam — and part to the car's own
+           * walls at each landing.
+           */}
+          <path d="M175 372V560" />
+          <g data-hero-plate-lift="true">
+            <rect x="180" y="534" width="20" height="26" />
+            <line data-hero-plate-door="near" x1="190" y1="536" x2="190" y2="558" />
+            <line data-hero-plate-door="far" x1="190" y1="536" x2="190" y2="558" />
+          </g>
 
           <path d="M546 560V457.4H447.2V560" />
           <path d="M546 457.4L477.6 402.3H371.2V457.4" />
@@ -60,10 +88,25 @@ export function HeroPlateArtwork() {
           <path d="M120.4 305.4L102.4 345.3L138.5 360.5Z" />
           <path d="M477.6 402.3V360.5H302.8M302.8 360.5V402.3" />
           <path d="M422.5 360.5V324.4H194.5V360.5" />
-          <circle cx="502.3" cy="516.3" r="31.4" />
-          <circle cx="502.3" cy="516.3" r="11.4" />
-          <circle cx="413" cy="516.3" r="31.4" />
-          <circle cx="413" cy="516.3" r="11.4" />
+
+          {/*
+           * Both wheels sit on the ground datum: at r=31.4 that puts their
+           * centres on 528.6, not 516.3, which had them floating ~12 units
+           * clear of the base every other structure here rests on.
+           *
+           * Each hub carries the same keyway, so the detail reads as drafted
+           * rather than as a mark on one wheel. Only the hub inside the chassis
+           * turns; its rim, and the far wheel, stay still.
+           */}
+          <circle cx="413" cy="528.6" r="31.4" />
+          <circle cx="413" cy="528.6" r="11.4" />
+          <line x1="413" y1="528.6" x2="413" y2="517.2" />
+
+          <circle cx="502.3" cy="528.6" r="31.4" />
+          <g data-hero-plate-site="true">
+            <circle cx="502.3" cy="528.6" r="11.4" />
+            <line x1="502.3" y1="528.6" x2="502.3" y2="517.2" />
+          </g>
         </g>
       </g>
 

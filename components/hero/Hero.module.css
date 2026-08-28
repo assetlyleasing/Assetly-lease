@@ -181,6 +181,156 @@
   animation: plateJourney 9s var(--eio) calc(var(--dur-draw) * 0.9) infinite;
 }
 
+/*
+ * The building's lift, working its shaft. The car stops with its floor level
+ * with a slab — 41.4 is the storey — so every keyframe is a landing and it can
+ * never come to rest between floors. Its runs are deliberately uneven — two
+ * storeys up, then one, then three back down to the ground — because a lift
+ * answering calls does not step floor by floor, and an even pattern reads as a
+ * metronome. --eio gives each run its own acceleration and braking.
+ *
+ * The dwells at the ground meet across the loop boundary, so the car rests
+ * there far longer than anywhere else and the cycle reads as returning home
+ * rather than snapping back. 15.8s shares no simple ratio with the journey's
+ * 9s, the nodes' 9–12s or the drift's 11s.
+ */
+@keyframes buildingLift {
+  0%,
+  21.5% {
+    translate: 0 0;
+  }
+
+  31%,
+  52.5% {
+    translate: 0 -82.8px;
+  }
+
+  58.9%,
+  80.4% {
+    translate: 0 -124.2px;
+  }
+
+  93%,
+  100% {
+    translate: 0 0;
+  }
+}
+
+/*
+ * The doors, on the same 15.8s clock. Each landing runs the full sequence in
+ * order and never overlaps the travel: the car arrives and is allowed to settle
+ * shut for a beat, the leaves take just over half a second to part, they stand
+ * open for well over a second, they take as long again to close, and only then
+ * does the car pause once more before it leaves. The car is never in motion
+ * with its doors anything but shut.
+ *
+ * The two leaves are drawn coincident, so "closed" is a single seam on the
+ * car's centre line and "open" is the pair standing in the car's own walls.
+ */
+@keyframes liftDoorNear {
+  0%,
+  3% {
+    translate: 0 0;
+  }
+  6.8%,
+  14.4% {
+    translate: -9px 0;
+  }
+  18.2%,
+  34.2% {
+    translate: 0 0;
+  }
+  38%,
+  45.6% {
+    translate: -9px 0;
+  }
+  49.4%,
+  62.1% {
+    translate: 0 0;
+  }
+  65.9%,
+  73.5% {
+    translate: -9px 0;
+  }
+  77.3%,
+  100% {
+    translate: 0 0;
+  }
+}
+
+@keyframes liftDoorFar {
+  0%,
+  3% {
+    translate: 0 0;
+  }
+  6.8%,
+  14.4% {
+    translate: 9px 0;
+  }
+  18.2%,
+  34.2% {
+    translate: 0 0;
+  }
+  38%,
+  45.6% {
+    translate: 9px 0;
+  }
+  49.4%,
+  62.1% {
+    translate: 0 0;
+  }
+  65.9%,
+  73.5% {
+    translate: 9px 0;
+  }
+  77.3%,
+  100% {
+    translate: 0 0;
+  }
+}
+
+.plate [data-hero-plate-lift] {
+  /* Without this the translate resolves against the SVG viewport, not the car. */
+  transform-box: fill-box;
+}
+
+.ready .plate [data-hero-plate-lift] {
+  animation: buildingLift 15.8s var(--eio) calc(var(--dur-draw) * 0.9) infinite;
+}
+
+.ready .plate [data-hero-plate-door="near"] {
+  animation: liftDoorNear 15.8s var(--eio) calc(var(--dur-draw) * 0.9) infinite;
+}
+
+.ready .plate [data-hero-plate-door="far"] {
+  animation: liftDoorFar 15.8s var(--eio) calc(var(--dur-draw) * 0.9) infinite;
+}
+
+/*
+ * The hub of the wheel inside the crane's chassis, turning on its own axis.
+ * Linear because a wheel turns at a constant rate. One revolution every 7.9s —
+ * quick enough to be plainly turning, short of the speed at which it would stop
+ * reading as machinery and start reading as a spinner. The keyway is what makes
+ * the rotation visible; the rim is outside this group and stays still.
+ */
+@keyframes siteSpin {
+  from {
+    rotate: 0deg;
+  }
+  to {
+    rotate: 360deg;
+  }
+}
+
+.plate [data-hero-plate-site] {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.ready .plate [data-hero-plate-site] {
+  animation: siteSpin 7.9s linear calc(var(--dur-draw) * 0.9) infinite;
+}
+
 /* ---- Content stack ------------------------------------------------------ */
 
 .content {
@@ -471,6 +621,23 @@
     display: none;
   }
 
+  /*
+   * The lift car stays — unlike the journey marker it is part of the building,
+   * and an empty shaft would be missing artwork rather than merely unanimated.
+   * It is drawn parked at the ground, which is its own resting state.
+   */
+  .ready .plate [data-hero-plate-lift],
+  .ready .plate [data-hero-plate-door] {
+    animation: none;
+    translate: none;
+  }
+
+  /* The hub simply rests at its drawn angle. */
+  .ready .plate [data-hero-plate-site] {
+    animation: none;
+    rotate: none;
+  }
+
   .plateFrame {
     color: var(--olive);
   }
@@ -501,9 +668,16 @@
  */
 @media (max-width: 640px) {
   .ready .plate,
-  .ready .plate [data-hero-plate-node] {
+  .ready .plate [data-hero-plate-node],
+  .ready .plate [data-hero-plate-lift],
+  .ready .plate [data-hero-plate-door] {
     animation: none;
     translate: none;
+  }
+
+  .ready .plate [data-hero-plate-site] {
+    animation: none;
+    rotate: none;
   }
 
   /*
