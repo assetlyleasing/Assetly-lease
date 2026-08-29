@@ -549,6 +549,51 @@
     calc(var(--dur-draw) * 0.9) infinite;
 }
 
+/*
+ * The load signal on the hub keyway. It runs on the crane's own 22.7s clock and
+ * delay, phase-locked to the hook on purpose: tying the hub to what the hook is
+ * doing is the whole point of it, and it is the one place in the plate where
+ * two mechanisms are meant to coincide.
+ *
+ * Tone, not opacity. The plate is composited at 20% as a group, so a child's
+ * own opacity can only ever take it further down; darkening the stroke is how
+ * `plateDrawTone` already expresses "a shade stronger" here.
+ *
+ * The two instants are read off the payload keyframes above: the outbound
+ * payload settles on the roof at 28.6%, and the inbound one is taken up at
+ * 66.5%, at the end of the dipped hold. Each bump is roughly four tenths of a
+ * second in and half a second out of a 22.7s cycle, and neither lands on any
+ * other beat.
+ */
+@keyframes craneKeyway {
+  0%,
+  27.6% {
+    color: var(--olive);
+  }
+
+  28.6% {
+    color: var(--pitch);
+  }
+
+  30.5%,
+  65.5% {
+    color: var(--olive);
+  }
+
+  66.5% {
+    color: var(--pitch);
+  }
+
+  68.5%,
+  100% {
+    color: var(--olive);
+  }
+}
+
+.ready .plate [data-hero-plate-keyway] {
+  animation: craneKeyway 22.7s var(--eio) calc(var(--dur-draw) * 0.9) infinite;
+}
+
 /* ---- Content stack ------------------------------------------------------ */
 
 .content {
@@ -870,6 +915,15 @@
     scale: 0;
   }
 
+  /*
+   * The keyway is drafted artwork, not a motion-only mark, so it stays and
+   * simply rests at the plate's settled tone.
+   */
+  .ready .plate [data-hero-plate-keyway] {
+    animation: none;
+    color: inherit;
+  }
+
   .plateFrame {
     color: var(--olive);
   }
@@ -922,6 +976,11 @@
     animation: none;
     translate: none;
     scale: 0;
+  }
+
+  .ready .plate [data-hero-plate-keyway] {
+    animation: none;
+    color: inherit;
   }
 
   /*
