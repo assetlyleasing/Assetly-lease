@@ -10,7 +10,7 @@ async function openSettledHero(page: Page) {
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 }
 
-test.describe("Hero plate responsive composition", () => {
+test.describe("Hero plate responsive composition", { tag: "@motion" }, () => {
   test("keeps the remote spacing exactly between mark, heading and tagline", async ({
     page,
   }) => {

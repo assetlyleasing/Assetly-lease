@@ -14,8 +14,16 @@ const launchOptions = executablePath ? { executablePath } : undefined;
 /**
  * User-flow and interaction tests (SOURCE_OF_TRUTH.md §19).
  *
- * The full regression suite runs in Chromium. Interaction-heavy completed
- * sections also run in WebKit; Phase 10 broadens that second-engine coverage.
+ * The suite runs in Chromium only (DEC-063) and is tiered by tag, so the whole
+ * of it does not have to run on every change:
+ *
+ *   npm run test:e2e:fast    @fast  - the everyday gate
+ *   npm run test:e2e         all    - before a phase commit
+ *   npm run test:e2e:motion  @motion - after touching loader or plate timing
+ *
+ * Tests run in parallel. The `--workers=1` rule this project carried until now
+ * existed for false failures on the WebKit mobile sheet, and WebKit was removed
+ * in DEC-063 — the reason went with it.
  */
 export default defineConfig({
   testDir: "./tests/e2e",

@@ -27,7 +27,7 @@ async function centreSlide(page: Page, index: number) {
   await page.waitForTimeout(300);
 }
 
-test("Compare renders the four approved arguments", async ({ page }) => {
+test("Compare renders the four approved arguments", { tag: "@fast" }, async ({ page }) => {
   await page.goto("/");
 
   for (const [id, headline] of SLIDES) {

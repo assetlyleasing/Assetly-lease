@@ -8,7 +8,7 @@ const PARAGRAPHS = [
 ] as const;
 
 test.describe("About page", () => {
-  test("renders the approved company copy and the leadership photograph", async ({ page }) => {
+  test("renders the approved company copy and the leadership photograph", { tag: "@fast" }, async ({ page }) => {
     await page.goto("/about");
 
     await expect(page.getByRole("heading", { level: 1, name: "About Assetly" })).toBeVisible();
@@ -43,7 +43,7 @@ test.describe("About page", () => {
     await expect(page.locator("main")).not.toContainText(/founder|timeline|statistics/i);
   });
 
-  test("publishes route-specific title, description and Open Graph metadata", async ({ page }) => {
+  test("publishes route-specific title, description and Open Graph metadata", { tag: "@fast" }, async ({ page }) => {
     await page.goto("/about");
 
     await expect(page).toHaveTitle("About Assetly | Assetly");

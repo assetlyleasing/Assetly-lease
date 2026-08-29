@@ -30,9 +30,14 @@ async function measureAnchorFit(page: Page, id: (typeof TARGETS)[number]) {
   });
 }
 
+/** Only the desktop case runs in the everyday gate. */
+const fastTier = (v: (typeof VIEWPORTS)[number]) =>
+  v.width === 1440 && v.height === 900 ? "@fast" : [];
+
 test.describe("Anchor targets fit below the fixed navigation", () => {
   for (const viewport of VIEWPORTS) {
-    test(`${viewport.width}x${viewport.height}`, async ({ page }) => {
+    // The desktop case is the everyday gate; the other two ride the full tier.
+    test(`${viewport.width}x${viewport.height}`, { tag: fastTier(viewport) }, async ({ page }) => {
       await page.setViewportSize(viewport);
       await page.goto("/");
       await settleOpening(page);

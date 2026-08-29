@@ -11,7 +11,7 @@ import { expect, test } from "./support/opening";
 const HEADLINE = "The lighter balance sheet.";
 
 test.describe("hero", () => {
-  test("renders the locked DEC-018 copy as the page h1", async ({ page }) => {
+  test("renders the locked DEC-018 copy as the page h1", { tag: "@fast" }, async ({ page }) => {
     await page.goto("/");
 
     const heading = page.getByRole("heading", { level: 1 });
@@ -40,7 +40,7 @@ test.describe("hero", () => {
     await expect(emphasis).toHaveCSS("color", "rgb(92, 92, 70)");
   });
 
-  test("the entry sequence completes and leaves content visible", async ({
+  test("the entry sequence completes and leaves content visible", { tag: "@fast" }, async ({
     page,
   }) => {
     await page.goto("/");
@@ -71,7 +71,7 @@ test.describe("hero", () => {
       .toBe("1");
   });
 
-  test("the plate is decorative and draws itself", async ({ page }) => {
+  test("the plate is decorative and draws itself", { tag: "@motion" }, async ({ page }) => {
     await page.goto("/");
 
     const plate = page.locator("section#hero svg");
@@ -95,7 +95,7 @@ test.describe("hero", () => {
       .toBe("0px");
   });
 
-  test("the plate fades as the visitor leaves the hero (§11 stage 3)", async ({
+  test("the plate fades as the visitor leaves the hero (§11 stage 3)", { tag: "@motion" }, async ({
     page,
   }) => {
     await page.goto("/");
@@ -116,7 +116,7 @@ test.describe("hero", () => {
     await expect.poll(readFade).toBeLessThan(1);
   });
 
-  test("the plate comes alive after it draws (§11 stage 2)", async ({
+  test("the plate comes alive after it draws (§11 stage 2)", { tag: "@motion" }, async ({
     page,
   }) => {
     await page.goto("/");
@@ -156,9 +156,13 @@ test.describe("hero", () => {
   test("fills the viewport without horizontal overflow, 320px to 1920px", async ({
     page,
   }) => {
+    // Layout reflows on resize, so one document serves the whole sweep. A
+    // fresh navigation per width only re-pays the opening sequence for a
+    // measurement that reads the same either way.
+    await page.goto("/");
+
     for (const width of [320, 390, 768, 1280, 1920]) {
       await page.setViewportSize({ width, height: 900 });
-      await page.goto("/");
 
       const overflow = await page.evaluate(
         () =>
@@ -171,6 +175,13 @@ test.describe("hero", () => {
         .locator("section#hero")
         .evaluate((node) => node.getBoundingClientRect().height);
       expect(heroHeight, `hero too short at ${width}px`).toBeGreaterThan(600);
+
+      // Kept from responsive.spec.ts, whose narrower copy of this sweep this
+      // one replaces.
+      await expect(
+        page.getByRole("heading", { level: 1 }),
+        `h1 not visible at ${width}px`,
+      ).toBeVisible();
     }
   });
 
@@ -192,7 +203,7 @@ test.describe("hero", () => {
   });
 });
 
-test.describe("hero under reduced motion", () => {
+test.describe("hero under reduced motion", { tag: "@motion" }, () => {
   test.use({ viewport: { width: 1280, height: 900 } });
 
   test("shows the final state immediately (§8)", async ({ page }) => {
@@ -225,8 +236,10 @@ test.describe("hero under reduced motion", () => {
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto("/");
 
-    // Give the entrance longer than it would need, then confirm nothing drifts.
-    await page.waitForTimeout(4000);
+    // Every assertion below reads a computed style that reduced motion pins
+    // from first paint; this only lets the entrance transition finish so the
+    // layer transform has resolved to its identity value.
+    await page.waitForTimeout(300);
 
     const motion = await page.evaluate(() => {
       const svg = document.querySelector("section#hero svg");

@@ -10,7 +10,9 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:e2e:fast": "playwright test --grep @fast",
+    "test:e2e:motion": "playwright test --grep @motion --workers=1"
   },
   "dependencies": {
     "firebase": "^12.18.0",

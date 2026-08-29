@@ -5,7 +5,7 @@ import { expect, test } from "./support/opening";
  * 200 with the expected title, and the design foundation actually reaches the
  * browser. Section-level flows are covered from Phase 1 onward.
  */
-test("root route responds 200 with the expected title", async ({ page }) => {
+test("root route responds 200 with the expected title", { tag: "@fast" }, async ({ page }) => {
   const response = await page.goto("/");
 
   expect(response?.status()).toBe(200);
@@ -15,7 +15,7 @@ test("root route responds 200 with the expected title", async ({ page }) => {
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 });
 
-test("design tokens and base typography are applied", async ({ page }) => {
+test("design tokens and base typography are applied", { tag: "@fast" }, async ({ page }) => {
   await page.goto("/");
 
   const paper = await page.evaluate(() =>
@@ -35,7 +35,7 @@ test("design tokens and base typography are applied", async ({ page }) => {
   expect(headingFont).toContain("DM Serif Display");
 });
 
-test("public and internal routes render", async ({ page }) => {
+test("public and internal routes render", { tag: "@fast" }, async ({ page }) => {
   const about = await page.goto("/about");
   expect(about?.status()).toBe(200);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(

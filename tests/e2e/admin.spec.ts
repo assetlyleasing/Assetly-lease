@@ -9,7 +9,7 @@ import { expect, test } from "./support/opening";
  * account — see PROGRESS.md.
  */
 test.describe("Admin auth gate", () => {
-  test("an unauthenticated visitor is redirected from /admin to /admin/login", async ({
+  test("an unauthenticated visitor is redirected from /admin to /admin/login", { tag: "@fast" }, async ({
     page,
   }) => {
     await page.goto("/admin");
@@ -17,7 +17,7 @@ test.describe("Admin auth gate", () => {
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("Admin sign-in");
   });
 
-  test("the login form exposes labeled email and password fields", async ({ page }) => {
+  test("the login form exposes labeled email and password fields", { tag: "@fast" }, async ({ page }) => {
     await page.goto("/admin/login");
     await expect(page.getByLabel("Email")).toBeVisible();
     await expect(page.getByLabel("Password")).toBeVisible();
@@ -65,7 +65,7 @@ test.describe("Admin auth gate", () => {
     }
   });
 
-  test("an incorrect password is rejected with a clear error and no navigation", async ({
+  test("an incorrect password is rejected with a clear error and no navigation", { tag: "@fast" }, async ({
     page,
   }) => {
     await page.goto("/admin/login");

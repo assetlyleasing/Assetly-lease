@@ -12,7 +12,7 @@ async function showSectors(page: Page) {
   await page.waitForTimeout(900);
 }
 
-test("Sectors shows four entries from the approved six-sector set", async ({ page }) => {
+test("Sectors shows four entries from the approved six-sector set", { tag: "@fast" }, async ({ page }) => {
   await showSectors(page);
   await expect(page.getByRole("heading", { level: 2, name: "Sectors We Serve" })).toBeVisible();
   await expect(page.locator(CARDS)).toHaveCount(4);
@@ -40,7 +40,7 @@ test("Sectors uses one contained column on mobile", async ({ page }) => {
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
 });
 
-test("Sectors becomes static under reduced motion", async ({ page }) => {
+test("Sectors becomes static under reduced motion", { tag: "@motion" }, async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await showSectors(page);
   const before = await page.locator(CARDS).evaluateAll((cards) =>

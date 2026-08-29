@@ -59,20 +59,23 @@ explicitly skipped by the owner and must not be reopened without a new request.
 - `DEC-062` — admin is a branded private workspace, not a generic dashboard.
 - `DEC-063` — browser E2E coverage stays proportional to the two-page product.
 - `DEC-064` — Vercel hosts preview/production; Firebase remains the application backend.
+- `DEC-065` — the browser suite is tiered, and runs in parallel.
 
 ## Tests Run
 
 - `npx tsc --noEmit` — clean.
-- `npx eslint .` — clean before the final test-suite reduction; final changed-file lint is the push
-  gate for this cycle.
+- `npx eslint tests/e2e playwright.config.ts` — clean.
 - `npx vitest run --reporter=dot` — 124/124 passed.
-- `npx playwright test --reporter=line` — 66 unaffected cases passed; three assertions in newly
-  condensed tests were corrected (one stale selector, expected text casing and a matcher name).
-- `npx playwright test tests/e2e/compare.spec.ts tests/e2e/hero-loader.spec.ts --workers=1` — 7/7
-  passed after those corrections. Together, every one of the final 69 cases has passed.
-- Focused admin regression — 5/5 passed.
 - `npm run build` — production build completed successfully.
-- Lighthouse production mobile audits — scores recorded above; no additional E2E suite was run.
+- Lighthouse production mobile audits — scores recorded above.
+- `npm run test:e2e` — 65/65 passed, three consecutive parallel runs (4.5m, 4.0m, 3.8m), against the
+  same warm dev server. This is what withdrew the project-wide `--workers=1` rule: it existed for
+  false failures on the WebKit mobile sheet, and WebKit went with DEC-063.
+- `npm run test:e2e:fast` — 22/22 passed in 1.5m warm, 2.5m from a cold server.
+- `npm run test:e2e:motion` — 12/12 passed, serial.
+
+The full suite was about 22.5 minutes before this cycle. The cost was overhead, not test count:
+serial execution, and the ~4.8s opening sequence paid on every one of the 50 loads of `/`.
 
 ## Issues / Blockers
 

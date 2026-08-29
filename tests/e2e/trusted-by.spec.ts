@@ -8,7 +8,7 @@ import { expect, test } from "./support/opening";
  * The admin-populated marquee (TRUST-008/009) needs a follow-up visual pass
  * once the owner has uploaded real logos — see PROGRESS.md.
  */
-test("the homepage renders with Trusted By absent when disabled or empty, and Hero is not blocked", async ({
+test("the homepage renders with Trusted By absent when disabled or empty, and Hero is not blocked", { tag: "@fast" }, async ({
   page,
 }) => {
   const errors: string[] = [];
