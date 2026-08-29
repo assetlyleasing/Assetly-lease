@@ -135,7 +135,11 @@
   /* Pops in once the linework has nearly finished drawing, not with it. */
   transition: scale 380ms var(--eio);
   transition-delay: calc(var(--dur-draw) * 0.78);
-  animation: nodeBreathe 9s var(--eio) 3.2s infinite alternate;
+  /*
+   * 9.7s, not 9s. `alternate` makes the round trip twice the duration, so a 9s
+   * breathe was exactly two journey loops long and the two never came apart.
+   */
+  animation: nodeBreathe 9.7s var(--eio) 3.2s infinite alternate;
 }
 
 /*
@@ -322,10 +326,14 @@
 
 /*
  * The hub of the wheel inside the crane's chassis, turning on its own axis.
- * Linear because a wheel turns at a constant rate. One revolution every 7.9s —
+ * Linear because a wheel turns at a constant rate. One revolution every 8.3s —
  * quick enough to be plainly turning, short of the speed at which it would stop
  * reading as machinery and start reading as a spinner. The keyway is what makes
  * the rotation visible; the rim is outside this group and stays still.
+ *
+ * 8.3s, not 7.9s: at 7.9 the hub turned exactly twice per 15.8s lift cycle and
+ * both start on the same delay, so the two were permanently in step rather than
+ * merely close — the one thing §11 asks these loops never to be.
  */
 @keyframes siteSpin {
   from {
@@ -342,12 +350,12 @@
 }
 
 .ready .plate [data-hero-plate-site] {
-  animation: siteSpin 7.9s linear calc(var(--dur-draw) * 0.9) infinite;
+  animation: siteSpin 8.3s linear calc(var(--dur-draw) * 0.9) infinite;
 }
 
 /*
  * The crane's 22.7s work cycle. It is deliberately non-harmonic with the
- * 7.9s hub, 9s journey, 11s drift and 15.8s lift. Every change resolves to a
+ * 8.3s hub, 9s journey, 11s drift and 15.8s lift. Every change resolves to a
  * real mechanical state: full extension, 55% retraction, or the 11.5-unit dip
  * that puts the existing hook triangle's lowest point exactly on the roof.
  *

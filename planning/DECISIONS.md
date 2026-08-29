@@ -836,6 +836,40 @@ Every important technical or product decision, including conflict resolutions fo
 
 ---
 
+### DEC-066 - The plate's mechanisms are de-synchronised, and the keyway signals load transfer
+
+- **Date**: 2026-08-29
+- **Decision**: The crane hub turns once every **8.3s** (was 7.9s) and node 1's `nodeBreathe` runs
+  over **9.7s** (was 9s). The keyway on that hub darkens from Olive to Pitch for roughly half a
+  second at 28.6% and 66.5% of the crane's 22.7s cycle - the two instants a payload is set down and
+  taken up. `plateDrawTone` is front-loaded: Pitch through the opening tenth, most of the way to
+  Olive by 40%, settled by 72%, with one intermediate stop mixed from the two existing tones.
+- **Reason**: §11 and `HERO_PLATE_MOTION.md` §3 require every loop to have a period sharing no simple
+  ratio with the others, and two pairs shared an exact 2:1 - the 7.9s hub against the 15.8s lift, and
+  the 9s journey against node 1's 9s `alternate` breathe, whose round trip is 18s. Both pairs also
+  start on the same `calc(var(--dur-draw) * 0.9)` delay, so they were permanently in step rather than
+  merely close. Separately, the staged payload cycle had no acknowledgement at the site that a load
+  had changed hands, and the owner reported the draw tone as a uniform bleed.
+- **Alternatives considered**: Moving `plateDrift` instead of the hub; expressing the keyway signal
+  as an opacity bump, as originally briefed; a travelling gradient highlight along the stroke in
+  place of the tone wash; leaving the tone as it was.
+- **Why rejected**: `plateDrift` is asserted to sit between 8 and 12 seconds by `hero.spec.ts`, and
+  it is not half of anything - moving it would have addressed neither lock. An opacity bump cannot
+  work: the plate is composited at 20% as a group, so a child's own opacity only takes it further
+  down. A gradient highlight needs a Hero-only override of `Plate.module.css`'s `stroke: currentColor`,
+  which is shared by the Compare and Sectors plates. Leaving the tone alone would have left the
+  reported fault in place.
+- **Consequences**: Supersedes DEC-061's stated 7.9s hub period; every other period it recorded
+  stands. `craneKeyway` deliberately shares the crane's 22.7s clock and delay - it is the one place
+  in the plate where two mechanisms are meant to coincide, because tying the hub to the hook is the
+  point of it. The keyway rests at the plate's settled tone under reduced motion and on phones rather
+  than being hidden: it is drafted artwork, not a motion-only mark. The tone change also explains a
+  property of the draw worth remembering - every path shares one 2200 dasharray, so short paths
+  complete within the first third of the 2.6s and only the datum and boom arrive late.
+- **Status**: Active
+
+---
+
 ## Decision index
 
 | ID | Topic | Status |
@@ -900,7 +934,8 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-058 | Favicon is the raster brand mark, Ivory on Pitch | Active |
 | DEC-059 | `OD-14` resolved: real About leadership photograph, `object-fit: contain` | Active |
 | DEC-060 | Opening true-axis lockup and nav-aware anchor section heights | Active |
-| DEC-061 | Deliberate Hero mechanisms complement the plate's ambient drift | Active |
+| DEC-061 | Deliberate Hero mechanisms complement the plate's ambient drift | Hub period superseded by DEC-066 |
 | DEC-062 | Admin is a branded private workspace, not a generic dashboard | Active |
 | DEC-063 | Browser E2E coverage stays proportional to the two-page product | Active |
 | DEC-064 | Vercel hosts the site; Firebase remains the application backend | Active |
+| DEC-066 | Plate mechanisms de-synchronised; keyway signals load transfer | Active |
