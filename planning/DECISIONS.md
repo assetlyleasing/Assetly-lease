@@ -836,6 +836,39 @@ Every important technical or product decision, including conflict resolutions fo
 
 ---
 
+### DEC-067 - The admin is a workspace holding sections, not the Trusted By page
+
+- **Date**: 2026-08-29
+- **Decision**: `/admin`'s `<h1>` is the workspace ("Homepage content"), sized as a tool's title
+  rather than as display type. Trusted By is a named section beneath it, introduced by a "Managed
+  sections" list header and carrying its own hanging ordinal, with the Publishing and Content panels
+  as its parts. Headings run workspace, section, panel, sub-panel - h1 through h4 - and the page
+  intro is a left-aligned stack that reaches the first control sooner.
+- **Reason**: The owner reported the Trusted By heading as too big and the admin as not looking like
+  it could hold more than one thing. Both followed from the same decision: "Trusted By" was the
+  workspace's own `<h1>` at `clamp(62px, 8.2vw, 126px)`, so a section label wore display type and the
+  workspace's top-level identity *was* the single section it manages. There was nowhere for a second
+  managed section to go without restructuring the page.
+- **Alternatives considered**: Only reducing the heading size; a left navigation rail listing
+  sections; showing placeholder entries for sections that do not exist yet; a live status line
+  (published state, logo count) in the section header.
+- **Why rejected**: Reducing the size alone would have fixed the symptom the owner named and left the
+  structural one, since the `<h1>` would still have been a section name. A rail is disproportionate
+  at one entry and would have made a third column beside the already two-column workspace grid.
+  Placeholder entries would advertise sections that do not exist. A live status line needs
+  `SectionToggle` and `LogoManager`'s separate subscriptions lifted into a shared parent, which is
+  more change than a presentation pass warrants - both panels already show their own state.
+- **Consequences**: Refines DEC-062 rather than superseding it; the branded shell, the panel
+  treatment and the login screen are unchanged. DEC-011's scope is unchanged too - this is still not
+  a general-purpose CMS, and Trusted By is still the only managed section. Adding a second one is now
+  adding a section block and a list entry. The section ordinal is deliberately larger than the panel
+  ordinals and sits further into the gutter, because at equal size the two numbering systems read as
+  one confused sequence. Verified by rendering the workspace outside the auth gate at 1440, 834 and
+  390 - the dashboard is behind a real Firebase sign-in, so no automated test reaches it.
+- **Status**: Active
+
+---
+
 ## Decision index
 
 | ID | Topic | Status |
@@ -901,6 +934,7 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-059 | `OD-14` resolved: real About leadership photograph, `object-fit: contain` | Active |
 | DEC-060 | Opening true-axis lockup and nav-aware anchor section heights | Active |
 | DEC-061 | Deliberate Hero mechanisms complement the plate's ambient drift | Active |
-| DEC-062 | Admin is a branded private workspace, not a generic dashboard | Active |
+| DEC-062 | Admin is a branded private workspace, not a generic dashboard | Refined by DEC-067 |
 | DEC-063 | Browser E2E coverage stays proportional to the two-page product | Active |
 | DEC-064 | Vercel hosts the site; Firebase remains the application backend | Active |
+| DEC-067 | The admin is a workspace holding sections, not the Trusted By page | Active |

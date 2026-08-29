@@ -287,23 +287,29 @@
   width: min(100%, 1540px);
   min-height: calc(100svh - 144px);
   margin: 0 auto;
-  padding: clamp(54px, 8vw, 112px) var(--gutter) clamp(76px, 10vw, 132px);
+  /*
+   * An internal tool should reach its controls quickly. This was
+   * clamp(54px, 8vw, 112px) over clamp(46px, 7vw, 84px) of intro padding,
+   * which spent most of a laptop screen before the first thing you can press.
+   */
+  padding: clamp(34px, 4.4vw, 60px) var(--gutter) clamp(64px, 8vw, 104px);
 }
 
+/*
+ * A left-aligned stack, not the two-column grid this used to be. The grid put
+ * the title in its second column, which was survivable while the title was
+ * 126px of display type and reads as a heading floating mid-page at the size a
+ * tool's title should actually be.
+ */
 .pageIntro {
-  display: grid;
-  grid-template-columns: minmax(180px, 0.38fr) minmax(0, 1fr);
-  gap: clamp(36px, 7vw, 110px);
-  align-items: end;
-  padding-bottom: clamp(46px, 7vw, 84px);
-  border-bottom: var(--hairline);
+  padding-bottom: clamp(24px, 3vw, 36px);
 }
 
 .introMeta {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding-bottom: 9px;
+  flex-direction: row;
+  gap: 26px;
+  margin-bottom: 16px;
   font-family: var(--u);
   font-size: var(--u-size);
   line-height: 1.45;
@@ -313,22 +319,83 @@
 }
 
 .introCopy {
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: clamp(30px, 5vw, 78px);
+  display: block;
 }
 
+/*
+ * The workspace's own name, not a section's. It carried
+ * clamp(62px, 8.2vw, 126px) when the h1 was "Trusted By" — display type on a
+ * section label, which is both why it read as oversized and why the admin
+ * looked like it managed exactly one thing.
+ */
 .title {
   flex: none;
-  font-size: clamp(62px, 8.2vw, 126px);
-  line-height: 0.88;
+  font-size: clamp(33px, 3.4vw, 50px);
+  line-height: 0.98;
 }
 
 .introCopy p {
-  max-width: 42ch;
-  padding-bottom: 9px;
-  font-size: clamp(16px, 1.3vw, 19px);
+  max-width: 58ch;
+  margin-top: 12px;
+  font-size: clamp(15px, 1.05vw, 17px);
+  line-height: 1.55;
+  color: var(--moss);
+}
+
+/*
+ * The managed sections are a list, and the list is what says this workspace
+ * holds more than one thing. There is only Trusted By today; the point is the
+ * shape, so a second section is an entry rather than a rebuild.
+ */
+.sectionIndex {
+  padding: 15px 0 13px;
+  border-top: var(--hairline);
+  border-bottom: var(--hairline);
+  font-family: var(--u);
+  font-size: var(--u-size);
+  letter-spacing: var(--u-track-wide);
+  text-transform: uppercase;
+  color: var(--moss);
+}
+
+.section {
+  margin-top: clamp(26px, 3.2vw, 44px);
+}
+
+.sectionBar {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(16px, 2vw, 26px);
+  padding-bottom: clamp(20px, 2.4vw, 30px);
+}
+
+/*
+ * The section's ordinal is its position in the list, and the panels below carry
+ * step numbers of their own. At the same size the two read as one confused
+ * sequence, so this is deliberately larger and sits further out in the gutter.
+ */
+.sectionIndexMark {
+  min-width: 34px;
+  padding-top: 3px;
+  font-family: var(--d);
+  font-size: 26px;
+  font-variant-numeric: tabular-nums;
+  color: var(--moss);
+}
+
+.sectionBarCopy {
+  min-width: 0;
+}
+
+.sectionTitle {
+  font-size: clamp(27px, 2.6vw, 38px);
+  line-height: 1.02;
+}
+
+.sectionBarCopy > p {
+  max-width: 56ch;
+  margin-top: 10px;
+  font-size: 15px;
   line-height: 1.55;
   color: var(--moss);
 }
@@ -338,7 +405,6 @@
   grid-template-columns: minmax(270px, 0.34fr) minmax(0, 1fr);
   gap: clamp(24px, 3vw, 42px);
   align-items: start;
-  margin-top: clamp(30px, 4vw, 54px);
 }
 
 .panel {
@@ -380,11 +446,15 @@
   color: var(--moss);
 }
 
-.sectionHeading { font-size: clamp(27px, 2.4vw, 36px); }
+/*
+ * A panel now sits inside a named section, so it steps down rather than
+ * competing with it: workspace, then section, then panel.
+ */
+.panelHeading { font-size: clamp(19px, 1.5vw, 23px); }
 
 .panelDescription {
-  margin: 22px 0 30px 46px;
-  font-size: 15px;
+  margin: 16px 0 26px 46px;
+  font-size: 14px;
   line-height: 1.55;
   color: var(--moss);
 }
@@ -495,9 +565,9 @@
   border-bottom: var(--hairline);
 }
 
-.uploadHeader h3,
-.libraryHeader h3,
-.emptyState h3 { font-size: clamp(23px, 2vw, 29px); }
+.uploadHeader h4,
+.libraryHeader h4,
+.emptyState h4 { font-size: clamp(18px, 1.4vw, 22px); }
 
 .uploadHeader > p,
 .libraryHeader > span,
@@ -795,8 +865,6 @@
 /* ---- Responsive -------------------------------------------------------- */
 
 @media (max-width: 1100px) {
-  .introCopy { display: block; }
-  .introCopy p { margin-top: 24px; }
   .workspaceGrid { grid-template-columns: minmax(250px, 0.42fr) minmax(0, 1fr); }
   .logoRow { grid-template-columns: 28px 70px minmax(110px, 1fr); }
   .logoThumb { width: 70px; }
@@ -823,9 +891,11 @@
   .loginTitle { font-size: clamp(46px, 13vw, 66px); }
   .dashboardBar { gap: 14px; }
   .accountEmail { display: none; }
-  .pageIntro { grid-template-columns: 1fr; gap: 28px; }
-  .introMeta { flex-direction: row; justify-content: space-between; }
-  .title { font-size: clamp(58px, 17vw, 88px); }
+  .introMeta { justify-content: space-between; gap: 16px; }
+  .title { font-size: clamp(30px, 8vw, 40px); }
+  .sectionTitle { font-size: clamp(25px, 6.4vw, 32px); }
+  .sectionBar { gap: 14px; }
+  .sectionIndexMark { min-width: 26px; }
   .panelDescription { margin-left: 0; }
   .formGrid { grid-template-columns: 1fr; }
   .uploadHeader,
@@ -838,7 +908,8 @@
   .brandMark { font-size: 31px; }
   .brandName { font-size: 18px; }
   .adminBadge { display: none; }
-  .page { padding-top: 46px; }
+  .page { padding-top: 30px; }
+  .sectionIndexMark { display: none; }
   .introMeta span:last-child,
   .dashboardFooter span:last-child { display: none; }
   .panel,

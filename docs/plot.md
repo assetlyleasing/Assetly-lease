@@ -142,6 +142,14 @@ Constraints that are invisible in the code but break things when violated. Full 
   provides). Check this first if a Trusted-By-shaped "the data's there but the section won't show up"
   report ever recurs, or before adding another compound query anywhere in the app.
 
+- **The admin dashboard cannot be reached by any automated test.** `AdminGate` is a client component
+  that renders nothing until Firebase reports a signed-in user, so `/admin` server-renders only the
+  "checking access" screen and `admin.spec.ts` covers the login route alone. To audit the workspace's
+  layout, render it outside the gate from a throwaway route and delete that route afterwards.
+- **The admin's `<h1>` is the workspace, not a section** (DEC-067). Trusted By is one section block
+  inside it, and a second managed section should be a section block plus a list entry - not a
+  restructure. Headings run h1 workspace, h2 section, h3 panel, h4 sub-panel.
+
 ### Testing traps
 
 - `test.use({ reducedMotion })` does not reach the page here. Use `page.emulateMedia({ reducedMotion: "reduce" })`.
