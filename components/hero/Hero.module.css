@@ -85,14 +85,28 @@
  * The approved 20% plate is a shade stronger while its line is being drawn.
  * Tone, rather than opacity, carries that emphasis so the settled opacity
  * remains exact and the shared Plate reveal is left intact.
+ *
+ * The tone is front-loaded so it travels with the linework instead of washing
+ * over it. Holding Pitch to 68% and then resolving put the whole change after
+ * the drawing had effectively finished: every path shares one 2200 dasharray,
+ * so the short ones complete in the first third of the 2.6s and only the datum
+ * and the boom are still arriving late. A single late flip therefore read as a
+ * uniform bleed applied to a finished plate, which is how the owner reported
+ * it. Now the darkness sits where the ink is actually appearing, is most of the
+ * way to Olive by 40%, and settles before the draw ends rather than after it.
  */
 @keyframes plateDrawTone {
   0%,
-  68% {
+  10% {
     color: var(--pitch);
   }
 
-  to {
+  40% {
+    color: color-mix(in srgb, var(--pitch) 30%, var(--olive));
+  }
+
+  72%,
+  100% {
     color: var(--olive);
   }
 }
