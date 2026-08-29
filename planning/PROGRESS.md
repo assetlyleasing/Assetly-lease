@@ -6,15 +6,14 @@ This file reflects the current state of the project, not a chronological log.
 
 ## Current Phase
 
-Phases 0–10 are complete. The owner-approved admin redesign is complete, `OD-07` is resolved,
-and the proportionate QA/accessibility/performance pass is recorded. Phase 11 is partially complete:
-Firebase, Vercel, the production domain and rules are configured, but the latest successful Vercel
-deployment has not been promoted to `assetly.lease`.
+Phases 0–11 are complete. The owner-approved admin redesign is live, `OD-07` is resolved, and the
+proportionate QA/accessibility/performance pass is recorded. Firebase, Vercel, the production domain,
+rules, current deployment and production smoke verification are complete.
 
 ## Current Task
 
-Promote the current `main` deployment to `assetly.lease`, then run the final production smoke check.
-The office fit-out item was explicitly skipped by the owner and is not part of this task.
+No release task remains. Select the next owner-directed product item; the office fit-out item was
+explicitly skipped by the owner and must not be reopened without a new request.
 
 ## Completed This Cycle
 
@@ -50,9 +49,10 @@ The office fit-out item was explicitly skipped by the owner and is not part of t
 - Lighthouse 12.8.2 mobile audits on the current production alias recorded:
   - `/`: Performance 67, Accessibility 96, Best Practices 100, SEO 100; CLS 0.
   - `/about`: Performance 70, Accessibility 100, Best Practices 100, SEO 100; CLS 0.
-- GitHub reports successful Vercel deployments for commit `1599934` from both repositories. Their
-  generated deployment URLs are Vercel-auth protected, while `assetly.lease` still serves the older
-  admin design. The deployment must be promoted/aliased in Vercel before final production smoke.
+- The current `main` deployment was rebuilt without Vercel's build cache and promoted to
+  `assetly.lease`. Hydrated production smoke confirmed the branded admin login, compiled Firebase
+  configuration, public routes, About heading and Contact drawer/focus behavior. Trusted By currently
+  resolves to its intentional hidden state because Firebase supplies no enabled logo set.
 
 ## Decisions
 
@@ -82,11 +82,8 @@ The office fit-out item was explicitly skipped by the owner and is not part of t
 4. `npm audit` still reports moderate advisories through `firebase-admin`; the Admin SDK is currently
    unused by the application and its private credential is not required in Vercel.
 5. The Contact marker follows Brigade Road's centreline rather than an exact building coordinate.
-6. Phase 11 promotion is blocked on Vercel dashboard access: the new deployments succeeded, but the
-   custom domain still serves an older release. Final smoke must follow promotion.
 
 ## Next Recommended Task
 
-In Vercel, promote the latest successful `main` deployment (commit `1599934`) for the intended
-production project and assign `assetly.lease` to it. Then verify the new admin marker and perform the
-short final production smoke; do not expand the E2E matrix.
+Select the next owner-directed product item. Keep the office fit-out skipped and do not expand the E2E
+matrix unless a future feature introduces a genuinely new critical journey.

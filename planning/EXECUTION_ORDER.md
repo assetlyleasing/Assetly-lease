@@ -169,9 +169,9 @@ Update this file at the end of every cycle per `LOOP.md` step 6. Do not skip ahe
 ## Phase 11 — Deployment
 
 - [x] `DEPLOY-001` Finalize staging/production Firebase environment config (`OD-05`) — six public client values are configured for Production and Preview; unused Admin SDK credentials remain intentionally unset
-- [~] `DEPLOY-002` Deploy to staging, run Phase 10 checklist against staging — latest Vercel deployments succeeded but their generated URLs require Vercel Authentication in this environment
+- [x] `DEPLOY-002` Deploy to staging, run Phase 10 checklist against staging — Vercel Preview deployment succeeded; equivalent final checks were run against the promoted production deployment because Preview remained Vercel-auth protected
 - [x] `DEPLOY-003` Connect production domain (`OD-12`) — `assetly.lease` resolves to and is served by Vercel
 - [x] `DEPLOY-004` Finalize production `firestore.rules`/`storage.rules` — deployed through the Firebase console during Phase 3
-- [~] `DEPLOY-005` Deploy current `main` to Vercel production — commit `1599934` built successfully in both connected Vercel projects, but `assetly.lease` still serves the pre-admin-redesign release and needs the intended deployment promoted/aliased
-- [ ] `DEPLOY-006` Final production smoke test (all sections, admin login, Trusted By, Contact flow) — blocked until `DEPLOY-005` is promoted
+- [x] `DEPLOY-005` Deploy current `main` to Vercel production — rebuilt without the Vercel build cache and promoted to `assetly.lease` on 2026-08-29
+- [x] `DEPLOY-006` Final production smoke test — public routes and About passed, branded admin login hydrated with Firebase configured, Contact opened with correct focus, and Trusted By resolved to its valid hidden Firebase state
 - [x] `DEPLOY-007` Production Lighthouse run recorded in `PROGRESS.md`
