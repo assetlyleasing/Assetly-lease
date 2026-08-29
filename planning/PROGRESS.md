@@ -60,6 +60,8 @@ explicitly skipped by the owner and must not be reopened without a new request.
 - `DEC-063` — browser E2E coverage stays proportional to the two-page product.
 - `DEC-064` — Vercel hosts preview/production; Firebase remains the application backend.
 - `DEC-065` — the browser suite is tiered, and runs in parallel.
+- `DEC-066` — plate mechanisms de-synchronised; the hub keyway signals load transfer.
+- `DEC-067` — the admin is a workspace holding sections, not the Trusted By page.
 
 ## Tests Run
 
@@ -73,6 +75,10 @@ explicitly skipped by the owner and must not be reopened without a new request.
   false failures on the WebKit mobile sheet, and WebKit went with DEC-063.
 - `npm run test:e2e:fast` — 22/22 passed in 1.5m warm, 2.5m from a cold server.
 - `npm run test:e2e:motion` — 12/12 passed, serial.
+- Admin refinement branch, before the tiering merged into it — 69/69 browser cases and 124/124 unit
+  tests passed.
+- The plate work (keyway, draw tone, loop periods) was type-checked and linted only. Plate motion is
+  reviewed by owner preview on a running dev server, not by test output — `HERO_PLATE_MOTION.md` §1.
 
 The full suite was about 22.5 minutes before this cycle. The cost was overhead, not test count:
 serial execution, and the ~4.8s opening sequence paid on every one of the 50 loads of `/`.
@@ -88,5 +94,11 @@ serial execution, and the ~4.8s opening sequence paid on every one of the 50 loa
 
 ## Next Recommended Task
 
-Select the next owner-directed product item. Keep the office fit-out skipped and do not expand the E2E
-matrix unless a future feature introduces a genuinely new critical journey.
+Owner preview of the three plate changes and the admin workspace, neither of which has been seen yet:
+the crane keyway's load signal and the front-loaded draw tone are judged by eye, and the admin
+dashboard sits behind a real Firebase sign-in that no automated test can reach.
+
+After that, select the next owner-directed product item. The office fit-out and the dev/prod
+plate-draw discrepancy are both dropped at the owner's instruction. Do not expand the E2E matrix
+unless a future feature introduces a genuinely new critical journey; when it does, tag it into the
+tier it belongs in rather than letting the everyday gate grow.
