@@ -164,14 +164,14 @@ Update this file at the end of every cycle per `LOOP.md` step 6. Do not skip ahe
 - [x] `QA-008` Animation performance profiling — Compare RAF metrics recorded; Hero mechanisms remain CSS-native and non-blocking
 - [x] `QA-009` Firebase failure-state re-verification — public empty/failure behavior remains silent; authenticated loop previously verified against the live project
 - [x] `QA-010` Essential 69-test Playwright journey suite (DEC-063): 61% smaller than the previous 176-test matrix while retaining one critical path per feature
-- [ ] `QA-011` Lighthouse pass on `/` and `/about`, scores recorded in `PROGRESS.md`
+- [x] `QA-011` Lighthouse mobile pass on `/` and `/about`, scores recorded in `PROGRESS.md` (67/96/100/100 and 70/100/100/100 respectively; both CLS 0)
 
 ## Phase 11 — Deployment
 
-- [ ] `DEPLOY-001` Finalize staging/production Firebase environment config (`OD-05`)
-- [ ] `DEPLOY-002` Deploy to staging, run Phase 10 checklist against staging
+- [x] `DEPLOY-001` Finalize staging/production Firebase environment config (`OD-05`) — six public client values are configured for Production and Preview; unused Admin SDK credentials remain intentionally unset
+- [~] `DEPLOY-002` Deploy to staging, run Phase 10 checklist against staging — latest Vercel deployments succeeded but their generated URLs require Vercel Authentication in this environment
 - [x] `DEPLOY-003` Connect production domain (`OD-12`) — `assetly.lease` resolves to and is served by Vercel
 - [x] `DEPLOY-004` Finalize production `firestore.rules`/`storage.rules` — deployed through the Firebase console during Phase 3
-- [~] `DEPLOY-005` Deploy current `main` to Vercel production — production is live but served the pre-admin-redesign build during the 2026-08-29 smoke check
-- [ ] `DEPLOY-006` Final production smoke test (all sections, admin login, Trusted By, Contact flow)
-- [ ] `DEPLOY-007` Production Lighthouse run recorded in `PROGRESS.md`
+- [~] `DEPLOY-005` Deploy current `main` to Vercel production — commit `1599934` built successfully in both connected Vercel projects, but `assetly.lease` still serves the pre-admin-redesign release and needs the intended deployment promoted/aliased
+- [ ] `DEPLOY-006` Final production smoke test (all sections, admin login, Trusted By, Contact flow) — blocked until `DEPLOY-005` is promoted
+- [x] `DEPLOY-007` Production Lighthouse run recorded in `PROGRESS.md`

@@ -6,15 +6,15 @@ This file reflects the current state of the project, not a chronological log.
 
 ## Current Phase
 
-Phases 0–9 are complete. The owner-approved admin redesign is complete and `OD-07` is resolved.
-Phase 10 remains in progress: `QA-000` and the newly proportioned `QA-010` browser journey gate are
-complete; the remaining formal accessibility/performance audits and Lighthouse recording are still
-open. Phase 11 deployment verification follows Phase 10.
+Phases 0–10 are complete. The owner-approved admin redesign is complete, `OD-07` is resolved,
+and the proportionate QA/accessibility/performance pass is recorded. Phase 11 is partially complete:
+Firebase, Vercel, the production domain and rules are configured, but the latest successful Vercel
+deployment has not been promoted to `assetly.lease`.
 
 ## Current Task
 
-Commit and push the branded admin redesign and lean regression suite to both GitHub remotes, then
-continue the remaining Phase 10 checklist.
+Promote the current `main` deployment to `assetly.lease`, then run the final production smoke check.
+The office fit-out item was explicitly skipped by the owner and is not part of this task.
 
 ## Completed This Cycle
 
@@ -42,10 +42,23 @@ continue the remaining Phase 10 checklist.
   public empty state.
 - Kept all 124 Vitest cases for detailed state, validation and calculation logic.
 
+### Phase 10 and release verification
+
+- `npm run build` completed successfully, including TypeScript and all 12 static routes.
+- Production returned HTTP 200 for `/`, `/about`, `/admin`, `/admin/login`, `/privacy`, `/terms`,
+  `/robots.txt` and `/sitemap.xml`; robots and sitemap retain the intended admin exclusions.
+- Lighthouse 12.8.2 mobile audits on the current production alias recorded:
+  - `/`: Performance 67, Accessibility 96, Best Practices 100, SEO 100; CLS 0.
+  - `/about`: Performance 70, Accessibility 100, Best Practices 100, SEO 100; CLS 0.
+- GitHub reports successful Vercel deployments for commit `1599934` from both repositories. Their
+  generated deployment URLs are Vercel-auth protected, while `assetly.lease` still serves the older
+  admin design. The deployment must be promoted/aliased in Vercel before final production smoke.
+
 ## Decisions
 
 - `DEC-062` — admin is a branded private workspace, not a generic dashboard.
 - `DEC-063` — browser E2E coverage stays proportional to the two-page product.
+- `DEC-064` — Vercel hosts preview/production; Firebase remains the application backend.
 
 ## Tests Run
 
@@ -58,6 +71,8 @@ continue the remaining Phase 10 checklist.
 - `npx playwright test tests/e2e/compare.spec.ts tests/e2e/hero-loader.spec.ts --workers=1` — 7/7
   passed after those corrections. Together, every one of the final 69 cases has passed.
 - Focused admin regression — 5/5 passed.
+- `npm run build` — production build completed successfully.
+- Lighthouse production mobile audits — scores recorded above; no additional E2E suite was run.
 
 ## Issues / Blockers
 
@@ -67,10 +82,11 @@ continue the remaining Phase 10 checklist.
 4. `npm audit` still reports moderate advisories through `firebase-admin`; the Admin SDK is currently
    unused by the application and its private credential is not required in Vercel.
 5. The Contact marker follows Brigade Road's centreline rather than an exact building coordinate.
-6. Phase 10's remaining manual/accessibility/performance/Lighthouse tasks and Phase 11's deployment
-   smoke checks remain open.
+6. Phase 11 promotion is blocked on Vercel dashboard access: the new deployments succeeded, but the
+   custom domain still serves an older release. Final smoke must follow promotion.
 
 ## Next Recommended Task
 
-Finish the remaining proportionate Phase 10 checks, record Lighthouse, then run Phase 11 staging and
-production smoke verification. Do not expand the E2E matrix back into exhaustive visual specifications.
+In Vercel, promote the latest successful `main` deployment (commit `1599934`) for the intended
+production project and assign `assetly.lease` to it. Then verify the new admin marker and perform the
+short final production smoke; do not expand the E2E matrix.
