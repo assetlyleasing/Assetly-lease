@@ -4,7 +4,8 @@ Working document for the Hero plate's animation work. `planning/PROGRESS.md` sta
 phase status; this file exists because the plate's motion has its own geometry, its own vocabulary and
 its own review loop, none of which belong in the phase tracker.
 
-Last updated after commit `5540a01`, pushed to both `origin` and `fresh`.
+Last updated after the crane keyway, draw tone and loop de-synchronisation work on
+`work/plate-motion`. Pushes go to `origin` only for now, at the owner's instruction.
 
 ---
 
@@ -86,7 +87,7 @@ car's centre line; open is `∓9px`, putting each leaf in the car's own wall.
 | Hook triangle | `M120.4 305.4L102.4 345.3L138.5 360.5Z` |
 | Chassis box | x 447.2 → 546, y 457.4 → 560 |
 | Wheels | cx 413 and cx 502.3, cy **528.6**, r 31.4 (rim) and 11.4 (hub) |
-| Hub keyways | vertical, hub centre out to hub edge — on **both** wheels |
+| Hub keyways | vertical, hub centre out to hub edge — on **both** wheels; the inner one also carries `data-hero-plate-keyway` and the load signal |
 
 The wheel at 502.3 sits fully inside the chassis box; 413 sits entirely outside it to the left. When
 the owner says "the one inside the building", they mean **502.3** — getting this wrong cost one
@@ -105,15 +106,21 @@ changing a path's length after the reveal produces no dash artefact.
 ## 3. The motion vocabulary
 
 Every loop in the plate must have a period that shares **no simple ratio** with the others, or they
-drift into a shared beat and the plate starts reading as "animated" rather than "alive". Current set:
+drift into a shared beat and the plate starts reading as "animated" rather than "alive". Two pairs
+had violated this exactly and were corrected in DEC-066: the hub was 7.9s against a 15.8s lift, and
+node 1's breathe was 9s — an 18s round trip under `alternate` — against a 9s journey. Both pairs also
+share a start delay, so they were locked rather than merely close. **`alternate` doubles the
+effective period; compare round trips, not durations.** Current set:
 
 | Animation | Period | Easing |
 |---|---|---|
 | `plateDrift` | 11s | `--eio`, alternate |
-| `nodeBreathe` | 9s / 12s / 10.5s | `--eio`, alternate |
+| `nodeBreathe` | 9.7s / 12s / 10.5s | `--eio`, alternate |
 | `plateJourney` | 9s | `--eio` |
-| `siteSpin` (hub) | 7.9s | `linear` — a wheel turns at a constant rate |
+| `siteSpin` (hub) | 8.3s | `linear` — a wheel turns at a constant rate |
 | `buildingLift` + doors | 15.8s | `--eio` |
+| `craneBoom` / `craneHook` / payloads | 22.7s | `--eio` |
+| `craneKeyway` | 22.7s | `--eio` — locked to the crane on purpose |
 
 Other load-bearing conventions:
 
@@ -127,7 +134,7 @@ Other load-bearing conventions:
 
 ---
 
-## 4. Done and shipped (`5540a01`)
+## 4. Done and shipped
 
 - **The lift.** Shaft against the building's right wall; slabs cut at it so it reads as a void through
   the storeys. Car is a box, not a line. Stops with its floor level with a slab, so it can never rest
@@ -138,62 +145,41 @@ Other load-bearing conventions:
   stay still. Both hubs carry the same keyway, since one marked wheel and one bare reads as a drafting
   error, and the keyway is what makes rotation visible at all.
 - **Wheel grounding.** Both wheels moved onto the datum.
+- **The crane's payload cycle** (`91883ad`). The boom telescopes between full extension and 55%
+  retraction, holds, and dips 11.5 units to place. Two exact clones of the existing hook triangle
+  take turns at the real hook's own position: one is carried out and left on the roof, the other is
+  collected later and carried back. Nothing appears in empty air.
+- **The keyway load signal** (DEC-066). The keyway on the hub inside the chassis darkens Olive to
+  Pitch for about half a second at 28.6% and 66.5% of the crane cycle — the instants a payload is set
+  down and taken up. Tone, not opacity: the plate is composited at 20% as a group, so a child's own
+  opacity can only take it further down.
+- **The draw tone, front-loaded** (DEC-066). Pitch through the opening tenth, most of the way to
+  Olive by 40%, settled by 72%. It had held Pitch to 68% and then flipped, which put the whole change
+  after the drawing had effectively finished — every path shares one 2200 dasharray, so short paths
+  complete in the first third of the 2.6s and only the datum and boom arrive late.
+- **Loop de-synchronisation** (DEC-066). Hub 7.9s → 8.3s, node 1's breathe 9s → 9.7s.
 
-### Owed: a `DECISIONS.md` entry
-
-`SOURCE_OF_TRUTH.md` §11 (line 183) currently reads *"only the structural junction nodes slowly
-reposition; machinery wheels and fixed architecture remain still."* The hub rotation and the lift both
-depart from this. The clause describes an older, purely-ambient version of the plate — the journey
-marker already travels the plate's full width on a 9s loop, far outside its "2–5px drift". **Amend §11
-to distinguish ambient drift (still 2–5px, nodes only) from deliberate mechanical motion (journey
-marker, lift, hub), and record the decision.** This is unwritten and should be done before the next
-phase closes.
+`SOURCE_OF_TRUTH.md` §11 has since been amended to distinguish ambient drift (2–5px, nodes only)
+from deliberate mechanical motion, and DEC-061 recorded it. That debt is paid.
 
 ---
 
 ## 5. Remaining work, in the owner's order
 
-### A — The crane hook (next)
-
-Approved in writing, not yet built:
-
-- The boom **telescopes** between two lengths along its existing line, always resolving cleanly to one
-  of its two ends. It must never freeze or read as glitchy mid-transition.
-- At full extension it **holds a beat**, then dips toward the building and back — the placing motion.
-- The payload is a **duplicate of the exact existing hook triangle** — same points, same size, not an
-  invented shape.
-- **Two take turns.** One rides out with the boom and is left at the site as it dips and retracts (the
-  drop); later a second is picked up from the site and rides back in as the boom re-extends (the lift).
-- Entrances and exits happen **at the real hook's own position**, scaling up from there. Nothing may
-  appear in empty air — that is the "ghost trick" that was rejected once already.
-- Reduced motion: boom stays extended, payload not shown.
-
-A retracted boom tip at roughly (233, 349) — 55% along the boom's line — was computed in an earlier
-pass and is a reasonable starting value.
-
 ### Finish
 
 - General aesthetic polish and proper finishing, as a standing requirement across all four elements.
-- Confirm nothing pulses in unison once A is in.
-
-### Addon
-
-- A brief, faint opacity bump on the crane's hub keyway exactly when a payload lands or lifts. No new
-  shape — it ties the hub to the hook so the drop and pickup beats have a payoff at the site.
+- Watch a full 22.7s crane cycle against the 15.8s lift and the 8.3s hub and confirm no two
+  mechanisms visibly start together now that DEC-066 has separated them.
 
 ### Open, unscheduled
 
 - **Office fit-out — skipped.** On 2026-08-29 the owner removed this item from the remaining scope.
   Do not rebuild the reverted plants, benches, lights or other office details unless a new request
   explicitly reopens it.
-- **The tone question.** The plate's dark-to-light `plateDrawTone` shift may read as a uniform "bleed"
-  rather than a targeted "bracketing" or highlight effect. Raised by the owner, never resolved. Two
-  directions were sketched — tune the existing wash, or build a travelling highlight along the stroke —
-  and neither was chosen.
-- **Dev/prod draw discrepancy.** The plate was reported as already fully drawn on entry on Vercel while
-  playing correctly locally. A bfcache `pageshow`/`event.persisted` fix was shipped but never confirmed
-  against the original report. Needs the owner to check a deployed URL in a fresh incognito window with
-  OS reduced-motion off.
+The **tone question** is resolved: the owner chose to tune the existing wash rather than build a
+travelling highlight, and DEC-066 records it. The **dev/prod draw discrepancy** and the **office
+fit-out** were both dropped by the owner on 2026-08-29 and are not being carried.
 
 ---
 
@@ -222,21 +208,16 @@ does not reach the page — and `--workers=1`, per `docs/plot.md:144-147`.
 
 ## 7. Git
 
-Two remotes, both currently at `5540a01`:
+Two remotes exist:
 
 - `origin` → `sujeth-dev/Assetly`
 - `fresh` → `assetlyleasing/Assetly-lease`
 
-Both accounts are authenticated in the `gh` keyring. `fresh` will 403 while `sujeth-dev` is the active
-account, because it has no write access there. Push it with:
+**Push only to `origin` for now**, at the owner's instruction. `fresh` needs
+`gh auth switch --user assetlyleasing` before a push and a switch back afterwards, because
+`sujeth-dev` has no write access there; leave `sujeth-dev` active.
 
-```
-gh auth switch --user assetlyleasing
-git push fresh main
-gh auth switch --user sujeth-dev
-```
-
-Leave `sujeth-dev` active afterwards, since `origin` is its repo.
-
-Work directly on `main`, one commit per completed phase, plain professional prose, and no tool or
-automation attribution anywhere — commit messages, trailers, comments or branch names.
+This batch of work runs on **one branch per workstream**, each committed and pushed as it finishes
+and merged to `main` at the end — a deliberate exception to the repo's usual "work directly on
+`main`" rule. Plain professional prose in commit messages, and no tool or automation attribution
+anywhere: messages, trailers, comments or branch names.

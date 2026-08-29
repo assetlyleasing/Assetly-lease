@@ -129,7 +129,20 @@ export function HeroPlateArtwork() {
           <circle cx="502.3" cy="528.6" r="31.4" />
           <g data-hero-plate-site="true">
             <circle cx="502.3" cy="528.6" r="11.4" />
-            <line x1="502.3" y1="528.6" x2="502.3" y2="517.2" />
+            {/*
+             * This keyway also carries the load signal: it darkens for a beat
+             * at the two instants the boom transfers a payload, which is what
+             * ties the turning hub to what the hook is doing. The far wheel's
+             * keyway stays inert — only the hub inside the chassis is working
+             * machinery.
+             */}
+            <line
+              data-hero-plate-keyway="true"
+              x1="502.3"
+              y1="528.6"
+              x2="502.3"
+              y2="517.2"
+            />
           </g>
         </g>
       </g>

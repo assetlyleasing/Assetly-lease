@@ -85,14 +85,28 @@
  * The approved 20% plate is a shade stronger while its line is being drawn.
  * Tone, rather than opacity, carries that emphasis so the settled opacity
  * remains exact and the shared Plate reveal is left intact.
+ *
+ * The tone is front-loaded so it travels with the linework instead of washing
+ * over it. Holding Pitch to 68% and then resolving put the whole change after
+ * the drawing had effectively finished: every path shares one 2200 dasharray,
+ * so the short ones complete in the first third of the 2.6s and only the datum
+ * and the boom are still arriving late. A single late flip therefore read as a
+ * uniform bleed applied to a finished plate, which is how the owner reported
+ * it. Now the darkness sits where the ink is actually appearing, is most of the
+ * way to Olive by 40%, and settles before the draw ends rather than after it.
  */
 @keyframes plateDrawTone {
   0%,
-  68% {
+  10% {
     color: var(--pitch);
   }
 
-  to {
+  40% {
+    color: color-mix(in srgb, var(--pitch) 30%, var(--olive));
+  }
+
+  72%,
+  100% {
     color: var(--olive);
   }
 }
@@ -121,7 +135,11 @@
   /* Pops in once the linework has nearly finished drawing, not with it. */
   transition: scale 380ms var(--eio);
   transition-delay: calc(var(--dur-draw) * 0.78);
-  animation: nodeBreathe 9s var(--eio) 3.2s infinite alternate;
+  /*
+   * 9.7s, not 9s. `alternate` makes the round trip twice the duration, so a 9s
+   * breathe was exactly two journey loops long and the two never came apart.
+   */
+  animation: nodeBreathe 9.7s var(--eio) 3.2s infinite alternate;
 }
 
 /*
@@ -308,10 +326,14 @@
 
 /*
  * The hub of the wheel inside the crane's chassis, turning on its own axis.
- * Linear because a wheel turns at a constant rate. One revolution every 7.9s —
+ * Linear because a wheel turns at a constant rate. One revolution every 8.3s —
  * quick enough to be plainly turning, short of the speed at which it would stop
  * reading as machinery and start reading as a spinner. The keyway is what makes
  * the rotation visible; the rim is outside this group and stays still.
+ *
+ * 8.3s, not 7.9s: at 7.9 the hub turned exactly twice per 15.8s lift cycle and
+ * both start on the same delay, so the two were permanently in step rather than
+ * merely close — the one thing §11 asks these loops never to be.
  */
 @keyframes siteSpin {
   from {
@@ -328,12 +350,12 @@
 }
 
 .ready .plate [data-hero-plate-site] {
-  animation: siteSpin 7.9s linear calc(var(--dur-draw) * 0.9) infinite;
+  animation: siteSpin 8.3s linear calc(var(--dur-draw) * 0.9) infinite;
 }
 
 /*
  * The crane's 22.7s work cycle. It is deliberately non-harmonic with the
- * 7.9s hub, 9s journey, 11s drift and 15.8s lift. Every change resolves to a
+ * 8.3s hub, 9s journey, 11s drift and 15.8s lift. Every change resolves to a
  * real mechanical state: full extension, 55% retraction, or the 11.5-unit dip
  * that puts the existing hook triangle's lowest point exactly on the roof.
  *
@@ -547,6 +569,51 @@
 .ready .plate [data-hero-plate-payload="inbound"] {
   animation: cranePayloadInbound 22.7s var(--eio)
     calc(var(--dur-draw) * 0.9) infinite;
+}
+
+/*
+ * The load signal on the hub keyway. It runs on the crane's own 22.7s clock and
+ * delay, phase-locked to the hook on purpose: tying the hub to what the hook is
+ * doing is the whole point of it, and it is the one place in the plate where
+ * two mechanisms are meant to coincide.
+ *
+ * Tone, not opacity. The plate is composited at 20% as a group, so a child's
+ * own opacity can only ever take it further down; darkening the stroke is how
+ * `plateDrawTone` already expresses "a shade stronger" here.
+ *
+ * The two instants are read off the payload keyframes above: the outbound
+ * payload settles on the roof at 28.6%, and the inbound one is taken up at
+ * 66.5%, at the end of the dipped hold. Each bump is roughly four tenths of a
+ * second in and half a second out of a 22.7s cycle, and neither lands on any
+ * other beat.
+ */
+@keyframes craneKeyway {
+  0%,
+  27.6% {
+    color: var(--olive);
+  }
+
+  28.6% {
+    color: var(--pitch);
+  }
+
+  30.5%,
+  65.5% {
+    color: var(--olive);
+  }
+
+  66.5% {
+    color: var(--pitch);
+  }
+
+  68.5%,
+  100% {
+    color: var(--olive);
+  }
+}
+
+.ready .plate [data-hero-plate-keyway] {
+  animation: craneKeyway 22.7s var(--eio) calc(var(--dur-draw) * 0.9) infinite;
 }
 
 /* ---- Content stack ------------------------------------------------------ */
@@ -870,6 +937,15 @@
     scale: 0;
   }
 
+  /*
+   * The keyway is drafted artwork, not a motion-only mark, so it stays and
+   * simply rests at the plate's settled tone.
+   */
+  .ready .plate [data-hero-plate-keyway] {
+    animation: none;
+    color: inherit;
+  }
+
   .plateFrame {
     color: var(--olive);
   }
@@ -922,6 +998,11 @@
     animation: none;
     translate: none;
     scale: 0;
+  }
+
+  .ready .plate [data-hero-plate-keyway] {
+    animation: none;
+    color: inherit;
   }
 
   /*
