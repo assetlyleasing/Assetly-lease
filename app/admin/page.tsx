@@ -15,8 +15,13 @@ export const metadata: Metadata = {
 };
 
 /**
- * Trusted By logo management (§18, Phase 3). Scope is deliberately narrow —
- * this section only, no general-purpose CMS (DEC-011).
+ * The private content workspace (§18, Phase 3).
+ *
+ * Trusted By is the only managed section, and DEC-011 keeps it that way — this
+ * is not a general-purpose CMS. The page is nonetheless built as a workspace
+ * holding a list of sections rather than as the Trusted By page itself, because
+ * the earlier shape made the section name the workspace's own h1 and left
+ * nowhere for a second section to go.
  */
 export default function AdminPage() {
   return (
@@ -36,48 +41,78 @@ export default function AdminPage() {
         <header className={styles.pageIntro}>
           <div className={styles.introMeta}>
             <span>Private workspace</span>
-            <span>Homepage content</span>
+            <span>Assetly Leasing</span>
           </div>
           <div className={styles.introCopy}>
-            <h1 className={styles.title}>Trusted By</h1>
+            <h1 className={styles.title}>Homepage content</h1>
             <p>
-              Curate the partner marks shown on the homepage and control when the
-              section is visible to visitors.
+              The sections of the public homepage that are managed from here.
+              Changes are live as soon as they are saved.
             </p>
           </div>
         </header>
 
-        <div className={styles.workspaceGrid}>
-          <section className={`${styles.panel} ${styles.visibilityPanel}`}>
-            <header className={styles.panelHeader}>
-              <span className={styles.panelIndex} aria-hidden="true">01</span>
-              <div>
-                <p className={styles.panelEyebrow}>Publishing</p>
-                <h2 className={styles.sectionHeading}>Section visibility</h2>
-              </div>
-            </header>
-            <p className={styles.panelDescription}>
-              Publish the strip only when the partner library is ready. An empty
-              library remains hidden even when publishing is on.
-            </p>
-            <SectionToggle />
-          </section>
+        {/*
+         * The managed sections are a list, and the list is the point. Trusted By
+         * is the only entry today (DEC-011 keeps the scope to that section), but
+         * it is presented as one section among however many there turn out to
+         * be, rather than as the identity of the whole workspace — adding the
+         * next one should be adding an entry, not restructuring the page.
+         */}
+        <p className={styles.sectionIndex}>Managed sections</p>
 
-          <section className={`${styles.panel} ${styles.libraryPanel}`}>
-            <header className={styles.panelHeader}>
-              <span className={styles.panelIndex} aria-hidden="true">02</span>
-              <div>
-                <p className={styles.panelEyebrow}>Content</p>
-                <h2 className={styles.sectionHeading}>Partner library</h2>
-              </div>
-            </header>
-            <p className={styles.panelDescription}>
-              Upload approved logo files, write meaningful alternative text, and
-              arrange the order shown on the public site.
-            </p>
-            <LogoManager />
-          </section>
-        </div>
+        <section className={styles.section} aria-labelledby="section-trusted-by">
+          <header className={styles.sectionBar}>
+            <span className={styles.sectionIndexMark} aria-hidden="true">
+              01
+            </span>
+            <div className={styles.sectionBarCopy}>
+              <h2 id="section-trusted-by" className={styles.sectionTitle}>
+                Trusted By
+              </h2>
+              <p>
+                Curate the partner marks shown on the homepage and control when
+                the section is visible to visitors.
+              </p>
+            </div>
+          </header>
+
+          <div className={styles.workspaceGrid}>
+            <section className={`${styles.panel} ${styles.visibilityPanel}`}>
+              <header className={styles.panelHeader}>
+                <span className={styles.panelIndex} aria-hidden="true">
+                  01
+                </span>
+                <div>
+                  <p className={styles.panelEyebrow}>Publishing</p>
+                  <h3 className={styles.panelHeading}>Section visibility</h3>
+                </div>
+              </header>
+              <p className={styles.panelDescription}>
+                Publish the strip only when the partner library is ready. An
+                empty library remains hidden even when publishing is on.
+              </p>
+              <SectionToggle />
+            </section>
+
+            <section className={`${styles.panel} ${styles.libraryPanel}`}>
+              <header className={styles.panelHeader}>
+                <span className={styles.panelIndex} aria-hidden="true">
+                  02
+                </span>
+                <div>
+                  <p className={styles.panelEyebrow}>Content</p>
+                  <h3 className={styles.panelHeading}>Partner library</h3>
+                </div>
+              </header>
+              <p className={styles.panelDescription}>
+                Upload approved logo files, write meaningful alternative text,
+                and arrange the order shown on the public site.
+              </p>
+              <LogoManager />
+            </section>
+          </div>
+        </section>
       </main>
 
       <footer className={styles.dashboardFooter}>

@@ -79,7 +79,7 @@ export function LogoUploadForm({ nextSortOrder }: { nextSortOrder: number }) {
       <header className={styles.uploadHeader}>
         <div>
           <p className={styles.uploadEyebrow}>New partner</p>
-          <h3>Add a logo</h3>
+          <h4>Add a logo</h4>
         </div>
         <p>SVG, PNG, or WebP · Maximum 2MB</p>
       </header>

@@ -611,6 +611,8 @@ Every important technical or product decision, including conflict resolutions fo
 - **Consequences**: `lib/motion/useCursorParallax.ts` is deleted (no other caller existed). `plateLayerRef` in `Hero.tsx` and the `--hero-parallax-x/y`-driven transform/transition on `.plateLayer`, along with the reduced-motion and mobile overrides that existed only to neutralise it, are removed as dead code alongside it.
 - **Status**: Active
 
+---
+
 ### DEC-056 - The Hero plate gets a node-arrival pop and a traveling journey marker
 
 - **Date**: 2026-08-26
@@ -866,6 +868,8 @@ Every important technical or product decision, including conflict resolutions fo
   paint. `@fast` is a gate, not the safety net — the full tier remains the pre-commit requirement.
 - **Status**: Active
 
+---
+
 ### DEC-066 - The plate's mechanisms are de-synchronised, and the keyway signals load transfer
 
 - **Date**: 2026-08-29
@@ -896,6 +900,35 @@ Every important technical or product decision, including conflict resolutions fo
   than being hidden: it is drafted artwork, not a motion-only mark. The tone change also explains a
   property of the draw worth remembering - every path shares one 2200 dasharray, so short paths
   complete within the first third of the 2.6s and only the datum and boom arrive late.
+### DEC-067 - The admin is a workspace holding sections, not the Trusted By page
+
+- **Date**: 2026-08-29
+- **Decision**: `/admin`'s `<h1>` is the workspace ("Homepage content"), sized as a tool's title
+  rather than as display type. Trusted By is a named section beneath it, introduced by a "Managed
+  sections" list header and carrying its own hanging ordinal, with the Publishing and Content panels
+  as its parts. Headings run workspace, section, panel, sub-panel - h1 through h4 - and the page
+  intro is a left-aligned stack that reaches the first control sooner.
+- **Reason**: The owner reported the Trusted By heading as too big and the admin as not looking like
+  it could hold more than one thing. Both followed from the same decision: "Trusted By" was the
+  workspace's own `<h1>` at `clamp(62px, 8.2vw, 126px)`, so a section label wore display type and the
+  workspace's top-level identity *was* the single section it manages. There was nowhere for a second
+  managed section to go without restructuring the page.
+- **Alternatives considered**: Only reducing the heading size; a left navigation rail listing
+  sections; showing placeholder entries for sections that do not exist yet; a live status line
+  (published state, logo count) in the section header.
+- **Why rejected**: Reducing the size alone would have fixed the symptom the owner named and left the
+  structural one, since the `<h1>` would still have been a section name. A rail is disproportionate
+  at one entry and would have made a third column beside the already two-column workspace grid.
+  Placeholder entries would advertise sections that do not exist. A live status line needs
+  `SectionToggle` and `LogoManager`'s separate subscriptions lifted into a shared parent, which is
+  more change than a presentation pass warrants - both panels already show their own state.
+- **Consequences**: Refines DEC-062 rather than superseding it; the branded shell, the panel
+  treatment and the login screen are unchanged. DEC-011's scope is unchanged too - this is still not
+  a general-purpose CMS, and Trusted By is still the only managed section. Adding a second one is now
+  adding a section block and a list entry. The section ordinal is deliberately larger than the panel
+  ordinals and sits further into the gutter, because at equal size the two numbering systems read as
+  one confused sequence. Verified by rendering the workspace outside the auth gate at 1440, 834 and
+  390 - the dashboard is behind a real Firebase sign-in, so no automated test reaches it.
 - **Status**: Active
 
 ---
@@ -965,8 +998,9 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-059 | `OD-14` resolved: real About leadership photograph, `object-fit: contain` | Active |
 | DEC-060 | Opening true-axis lockup and nav-aware anchor section heights | Active |
 | DEC-061 | Deliberate Hero mechanisms complement the plate's ambient drift | Hub period superseded by DEC-066 |
-| DEC-062 | Admin is a branded private workspace, not a generic dashboard | Active |
+| DEC-062 | Admin is a branded private workspace, not a generic dashboard | Refined by DEC-067 |
 | DEC-063 | Browser E2E coverage stays proportional to the two-page product | Active |
 | DEC-064 | Vercel hosts the site; Firebase remains the application backend | Active |
 | DEC-065 | The browser suite is tiered, and runs in parallel | Active |
 | DEC-066 | Plate mechanisms de-synchronised; keyway signals load transfer | Active |
+| DEC-067 | The admin is a workspace holding sections, not the Trusted By page | Active |

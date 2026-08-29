@@ -64,7 +64,7 @@ export function LogoManager() {
         <div className={styles.emptyState}>
           <span className={styles.emptyIndex} aria-hidden="true">00</span>
           <div>
-            <h3>No logos uploaded yet</h3>
+            <h4>No logos uploaded yet</h4>
             <p>Your approved partner marks will appear here after the first upload.</p>
           </div>
         </div>
@@ -73,7 +73,7 @@ export function LogoManager() {
           <header className={styles.libraryHeader}>
             <div>
               <p className={styles.uploadEyebrow}>Display order</p>
-              <h3>Current library</h3>
+              <h4>Current library</h4>
             </div>
             <span aria-live="polite">
               {logos.length} {logos.length === 1 ? "logo" : "logos"}
