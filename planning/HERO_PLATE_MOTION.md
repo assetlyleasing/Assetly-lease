@@ -183,11 +183,9 @@ pass and is a reasonable starting value.
 
 ### Open, unscheduled
 
-- **Office fit-out.** The owner asked for small plants, work benches, lights and similar office
-  elements distributed through the building's storeys, then reverted the first attempt without giving
-  a reason. Do not rebuild it blind — ask what was wrong with it first. The reverted attempt is
-  recoverable from this session's transcript; it placed 11 short paths (desk, chair, planter, shelving,
-  two pendants, benches) across the four rooms west of the shaft.
+- **Office fit-out — skipped.** On 2026-08-29 the owner removed this item from the remaining scope.
+  Do not rebuild the reverted plants, benches, lights or other office details unless a new request
+  explicitly reopens it.
 - **The tone question.** The plate's dark-to-light `plateDrawTone` shift may read as a uniform "bleed"
   rather than a targeted "bracketing" or highlight effect. Raised by the owner, never resolved. Two
   directions were sketched — tune the existing wash, or build a travelling highlight along the stroke —

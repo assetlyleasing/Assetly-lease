@@ -486,7 +486,8 @@ expand it into a general-purpose CMS.
 - Next.js (App Router)
 - React + TypeScript
 - CSS Modules + global CSS design tokens
-- Firebase: Firestore, Storage, Authentication, App Hosting
+- Firebase: Firestore, Storage and Authentication
+- Vercel: preview and production hosting, including `assetly.lease` (DEC-064)
 - Inline SVG plate components
 - Native CSS animation + Motion for React (component animation) + targeted `requestAnimationFrame` (continuous scroll-linked interactions only)
 - Zod (validation, where useful — e.g. the Contact form and admin inputs)

@@ -815,6 +815,27 @@ Every important technical or product decision, including conflict resolutions fo
 
 ---
 
+### DEC-064 - Vercel hosts the site; Firebase remains the application backend
+
+- **Date**: 2026-08-29
+- **Decision**: Production and preview deployments run on Vercel, with `assetly.lease` connected there.
+  Firebase remains responsible only for Authentication, Firestore and Storage. The six public Firebase
+  web SDK variables belong in Vercel's environment configuration; the four Admin SDK variables are
+  omitted until server-side Admin SDK code is actually consumed.
+- **Reason**: The owner completed the production project and domain setup on Vercel, and the live
+  domain identifies Vercel as its serving platform. The application currently uses only Firebase's
+  browser SDK for the Trusted By/admin feature.
+- **Alternatives considered**: Continue describing Firebase App Hosting as the release target; require
+  an unused service-account private key in Vercel.
+- **Why rejected**: Both would document an architecture that does not match production, and the unused
+  private key would add unnecessary secret exposure.
+- **Consequences**: Phase 11 deploys the connected GitHub `main` branch through Vercel. Firebase rules
+  remain separately deployed through Firebase. DEC-010 remains active for the backend choice but is
+  superseded by this decision wherever it described hosting.
+- **Status**: Active
+
+---
+
 ## Decision index
 
 | ID | Topic | Status |
@@ -828,7 +849,7 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-007 | Trusted By dual marquee speed | Active |
 | DEC-008 | Next.js over static HTML | Active |
 | DEC-009 | CSS Modules over Tailwind | Active |
-| DEC-010 | Firebase as backend/hosting | Active |
+| DEC-010 | Firebase as backend/hosting | Hosting superseded by DEC-064 |
 | DEC-011 | Firestore scoped to Trusted By only | Active |
 | DEC-012 | Gmail compose + mailto over backend email | Active |
 | DEC-013 | Hero brand-signature loader replaces old Hero entry; built as Phase 8.5 | Active |
@@ -882,3 +903,4 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-061 | Deliberate Hero mechanisms complement the plate's ambient drift | Active |
 | DEC-062 | Admin is a branded private workspace, not a generic dashboard | Active |
 | DEC-063 | Browser E2E coverage stays proportional to the two-page product | Active |
+| DEC-064 | Vercel hosts the site; Firebase remains the application backend | Active |

@@ -530,16 +530,19 @@ Referenced open decisions (`OD-xx`) and resolved conflicts (`DEC-xxx`) are defin
 
 ## Phase 11 — Deployment
 
-**Objective**: Ship to production via Firebase App Hosting.
+**Objective**: Ship to production on Vercel, with Firebase retained for Authentication, Firestore and
+Storage only (DEC-064).
 
 **Inputs/dependencies**: Phase 10 passed. OD-05 (Firebase project/env split) and OD-12 (domain) resolved.
 
 **Implementation tasks**:
-1. Finalize environment configuration for staging and production Firebase projects (or environment-scoped config within one project, per OD-05's resolution).
-2. Deploy to staging first; run the Phase 10 regression checklist against staging.
+1. Finalize Vercel Preview and Production environment configuration with the Firebase web SDK
+   variables resolved under OD-05. Firebase Admin credentials are not required while the server-side
+   Admin SDK has no consumer.
+2. Use a Vercel Preview deployment as staging; run the proportionate Phase 10 regression checklist.
 3. Connect production domain (OD-12).
 4. Finalize production `firestore.rules`/`storage.rules` (confirm no debug/permissive rules leaked from development).
-5. Deploy to production via Firebase App Hosting.
+5. Deploy the connected GitHub `main` branch to Vercel production.
 6. Run one final smoke test against the live production URL: home page loads, all 8 sections render, About loads, admin login works, Trusted By reflects current admin state, Contact produces a correct Gmail draft.
 
 **Data/schema changes**: None beyond what Phase 3 already defined; confirm production Firestore/Storage are seeded appropriately (even if empty — Trusted By must degrade correctly with zero logos, per §12).
