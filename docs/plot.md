@@ -147,7 +147,16 @@ Constraints that are invisible in the code but break things when violated. Full 
 - `test.use({ reducedMotion })` does not reach the page here. Use `page.emulateMedia({ reducedMotion: "reduce" })`.
 - Unregistered custom properties read back as literal `clamp(...)` text and parse as `NaN`. Measure
   elements, don't parse tokens.
-- Run Playwright with `--workers=1`; parallel workers produce false failures on the WebKit mobile sheet.
+- The browser suite is **tiered by tag**, so the whole of it need not run on every change:
+  `npm run test:e2e:fast` (`@fast`, 22 cases) is the everyday gate; `npm run test:e2e` (65) runs
+  before a phase commit; `npm run test:e2e:motion` (`@motion`, 12, serial) runs after touching
+  loader or plate timing. A single spec still runs on its own: `npx playwright test contact`.
+- Playwright runs **in parallel**. The old `--workers=1` rule was for false failures on the WebKit
+  mobile sheet; WebKit was removed in DEC-063 and the reason went with it. `@motion` keeps
+  `--workers=1` because those cases measure animation timing.
+- **Every load of `/` sits through the ~4.8s opening**, absorbed by `tests/e2e/support/opening.ts`.
+  That is the suite's dominant fixed cost, so a spec that sweeps viewport widths should `goto` once
+  and call `setViewportSize` per width — CSS reflows on resize and a fresh document buys nothing.
 - `playwright.config.ts` sets `reuseExistingServer` — an existing dev server on :3000 is reused.
 
 ---

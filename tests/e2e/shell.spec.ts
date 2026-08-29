@@ -10,7 +10,7 @@ test("desktop navigation exposes the brand and approved links", async ({ page })
   for (const label of NAV_LINKS) await expect(nav.getByRole("link", { name: label })).toBeVisible();
 });
 
-test("desktop section and route links reach the right destination", async ({ page }) => {
+test("desktop section and route links reach the right destination", { tag: "@fast" }, async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto("/");
   const nav = page.getByRole("navigation", { name: "Primary" });
@@ -29,7 +29,7 @@ test("navigation changes to the approved dark surface after scrolling", async ({
   await expect(header).toHaveAttribute("data-solid", "true");
 });
 
-test("mobile menu opens full-width, traps focus, and returns it on Escape", async ({ page }) => {
+test("mobile menu opens full-width, traps focus, and returns it on Escape", { tag: "@fast" }, async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
   const toggle = page.getByRole("button", { name: "Open menu" });
@@ -52,7 +52,7 @@ test("mobile menu locks the page and closes after choosing a section", async ({ 
   await expect(page.getByRole("button", { name: "Open menu" })).toHaveAttribute("aria-expanded", "false");
 });
 
-test("footer exposes brand, contact, navigation, and legal links", async ({ page }) => {
+test("footer exposes brand, contact, navigation, and legal links", { tag: "@fast" }, async ({ page }) => {
   await page.goto("/");
   const footer = page.getByRole("contentinfo");
   await footer.scrollIntoViewIfNeeded();
@@ -62,7 +62,7 @@ test("footer exposes brand, contact, navigation, and legal links", async ({ page
   await expect(footer.getByRole("link", { name: "Terms of Use" })).toBeVisible();
 });
 
-test("primary landmarks and keyboard focus remain visible", async ({ page }) => {
+test("primary landmarks and keyboard focus remain visible", { tag: "@fast" }, async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("banner")).toHaveCount(1);
   await expect(page.getByRole("main")).toHaveCount(1);

@@ -46,18 +46,21 @@ continue the remaining Phase 10 checklist.
 
 - `DEC-062` — admin is a branded private workspace, not a generic dashboard.
 - `DEC-063` — browser E2E coverage stays proportional to the two-page product.
+- `DEC-065` — the browser suite is tiered, and runs in parallel.
 
 ## Tests Run
 
 - `npx tsc --noEmit` — clean.
-- `npx eslint .` — clean before the final test-suite reduction; final changed-file lint is the push
-  gate for this cycle.
+- `npx eslint tests/e2e playwright.config.ts` — clean.
 - `npx vitest run --reporter=dot` — 124/124 passed.
-- `npx playwright test --reporter=line` — 66 unaffected cases passed; three assertions in newly
-  condensed tests were corrected (one stale selector, expected text casing and a matcher name).
-- `npx playwright test tests/e2e/compare.spec.ts tests/e2e/hero-loader.spec.ts --workers=1` — 7/7
-  passed after those corrections. Together, every one of the final 69 cases has passed.
-- Focused admin regression — 5/5 passed.
+- `npm run test:e2e` — 65/65 passed, three consecutive parallel runs (4.5m, 4.0m, 3.8m), against the
+  same warm dev server. This is what withdrew the project-wide `--workers=1` rule: it existed for
+  false failures on the WebKit mobile sheet, and WebKit went with DEC-063.
+- `npm run test:e2e:fast` — 22/22 passed in 1.5m warm, 2.5m from a cold server.
+- `npm run test:e2e:motion` — 12/12 passed, serial.
+
+The full suite was about 22.5 minutes before this cycle. The cost was overhead, not test count:
+serial execution, and the ~4.8s opening sequence paid on every one of the 50 loads of `/`.
 
 ## Issues / Blockers
 
@@ -72,5 +75,12 @@ continue the remaining Phase 10 checklist.
 
 ## Next Recommended Task
 
-Finish the remaining proportionate Phase 10 checks, record Lighthouse, then run Phase 11 staging and
-production smoke verification. Do not expand the E2E matrix back into exhaustive visual specifications.
+The Hero plate's remaining motion work, in the owner's order: the crane hub keyway's tone bump at
+payload drop and pickup, the plate draw tone (`plateDrawTone` currently reads as a uniform wash), and
+the de-synchronisation of two loop pairs that share an exact 2:1 period ratio — `siteSpin` against
+`buildingLift` (7.9s/15.8s) and `plateJourney` against node 1's `nodeBreathe` (9s/18s). Then the
+admin UI/UX refinement: `app/admin/page.tsx` makes "Trusted By" the workspace's own `<h1>` at up to
+126px, which is why the admin does not read as holding more than one managed section.
+
+Phase 10's remaining checks and Phase 11's smoke verification are running in a separate session. Do
+not expand the E2E matrix back into exhaustive visual specifications.

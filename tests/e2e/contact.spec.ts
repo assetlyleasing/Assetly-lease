@@ -35,7 +35,7 @@ async function fillBase(page: Page) {
 }
 
 test.describe("Contact — section and panels", () => {
-  test("renders only the approved public contact information and illustrative map", async ({ page }) => {
+  test("renders only the approved public contact information and illustrative map", { tag: "@fast" }, async ({ page }) => {
     await showContact(page);
     const section = page.locator(SECTION);
 
@@ -127,7 +127,7 @@ test.describe("Contact — section and panels", () => {
 });
 
 test.describe("Contact — enquiry branches and drafts", () => {
-  test("Operating Lease creates matching protected Gmail and mailto drafts", async ({ page }) => {
+  test("Operating Lease creates matching protected Gmail and mailto drafts", { tag: "@fast" }, async ({ page }) => {
     await showContact(page);
     await openContact(page);
     await choose(page, "Operating Lease");
@@ -181,7 +181,7 @@ test.describe("Contact — enquiry branches and drafts", () => {
     await expect(page.locator("#contact-message")).toBeVisible();
   });
 
-  test("invalid details show associated errors and focus the first field", async ({ page }) => {
+  test("invalid details show associated errors and focus the first field", { tag: "@fast" }, async ({ page }) => {
     await showContact(page);
     await openContact(page);
     await choose(page, "General Enquiry");

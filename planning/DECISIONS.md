@@ -836,6 +836,36 @@ Every important technical or product decision, including conflict resolutions fo
 
 ---
 
+### DEC-065 - The browser suite is tiered, and runs in parallel
+
+- **Date**: 2026-08-29
+- **Decision**: The 65-case Playwright suite is split by tag into three tiers driven by npm scripts:
+  `test:e2e:fast` (`@fast`, 22 cases) is the everyday gate, `test:e2e` runs all 65 before a phase
+  commit, and `test:e2e:motion` (`@motion`, 12 cases, `--workers=1`) runs after loader or plate
+  timing changes. Tests otherwise run in parallel; the project-wide `--workers=1` rule is withdrawn.
+  A single spec still runs on its own by path, which stays the right tool for focused work.
+- **Reason**: The owner asked for less automation on every change without giving up coverage. The
+  cost was almost entirely fixed overhead rather than test count: the suite ran serially, and every
+  load of `/` sits through the ~4.8s opening sequence. Measured on this machine, the full suite went
+  from about 22.5 minutes to 4.5 minutes, and the everyday gate is under half of that again.
+- **Alternatives considered**: Deleting more cases; running the tiers as separate Playwright
+  projects; a test-only switch in `homeOpeningReplay` to skip the opening; applying
+  `prefers-reduced-motion` by default so the opening collapses to its 120ms path.
+- **Why rejected**: DEC-063 already cut 176 executions to 69 and further deletion would have started
+  removing sole guards, which the owner ruled out. Separate projects make a plain `playwright test`
+  run everything twice. A product-code test hatch buys speed by putting a branch in shipped code
+  that only tests take. Defaulting to reduced motion silently changes what the page renders — plate
+  drift stops, the journey marker is hidden, node scale differs — so specs would pass against a page
+  no visitor sees.
+- **Consequences**: Three genuinely redundant cases were removed: `responsive.spec.ts`'s per-width
+  horizontal-overflow tests asserted at 320/768/1920 what `hero.spec.ts` already asserts at
+  320/390/768/1280/1920. Its remaining clamp checks are one test that resizes rather than five that
+  re-navigate, and `hero.spec.ts`'s own sweep now loads once instead of five times; the `h1`-visible
+  assertion moved across so nothing was lost. `hero.spec.ts`'s 4s sleep under reduced motion became
+  300ms, since every assertion after it reads a computed style that reduced motion pins from first
+  paint. `@fast` is a gate, not the safety net — the full tier remains the pre-commit requirement.
+- **Status**: Active
+
 ## Decision index
 
 | ID | Topic | Status |
@@ -904,3 +934,4 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-062 | Admin is a branded private workspace, not a generic dashboard | Active |
 | DEC-063 | Browser E2E coverage stays proportional to the two-page product | Active |
 | DEC-064 | Vercel hosts the site; Firebase remains the application backend | Active |
+| DEC-065 | The browser suite is tiered, and runs in parallel | Active |

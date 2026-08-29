@@ -11,7 +11,7 @@ async function showWhyUs(page: Page) {
   await page.waitForTimeout(900);
 }
 
-test("Why Assetly renders the four approved values", async ({ page }) => {
+test("Why Assetly renders the four approved values", { tag: "@fast" }, async ({ page }) => {
   await showWhyUs(page);
   await expect(page.getByRole("heading", { level: 2, name: "Why Assetly" })).toBeVisible();
   await expect(page.locator(CARDS)).toHaveCount(4);
