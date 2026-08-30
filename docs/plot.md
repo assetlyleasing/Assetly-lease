@@ -150,6 +150,18 @@ Constraints that are invisible in the code but break things when violated. Full 
   inside it, and a second managed section should be a section block plus a list entry - not a
   restructure. Headings run h1 workspace, h2 section, h3 panel, h4 sub-panel.
 
+- **Never size a child with a percentage height inside a box whose height came from `aspect-ratio`.**
+  A percentage height should resolve against the containing block's *content* box; WebKit resolves it
+  against the border box when that height came from `aspect-ratio`, so a padded frame renders the
+  child at the full frame height. With `overflow: hidden` on the frame, the result is silent: the
+  child eats the bottom padding and the bottom border, and the box looks cropped along one edge only.
+  Put the ratio on the child and let the frame size from its content instead — see
+  `about/About.module.css` `.media`/`.mediaImage` (DEC-068). The Chromium-only suite cannot see this
+  class of fault; check it with a WebKit run when a framed, padded, ratio-driven box is introduced.
+- **A frame that is 16:9 *including* its padding leaves a content box flatter than 16:9**, so an image
+  at the same ratio with `object-fit: cover` is quietly cropped. This is engine-independent and was
+  losing about 24px off the About photograph at every width.
+
 ### Testing traps
 
 - `test.use({ reducedMotion })` does not reach the page here. Use `page.emulateMedia({ reducedMotion: "reduce" })`.

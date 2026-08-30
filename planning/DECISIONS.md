@@ -933,6 +933,40 @@ Every important technical or product decision, including conflict resolutions fo
 
 ---
 
+### DEC-068 - The About frame is sized by its photograph, not by a ratio of its own
+
+- **Date**: 2026-08-30
+- **Decision**: `.media` in `app/(site)/about/About.module.css` no longer carries `aspect-ratio` or
+  `overflow: hidden`. The 1600/899 ratio moves onto `.mediaImage`, which is `width: 100%;
+  height: auto`, so the cream mat's height is the photograph plus its padding.
+- **Reason**: The owner reported the frame's bottom edge cropped on an iPhone. Two faults were
+  stacked. The frame was `aspect-ratio: 1600 / 899` with the image at `height: 100%`, and a
+  percentage height should resolve against the containing block's content box - WebKit resolves it
+  against the border box when that height came from `aspect-ratio`. On Safari the photograph
+  therefore rendered at the full frame height, 46px too tall on an iPhone and 60px on desktop,
+  overflowed, and was clipped by `overflow: hidden`, taking the bottom band of cream and the bottom
+  border with it: cream on three sides, none along the bottom, at every width rather than only on
+  phones. Separately and on every engine, a frame that is 16:9 *including* its padding leaves a
+  content box flatter than 16:9, so `object-fit: cover` was cropping about 24px off the photograph.
+- **Alternatives considered**: Keeping the ratio on the frame and absolutely positioning the image to
+  `inset: var(--card-pad)`; keeping it and setting the image to `height: auto` with the frame's
+  `overflow: hidden` doing the cropping; subtracting the padding from the frame's ratio with `calc`.
+- **Why rejected**: All three keep a geometry the two engines can disagree about, and the first two
+  keep `overflow: hidden`, which is what made the fault silent rather than visible. Adjusting the
+  ratio by the padding would need the padding expressed twice and would still crop the picture.
+- **Consequences**: The frame is taller than before by twice the padding plus the borders, because
+  the photograph is now shown whole rather than cover-cropped - which is what §11's About treatment
+  asked for and what `OD-14`'s photograph was chosen to show. Verified on WebKit and Chromium at
+  iPhone SE, iPhone 13, iPhone 14 Pro Max, iPad Mini and 1440px: the cream band is equal above and
+  below on both engines at all five, and the picture is drawn at its natural ratio. `about.spec.ts`
+  gains a `@fast` case asserting an even mat and an uncropped photograph; it fails against the
+  previous CSS. Chromium can only see the cropping half of the fault, so the WebKit half is recorded
+  as a trap in `docs/plot.md` rather than guarded by the suite - DEC-063's single-engine matrix is
+  unchanged.
+- **Status**: Active
+
+---
+
 ## Decision index
 
 | ID | Topic | Status |
@@ -995,7 +1029,7 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-056 | The Hero plate gets a node-arrival pop and a traveling journey marker | Active |
 | DEC-057 | Admin auth method resolved: Email/Password | Active |
 | DEC-058 | Favicon is the raster brand mark, Ivory on Pitch | Active |
-| DEC-059 | `OD-14` resolved: real About leadership photograph, `object-fit: contain` | Active |
+| DEC-059 | `OD-14` resolved: real About leadership photograph, `object-fit: contain` | Framing superseded by DEC-068 |
 | DEC-060 | Opening true-axis lockup and nav-aware anchor section heights | Active |
 | DEC-061 | Deliberate Hero mechanisms complement the plate's ambient drift | Hub period superseded by DEC-066 |
 | DEC-062 | Admin is a branded private workspace, not a generic dashboard | Refined by DEC-067 |
@@ -1004,3 +1038,4 @@ Every important technical or product decision, including conflict resolutions fo
 | DEC-065 | The browser suite is tiered, and runs in parallel | Active |
 | DEC-066 | Plate mechanisms de-synchronised; keyway signals load transfer | Active |
 | DEC-067 | The admin is a workspace holding sections, not the Trusted By page | Active |
+| DEC-068 | The About frame is sized by its photograph, not by a ratio of its own | Active |

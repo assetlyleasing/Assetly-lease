@@ -18,20 +18,41 @@
   margin-top: clamp(16px, 2.5vh, 24px);
 }
 
+/*
+ * The cream mat. Its height comes from the photograph plus the padding, and
+ * deliberately NOT from an aspect-ratio of its own.
+ *
+ * It used to carry `aspect-ratio: 1600 / 899` with the image at `height: 100%`,
+ * and that combination is resolved differently by the two engines. A percentage
+ * height should resolve against the containing block's *content* box; WebKit
+ * resolves it against the border box when that box's height came from
+ * `aspect-ratio`. So on Safari the photograph rendered the full frame height —
+ * 46px too tall on an iPhone, 60px on a desktop — overflowed the content box,
+ * and `overflow: hidden` clipped it, which ate the bottom band of cream and the
+ * bottom border with it. Cream on three sides, none along the bottom.
+ *
+ * Chromium sized it correctly and still had a fault of its own: the frame was
+ * 16:9 including its padding, so the content box left for the photograph was
+ * flatter than 16:9 and `object-fit: cover` quietly cropped about 24px off the
+ * picture at every width.
+ *
+ * Putting the ratio on the image removes both. There is no percentage height to
+ * resolve, so the engines cannot disagree, and the image box is exactly its own
+ * aspect so nothing is cropped.
+ */
 .media {
   position: relative;
   width: 100%;
-  aspect-ratio: 1600 / 899;
-  overflow: hidden;
   border: var(--hairline);
   background: var(--field);
   padding: var(--card-pad);
 }
 
 .mediaImage {
-  position: relative;
+  display: block;
   width: 100%;
-  height: 100%;
+  height: auto;
+  aspect-ratio: 1600 / 899;
   object-fit: cover;
 }
 
