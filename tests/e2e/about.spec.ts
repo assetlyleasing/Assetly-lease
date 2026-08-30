@@ -105,6 +105,59 @@ test.describe("About page", () => {
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
   });
 
+  test(
+    "keeps an even cream mat around an uncropped photograph",
+    { tag: "@fast" },
+    async ({ page }) => {
+      /*
+       * The frame's height must come from the photograph plus its padding. When
+       * the frame carried `aspect-ratio` of its own and the image was sized at
+       * `height: 100%`, two separate faults followed: the content box left for
+       * the image was flatter than the image's own ratio, so `object-fit: cover`
+       * cropped roughly 24px off the picture at every width, and WebKit resolved
+       * that percentage height against the border box instead of the content
+       * box, so on Safari the image covered the bottom band of cream entirely.
+       *
+       * Chromium can only see the first of those. The uneven-mat assertion is
+       * still worth making here: it is the shape of the bug, and it fails on
+       * this engine too if the ratio ever moves back onto the frame.
+       */
+      for (const [width, height] of [
+        [1440, 900],
+        [390, 844],
+      ] as const) {
+        await page.setViewportSize({ width, height });
+        await page.goto("/about");
+        await page.locator("[data-about-media] img").waitFor({ state: "visible" });
+
+        const frame = await page.locator("[data-about-media]").evaluate((node) => {
+          const image = node.querySelector("img")!;
+          const style = getComputedStyle(node);
+          const box = node.getBoundingClientRect();
+          const picture = image.getBoundingClientRect();
+          return {
+            creamAbove: picture.top - box.top - parseFloat(style.borderTopWidth),
+            creamBelow:
+              box.bottom - parseFloat(style.borderBottomWidth) - picture.bottom,
+            drawnHeight: picture.height,
+            uncroppedHeight:
+              picture.width / (image.naturalWidth / image.naturalHeight),
+          };
+        });
+
+        expect(frame.creamAbove, `no cream above at ${width}px`).toBeGreaterThan(8);
+        expect(
+          Math.abs(frame.creamAbove - frame.creamBelow),
+          `mat is uneven at ${width}px`,
+        ).toBeLessThan(1);
+        expect(
+          Math.abs(frame.uncroppedHeight - frame.drawnHeight),
+          `photograph is cropped at ${width}px`,
+        ).toBeLessThan(1.5);
+      }
+    },
+  );
+
   test("shows the final layout immediately under reduced motion", async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto("/about");
